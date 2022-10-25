@@ -1,2 +1,2 @@
 # AppDevelopmentTIF20
-Repository für das App Porjekt im Kurs "Entwicklung mobiler Applikationen"
+Repository für das App-Projekt im Kurs "Entwicklung mobiler Applikationen"
