@@ -1,15 +1,16 @@
+import React from 'react';
 import {useState} from "react";
-import { StyleSheet, View } from 'react-native';
+import {  View } from 'react-native';
 
 import SignIn from "./Views/SignIn";
 import Main from "./Views/Main";
 
 export default function App() {
-  let [loggedIn, setLoggedIn] = useState(true);
+  let [loggedIn, setLoggedIn] = useState(false);
 
 
   return (
-       <View style={styles.container}>
+       <View className="flex-1 items-center justify-center bg-white">
          {
              !loggedIn && ( <SignIn/> )
          }
@@ -20,11 +21,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
