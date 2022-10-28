@@ -21,8 +21,8 @@ export async function createUser(newUsername, newPassword){
     const passwordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
                                                         newPassword)
     authentificationObject = {
-        'username': newUsername,
-        'passwordHash': passwordHash
+        username: newUsername,
+        passwordHash: passwordHash
     }
     authentificationInfo = getAuthenticationInfo()
 
