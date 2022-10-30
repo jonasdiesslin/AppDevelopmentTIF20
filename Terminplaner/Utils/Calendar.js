@@ -1,4 +1,4 @@
-//Selects all events from calendar that start at of after rangeStart and before rangeEnd
+//Selects all events from calendar that start at or after rangeStart and before rangeEnd
 export function getEventsWithinRange(calendar, rangeStart, rangeEnd){
     function isInRange(event){
         const eventStart = new Date(event.start);

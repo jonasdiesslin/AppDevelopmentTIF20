@@ -6,7 +6,7 @@ Ein Array mit Objekten von folgendem Format:
 ```
 {
     username: 'Benutzername',
-    passwordHash: 'Ad5dbc...D' //Base-64 des Passwort-Hashes
+    passwordHash: 'Ad5dbc...D' //Base-64 des Passwort-Hashes (SHA256)
 }
 ```
 
@@ -16,7 +16,7 @@ Ein Array mit Objekten von folgendem Format:
 ```
 {
     title: 'Titel',
-    description: 'Beschreibung'
+    description: 'Beschreibung',
     start: Timestamp,
     end: Timestamp,
     notification: true/false
