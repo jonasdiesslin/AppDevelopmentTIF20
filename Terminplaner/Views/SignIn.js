@@ -1,6 +1,27 @@
+import {useState} from 'react';
 import {View,Text, Button, TextInput, SafeAreaView, Alert} from "react-native";
 
-export default function SignIn() {
+import { authenticateUser } from '../Utils/Authentication';
+
+export default function SignIn({loginFunction: setLoggedIn,
+                                userFunction: setCurrentUser}) {
+    const [usernameInput, setUsernameInput] = useState("");
+    const [passwordInput, setPasswordInput] = useState("");
+
+    async function attemptLogin(){
+        const loginSuccessful = await authenticateUser(usernameInput, passwordInput)
+
+        if(loginSuccessful){
+            //Password was correct, log in this user
+            setCurrentUser(usernameInput);
+            setLoggedIn(true); //Now we'll switch over to the Main component
+        } else {
+            setUsernameInput("");
+            setPasswordInput("");
+            Alert.alert("Benutzername oder Passwort fehlerhaft.");
+        }
+    }
+
     return (
         <View className="relative">
             <View  className="justify-center absolute top-20"><Text className="absolute">Terminplaner-Login</Text></View >
@@ -8,15 +29,21 @@ export default function SignIn() {
             <SafeAreaView>
             <TextInput
                 placeholder="Benutzername"
-                onChangeText={text => (text)}
+                autoComplete="username"
+                textContentType="username"
+                value={usernameInput}
+                onChangeText={setUsernameInput}
             />
             <TextInput
                 placeholder="Passwort"
-                onChangeText={text => (text)}
-                keyboardType="numeric"
+                autoComplete="password"
+                textContentType="password"
+                secureTextEntry={true}
+                value={passwordInput}
+                onChangeText={setPasswordInput}
             />
         </SafeAreaView>
-            <Button title="Login" onPress={() => Alert.alert("Button pressed")} />
+            <Button title="Login" onPress={attemptLogin} />
         </View>
     )
 }

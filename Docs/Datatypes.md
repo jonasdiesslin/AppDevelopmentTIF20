@@ -12,7 +12,7 @@ Ein Array mit Objekten von folgendem Format:
 
 ## Kalender
 
-Ein Array mit Objekten von folgendem Format:
+Ein Kalender ist ein Array mit Objekten von folgendem Format:
 ```
 {
     title: 'Titel',
@@ -20,5 +20,14 @@ Ein Array mit Objekten von folgendem Format:
     start: Timestamp,
     end: Timestamp,
     notification: true/false
+}
+```
+Aktuell werden die Kalender aller Benutzer in einem Objekt gespeichert. 
+Dieses hat die folgende Form:
+```
+{
+    username1: Kalender für User 1,
+    username2: Kalender für User 2,
+    etc.
 }
 ```

@@ -18,7 +18,7 @@ export function getTodayTimestamp(){
     const month = now.getMonth();
     const year = now.getFullYear();
 
-    const startOfToday = new Date(year, month, dateOfMonth);
+    const startOfToday = new Date(year, month, dateOfMonth, 0, 0, 0); //startOfToday = 0:00:00 of today
     return startOfToday
 }
 
@@ -38,5 +38,13 @@ export function getEndTomorrowTimestamp(){
 
     const endOfTomorrow = newDate(today.getTime() + (2 * oneDayMilliseconds))
     return endOfTomorrow;
+}
+
+//Takes in a number and pads with a leading zero if less than ten. Use for displaying minutes
+export function padWithLeadingZero(input){
+    if(input < 10)
+        return "0" + input.toString()
+    else
+        return input.toString()
 }
 
