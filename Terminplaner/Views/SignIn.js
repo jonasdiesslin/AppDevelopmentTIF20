@@ -1,10 +1,18 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {View,Text, Button, TextInput, SafeAreaView, Alert} from "react-native";
 
 import { authenticateUser } from '../Utils/Authentication';
 
-export default function SignIn({loginFunction: setLoggedIn,
-                                userFunction: setCurrentUser}) {
+import { useCurrentUserContext } from '../Utils/userContext';
+
+//The component for the login screen
+export default function SignIn() {
+    
+    const {
+        loginFunction: setLoggedIn,
+        userFunction: setCurrentUser
+    } = useCurrentUserContext();
+
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
 

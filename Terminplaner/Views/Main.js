@@ -5,9 +5,16 @@ import { Button, Text, View } from 'react-native';
 import {getCalendar} from '../Utils/Storage';
 import Event from '../Components/Event'
 
-export default function Main({loginFunction: setLoggedIn,
-                              userFunction: setCurrentUser,
-                              username: currentUser}) {
+import { useCurrentUserContext } from '../Utils/userContext';
+
+export default function Main({ navigation }) {
+
+    const {
+        loginFunction: setLoggedIn,
+        userFunction: setCurrentUser,
+        username: currentUser
+    } = useCurrentUserContext();
+
     const [mainCalendar, setCalendar] = useState([]);
 
     async function loadCalendar(){
@@ -20,7 +27,10 @@ export default function Main({loginFunction: setLoggedIn,
 
     return (
         <View>
-            <Button title="Logout" onPress={() => {setCurrentUser(null); setLoggedIn(false);}}/>
+            <Button title="Logout" onPress={() => {
+                setCurrentUser(null);
+                setLoggedIn(false);//Now we'll back up to the login component
+            }}/>
 
             <Text>Hallo, {currentUser}!</Text>
             <Text>Ihre Termine:</Text>
