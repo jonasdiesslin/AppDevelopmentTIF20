@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SignIn from "./Views/SignIn";
 import Main from "./Views/Main";
+import Appointment from "./Views/Appointment";
 
 import { currentUserContext } from './Utils/userContext';
 
@@ -31,8 +32,9 @@ export default function App() {
         }
         {
           loggedIn && ( 
-                        <Stack.Navigator initialRouteName="Main">
+                        <Stack.Navigator initialRouteName="Appointment">
                           <Stack.Screen name="Main" component={Main} options={{ title:"Übersicht" }}/>
+                          <Stack.Screen name="Appointment" component={Appointment} options={{ title:"Test" }}/>
                         </Stack.Navigator>
                       )
         }  
