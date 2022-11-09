@@ -1,6 +1,5 @@
 import React from 'react';
 import {useState} from "react";
-import {  View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -25,9 +24,8 @@ export default function App() {
           userFunction: setCurrentUser
         }}>
         {
-          !loggedIn &&  ( <View className="flex-1 items-center justify-center bg-white">
+          !loggedIn &&  (
                             <SignIn/>
-                          </View>
                         )
         }
         {
