@@ -32,9 +32,9 @@ export default function App() {
         }
         {
           loggedIn && ( 
-                        <Stack.Navigator initialRouteName="Appointment">
+                        <Stack.Navigator initialRouteName="Main">
                           <Stack.Screen name="Main" component={Main} options={{ title:"Übersicht" }}/>
-                          <Stack.Screen name="Appointment" component={Appointment} options={{ title:"Test" }}/>
+                          <Stack.Screen name="Appointment" component={Appointment} options={{ title:"Neuer Termin" }}/>
                         </Stack.Navigator>
                       )
         }  

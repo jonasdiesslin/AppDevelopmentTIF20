@@ -7,18 +7,21 @@ import {
   StyleSheet,
   Switch,
   TextInput,
+  Text,
   Alert
 } from "react-native";
 
-const Appointment = () => {
-  const [titel, onChangeTitel] = React.useState();
-  const [comment, onChangeComment] = React.useState();
+const Appointment = ({ navigation }) => {
+  const [titel, onChangeTitel] = useState();
+  const [comment, onChangeComment] = useState();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
     <SafeAreaView>
-      <h1 style={styles.header}>Neuer Termin</h1>
+      <Text style={styles.header}>
+        Neuer Termin
+      </Text>
       <TextInput
         style={styles.input}
         onChangeTitel={onChangeTitel}
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
   },
   felx: {
     flex: 1,
-    height: "50px",
+    height: 50,
     marginHorizontal: 20,
     marginTop: 5
   },
