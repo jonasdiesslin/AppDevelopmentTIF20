@@ -6,11 +6,7 @@ export async function authenticateUser(username, enteredPassword){
                                                                enteredPassword)
     const storedPasswordHash = await getPasswordHash(username)
 
-    if(enteredPasswordHash == storedPasswordHash){
-        return true
-    } else {
-        return false
-    }
+    return enteredPasswordHash === storedPasswordHash;
 }
 
 export async function createUser(newUsername, newPassword){
@@ -26,7 +22,8 @@ export async function createUser(newUsername, newPassword){
     authentificationInfo.append(authentificationObject)
     storeAuthentificationInfo(authentificationInfo)
     */
-    return
+    //return true for testing purposes only for now
+    return true
 }
 
 export function deleteUser(username){

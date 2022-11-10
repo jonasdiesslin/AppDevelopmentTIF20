@@ -1,21 +1,23 @@
 import React, {useState} from 'react';
 import {View,Text, TextInput, Alert, TouchableOpacity,ImageBackground} from "react-native";
 import { UserCircleIcon } from "react-native-heroicons/outline";
-import { authenticateUser } from '../Utils/Authentication';
+import { authenticateUser } from '../../Utils/Authentication';
 
-import { useCurrentUserContext } from '../Utils/userContext';
+import { useCurrentUserContext } from '../../Utils/userContext';
 
 const image = { uri: "https://i.pinimg.com/originals/04/9f/83/049f836b439f058287cb23ed77b11bd0.jpg" };
 //The component for the login screen
-export default function SignIn() {
-    
+export default function SignIn({navigation}) {
+
+    const [usernameInput, setUsernameInput] = useState("");
+    const [passwordInput, setPasswordInput] = useState("");
+
     const {
         loginFunction: setLoggedIn,
         userFunction: setCurrentUser
     } = useCurrentUserContext();
 
-    const [usernameInput, setUsernameInput] = useState("");
-    const [passwordInput, setPasswordInput] = useState("");
+
 
     async function attemptLogin(){
         const loginSuccessful = await authenticateUser(usernameInput, passwordInput)
@@ -36,7 +38,7 @@ export default function SignIn() {
         <ImageBackground source={image} className="flex-1">
           <View className="flex-col justify-center items-center relative top-40">
 
-                    <Text className="text-3xl bottom-7 font-bold text-white">Terminplaner-Login</Text>
+                    <Text className="text-3xl bottom-7 font-bold text-white">Login</Text>
                     <UserCircleIcon color="white" size={170} />
 
                 <View className="top-36">
