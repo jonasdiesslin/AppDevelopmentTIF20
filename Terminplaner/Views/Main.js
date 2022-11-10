@@ -46,7 +46,7 @@ export default function Main({ navigation }) {
                     })}
                 </View>
             </View>
-            <TouchableOpacity activeOpacity={0.5} style={styles.touchableOpacityStyle} onPress={() => Alert.alert("I've been clicked!")}>
+            <TouchableOpacity activeOpacity={0.5} style={styles.touchableOpacityStyle} onPress={() => navigation.navigate("Appointment")}>
                 <Text style={styles.FABTextStyle}>+</Text>
             </TouchableOpacity>
         </>
