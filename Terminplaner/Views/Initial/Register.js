@@ -1,18 +1,17 @@
 import {Alert, ImageBackground, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {UserCircleIcon} from "react-native-heroicons/outline";
 import React, {useState, useMemo} from "react";
-import {useCurrentUserContext} from "../../Utils/userContext";
 import {createUser} from "../../Utils/Authentication";
 import { CommonActions } from '@react-navigation/native';
 
 
-const image = { uri: "https://i.pinimg.com/originals/04/9f/83/049f836b439f058287cb23ed77b11bd0.jpg" };
-
-export default function Register({navigation}) {
+export default function Register({route, navigation}) {
 
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [passwordInputRepeat, setpasswordInputRepeat] = useState("");
+
+    const {image} = route.params;
 
     const isFormValid = useMemo(() => {
         return usernameInput.length > 0 && (passwordInput.length > 0 && passwordInputRepeat.length > 0)
@@ -32,7 +31,7 @@ export default function Register({navigation}) {
                             routes: [
                                 { name: 'Startseite' },
                                 {
-                                    name: 'Anmelden',
+                                    name: 'Anmelden', params: { image: image }
                                 },
                             ],
                         })
@@ -60,7 +59,7 @@ c           //register wasn't successful, show error
             <Text className="text-3xl bottom-7 font-bold text-white">Registrieren</Text>
             <UserCircleIcon color="white" size={170} />
 
-            <View className="top-36">
+            <View className="top-28">
                 <TextInput
                     placeholder="Benutzername"
                     placeholderTextColor="white"

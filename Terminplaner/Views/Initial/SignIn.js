@@ -5,12 +5,13 @@ import { authenticateUser } from '../../Utils/Authentication';
 
 import { useCurrentUserContext } from '../../Utils/userContext';
 
-const image = { uri: "https://i.pinimg.com/originals/04/9f/83/049f836b439f058287cb23ed77b11bd0.jpg" };
 //The component for the login screen
-export default function SignIn({navigation}) {
+export default function SignIn({route, navigation}) {
 
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
+
+    const {image} = route.params;
 
     const {
         loginFunction: setLoggedIn,

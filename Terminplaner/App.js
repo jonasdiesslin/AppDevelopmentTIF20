@@ -1,5 +1,4 @@
-import React from 'react';
-import {useState} from "react";
+import React, {useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -10,6 +9,8 @@ import Main from "./Views/Main";
 import Appointment from "./Views/Appointment";
 
 import { currentUserContext } from './Utils/userContext';
+
+const background = require("./public/images/bg.jpg")
 
 //Set up the global navigator here
 const Stack = createNativeStackNavigator();
@@ -23,7 +24,8 @@ export default function App() {
         <currentUserContext.Provider value={{
           loginFunction: setLoggedIn,
           username: currentUser,
-          userFunction: setCurrentUser
+          userFunction: setCurrentUser,
+          background: background
         }}>
         {
           !loggedIn &&  (
