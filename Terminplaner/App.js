@@ -1,13 +1,16 @@
-import React from 'react';
-import {useState} from "react";
+import React, {useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import SignIn from "./Views/SignIn";
+import Initial from "./Views/Initial/Initial";
+import SignIn from "./Views/Initial/SignIn";
+import Register from "./Views/Initial/Register";
 import Main from "./Views/Main";
 import Appointment from "./Views/Appointment";
 
 import { currentUserContext } from './Utils/userContext';
+
+const background = require("./public/images/bg.jpg")
 
 //Set up the global navigator here
 const Stack = createNativeStackNavigator();
@@ -21,11 +24,21 @@ export default function App() {
         <currentUserContext.Provider value={{
           loginFunction: setLoggedIn,
           username: currentUser,
-          userFunction: setCurrentUser
+          userFunction: setCurrentUser,
+          background: background
         }}>
         {
           !loggedIn &&  (
-                            <SignIn/>
+                        <Stack.Navigator initialRouteName="Initial"
+                                         screenOptions={{
+                                             headerTransparent: true,
+                                         }}
+                        >
+                            <Stack.Screen name="Startseite" component={Initial}/>
+                            <Stack.Screen name="Anmelden" component={SignIn}/>
+                            <Stack.Screen name="Registrieren" component={Register}/>
+                            <Stack.Screen name="Benutzerauswahl" component={Register}/>
+                        </Stack.Navigator>
                         )
         }
         {
