@@ -47,31 +47,57 @@ var testCalendars = {
     ]
 }
 
+//Checks if the local storage is empty and initializes it with example data, if necessary
+//Returns true if storage was empty (and had to be initialized) and false if some data was already stored.
+export async function initLocalStorage(){
+    const keys = await AsyncStorage.getAllKeys();
+    if (keys.length == 0){
+        //Local storage empty, set up example data
+        //First the authentication info
+        await AsyncStorage.setItem("authenticationInfo", JSON.stringify(testAuthentificationInfo));
+        //Then the individual calendars
+        for (const currentUsername in testCalendars){
+            await AsyncStorage.setItem((currentUsername + "-calendar"), JSON.stringify(testCalendars[currentUsername]));
+        }
+        return true;
+    } else {
+        console.log("Test2")
+        //Something is stored in localStorage already -> nothing to do for us
+        return false;
+    }
+}
+
 
 //Returns all of the authenticationInfo-Array
-export function getAuthenticationInfo(){
-    return testAuthentificationInfo
+export async function getAuthenticationInfo(){
+    const jsonValue = await AsyncStorage.getItem("authenticationInfo");
+    const authenticationInfo = JSON.parse(jsonValue);
+    return authenticationInfo;
 }
 
 //Stores a new authenticationInfo-Array
-export function storeAuthentificationInfo(newAuthentificationInfo){
-    testAuthentificationInfo = newAuthentificationInfo
+export async function storeAuthentificationInfo(newAuthentificationInfo){
+    await AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthentificationInfo))
 }
 
-export function getPasswordHash(username){
-    for (let i in testAuthentificationInfo){
-        if (testAuthentificationInfo[i].username == username){
-            return testAuthentificationInfo[i].passwordHash
+//Returns the password hash associated with a given username (or the empty string if the username doesn't exist)
+export async function getPasswordHash(username){
+    const authentificationInfo = await getAuthenticationInfo()
+    for (const i in authentificationInfo){
+        if (authentificationInfo[i].username == username){
+            return authentificationInfo[i].passwordHash
         }
     }
     //If we are here, the username has not been found
     return ""
 }
 
-export function getCalendar(username){
-    return testCalendars[username] //NOTE: The authentication code makes sure that only valid usernames will be passed as arguments
+export async function getCalendar(username){
+    const jsonValue = await AsyncStorage.getItem(username + "-calendar");
+    const calendar = JSON.parse(jsonValue);
+    return calendar //NOTE: The authentication code makes sure that only valid usernames will be passed as arguments
 }
 
-export function storeCalendar(username, newCalendar){
-    testCalendars[username] = newCalendar
+export async function storeCalendar(username, newCalendar){
+    await AsyncStorage.setItem((username + "-calendar"), JSON.stringify(newCalendar));
 }

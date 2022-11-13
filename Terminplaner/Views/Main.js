@@ -23,7 +23,7 @@ export default function Main({ navigation }) {
         setCalendar(newCalendar);
     }
 
-    //Load 
+    //Load calendar initially
     loadCalendar();
 
     return (
@@ -31,7 +31,10 @@ export default function Main({ navigation }) {
             <View>
                 <Button title="Logout" onPress={() => {
                     setCurrentUser(null);
-                    setLoggedIn(false);//Now we'll back up to the login component
+                    setLoggedIn(false);//Now we'll go back to the login component
+                }}/>
+                <Button title="Kalendaransicht" onPress={() => {
+                    //navigate to calendar view
                 }}/>
 
                 <Text>Hallo, {currentUser}!</Text>
@@ -46,7 +49,7 @@ export default function Main({ navigation }) {
                     })}
                 </View>
             </View>
-            <TouchableOpacity activeOpacity={0.5} style={styles.touchableOpacityStyle} onPress={() => navigation.navigate("Appointment")}>
+            <TouchableOpacity activeOpacity={0.9} style={styles.touchableOpacityStyle} onPress={() => navigation.navigate("Appointment")}>
                 <Text style={styles.FABTextStyle}>+</Text>
             </TouchableOpacity>
         </>

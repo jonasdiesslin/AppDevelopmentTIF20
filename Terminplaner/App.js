@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -9,6 +10,7 @@ import Main from "./Views/Main";
 import Appointment from "./Views/Appointment";
 
 import { currentUserContext } from './Utils/userContext';
+import { initLocalStorage } from './Utils/Storage'
 
 const background = require("./public/images/bg.jpg")
 

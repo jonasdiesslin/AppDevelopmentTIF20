@@ -10,7 +10,6 @@ export async function authenticateUser(username, enteredPassword){
 }
 
 export async function createUser(newUsername, newPassword){
-    /*
     const passwordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
                                                         newPassword)
     authentificationObject = {
@@ -21,11 +20,22 @@ export async function createUser(newUsername, newPassword){
 
     authentificationInfo.append(authentificationObject)
     storeAuthentificationInfo(authentificationInfo)
-    */
-    //return true for testing purposes only for now
-    return true
 }
 
-export function deleteUser(username){
-    return
+export async function deleteUser(usernameToDelete){
+    const authenticationInfo = await getAuthenticationInfo();
+    //Keep only users with a different username
+    let newAuthentificationInfo = authenticationInfo.filter((authObj) => (authObj.username !== usernameToDelete));
+    await storeAuthentificationInfo(newAuthentificationInfo);
+}
+
+export async function checkIfUsernameExists(usernameToFind){
+    const authenticationInfo = await getAuthenticationInfo();
+    for (const i in authentificationInfo){
+        if (authentificationInfo[i].username == usernameToFind){
+            return true
+        }
+    }
+    //If we're here, the username wasn't found in the authenticationInfo-array -> it doesn't exist yet
+    return false;
 }

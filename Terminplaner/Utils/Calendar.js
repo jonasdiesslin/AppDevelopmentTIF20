@@ -60,3 +60,18 @@ export function getDaysInMonth(year, month){
 function isLeapYear(year){
     return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0); //Copied straight from StackOverflow, a sure sign of quality code
 }
+
+export const monthNames = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember"
+]
