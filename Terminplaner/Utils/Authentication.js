@@ -1,3 +1,5 @@
+//Various functions for login and user management
+
 import * as Crypto from 'expo-crypto';
 import { getAuthenticationInfo, getPasswordHash, storeAuthentificationInfo } from './Storage';
 

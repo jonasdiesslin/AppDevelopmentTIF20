@@ -1,3 +1,5 @@
+//Various utilities for dealing with calendars and times
+
 //Selects all events from calendar that start at or after rangeStart and before rangeEnd
 export function getEventsWithinRange(calendar, rangeStart, rangeEnd){
     function isInRange(event){
@@ -50,7 +52,7 @@ export function padWithLeadingZero(input){
 
 //Takes a year and a month (starting with January = 0) and returns the number of days in that month.
 export function getDaysInMonth(year, month){
-    const februaryDays = isLeapYear(year) ? 28 : 29;
+    const februaryDays = isLeapYear(year) ? 29 : 28;
     const dayCounts = [31, februaryDays, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     return dayCounts[month];
 }
@@ -75,3 +77,13 @@ export const monthNames = [
     "November",
     "Dezember"
 ]
+
+export function getCurrentYear(){
+    const now = new Date();
+    return now.getFullYear();
+}
+
+export function getCurrentMonth(){
+    const now = new Date();
+    return now.getMonth();
+}

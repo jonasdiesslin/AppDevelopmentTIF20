@@ -1,3 +1,5 @@
+//Various functions for dealing with storage
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Use these constants while we don't have a local storage set up yet.

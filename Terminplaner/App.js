@@ -8,6 +8,7 @@ import SignIn from "./Views/Initial/SignIn";
 import Register from "./Views/Initial/Register";
 import Main from "./Views/Main";
 import Appointment from "./Views/Appointment";
+import CalendarView from './Views/CalendarView';
 
 import { currentUserContext } from './Utils/userContext';
 import { initLocalStorage } from './Utils/Storage'
@@ -59,6 +60,7 @@ export default function App() {
                         <Stack.Navigator initialRouteName="Main">
                           <Stack.Screen name="Main" component={Main} options={{ title:"Übersicht" }}/>
                           <Stack.Screen name="Appointment" component={Appointment} options={{ title:"Neuer Termin" }}/>
+                          <Stack.Screen name="CalendarView" component={CalendarView} options={{ title:"Kalenderansicht" }}/>
                         </Stack.Navigator>
                       )
         }  

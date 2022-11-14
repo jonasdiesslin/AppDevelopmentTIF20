@@ -35,6 +35,7 @@ export default function Main({ navigation }) {
                 }}/>
                 <Button title="Kalendaransicht" onPress={() => {
                     //navigate to calendar view
+                    navigation.navigate("CalendarView");
                 }}/>
 
                 <Text>Hallo, {currentUser}!</Text>
