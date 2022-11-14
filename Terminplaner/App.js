@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -20,6 +20,17 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   let [loggedIn, setLoggedIn] = useState(false); //Boolean. Stores if there is currently a user logged into the app.
   let [currentUser, setCurrentUser] = useState(null); //The username of the currently active user. Null if no user logged in currently.
+
+  //Initialize local storage once at startup, if necessary
+  useEffect(() => {
+    async function initialize(){
+      const initialized = await initLocalStorage();
+      if(initialized){
+        Alert.alert("Leerer LocalStorage erkannt. Testwerte initialisiert.");
+      } 
+    }
+    initialize();
+  }, []) //Empty dependencies -> Effect used only one
 
   return (
       <NavigationContainer>

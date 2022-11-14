@@ -9,6 +9,8 @@ Ein Array mit Objekten von folgendem Format:
     passwordHash: 'Ad5dbc...D' //Base-64 des Passwort-Hashes (SHA256)
 }
 ```
+Dieses Objekt wird (als JSON-String) im AsyncStorage gespeichert.
+Der Key lautet "authentificationInfo"
 
 ## Kalender
 
@@ -22,12 +24,5 @@ Ein Kalender ist ein Array mit Objekten von folgendem Format:
     notification: true/false
 }
 ```
-Aktuell werden die Kalender aller Benutzer in einem Objekt gespeichert. 
-Dieses hat die folgende Form:
-```
-{
-    username1: Kalender für User 1,
-    username2: Kalender für User 2,
-    etc.
-}
-```
+Aktuell werden die Kalender aller Benutzer (als JSON-Strings) im AsyncStorage gespeichert.
+Der Key lautet dabei jeweils "${nutzername}-calendar", also bspw. für Benutzer "test2" "test2-calendar".

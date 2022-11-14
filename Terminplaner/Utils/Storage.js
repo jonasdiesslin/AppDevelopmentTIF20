@@ -61,7 +61,6 @@ export async function initLocalStorage(){
         }
         return true;
     } else {
-        console.log("Test2")
         //Something is stored in localStorage already -> nothing to do for us
         return false;
     }
