@@ -20,16 +20,16 @@ export default function Intitial({navigation}) {
                 <View className="top-36">
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Anmelden', {image: background})}
-                        className="border-2 border-stone-400 rounded-md p-2 w-80 h-11"
+                        className="border-2 border-stone-400 rounded-md w-80 h-11"
                     >
-                        <Text className="self-center bottom-1 text-lg text-white">Login</Text>
+                        <Text className="self-center bottom-1 text-lg text-white p-2">Login</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Registrieren', {image: background})}
-                        className="text-white top-2 border-2 bg-blue-300 border-blue-300 rounded-md p-2 w-80 h-11">
-                        <Text className="self-center bottom-1 text-lg text-white">Registrieren</Text>
+                        className="text-white top-2 border-2 bg-blue-300 border-blue-300 rounded-md  w-80 h-11">
+                        <Text className="self-center bottom-1 text-lg text-white p-2">Registrieren</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity className="top-10 border-2  border-stone-400 rounded-md p-2 w-80 h-11"  onPress={() => navigation.navigate('Startseite', {image: background})}><Text className="self-center bottom-1 text-lg text-white">Benutzerauswahl</Text></TouchableOpacity>
+                    <TouchableOpacity className="top-10 border-2  border-stone-400 rounded-md  w-80 h-11"  onPress={() => navigation.navigate('Startseite', {image: background})}><Text className="self-center bottom-1 text-lg text-white p-2">Benutzerauswahl</Text></TouchableOpacity>
                 </View>
 
             </View>
