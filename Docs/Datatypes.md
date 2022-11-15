@@ -19,7 +19,7 @@ Ein Kalender ist ein Array mit Objekten von folgendem Format:
 {
     title: 'Titel',
     description: 'Beschreibung',
-    start: Timestamp,
+    start: Timestamp, //Timestamps are stored as Strings
     end: Timestamp,
     notification: true/false
 }

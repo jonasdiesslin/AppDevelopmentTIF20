@@ -3,9 +3,9 @@ import {View,Text, Button, TextInput, SafeAreaView, Alert} from "react-native";
 import { padWithLeadingZero } from "../Utils/Calendar";
 
 //This component can display basic information for a single calendar entry
-export default function Event(props) {
-    const startDate = new Date(props.start)
-    const endDate = new Date(props.end)
+export default function Event({ calendarItem }) {
+    const startDate = new Date(calendarItem.start)
+    const endDate = new Date(calendarItem.end)
 
     //Nicely format start and end times
     const startTimeString = `${startDate.getHours()}:${padWithLeadingZero(startDate.getMinutes())}`
@@ -16,7 +16,7 @@ export default function Event(props) {
 
     return (
         <View>
-            <Text>{props.title}</Text>
+            <Text>{calendarItem.title}</Text>
             <Text>{startTimeString} - {endTimeString}</Text>
             <Text>{calendarDateString}</Text>
         </View>

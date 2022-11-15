@@ -1,12 +1,11 @@
 import {useState} from "react";
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Button, Text, View, TouchableOpacity, Alert } from 'react-native';
 
 import {getCalendar} from '../Utils/Storage';
 import Event from '../Components/Event'
 
 import { useCurrentUserContext } from '../Utils/userContext';
-import { fontScale } from "nativewind";
+import { getEventsAfterDate } from "../Utils/Calendar";
 
 export default function Main({ navigation }) {
 
@@ -19,7 +18,9 @@ export default function Main({ navigation }) {
     const [mainCalendar, setCalendar] = useState([]);
 
     async function loadCalendar(){
-        const newCalendar = await getCalendar(currentUser);
+        const fullCalendar = await getCalendar(currentUser);
+        const now = new Date();
+        const newCalendar = getEventsAfterDate(fullCalendar, now);
         setCalendar(newCalendar);
     }
 
@@ -43,9 +44,7 @@ export default function Main({ navigation }) {
 
                 <View>
                     {mainCalendar.map((calendarItem, index) => {
-                        return (<Event title={calendarItem.title}
-                                    start={calendarItem.start}
-                                    end={calendarItem.end}
+                        return (<Event calendarItem={calendarItem}
                                     key={index}/>)
                     })}
                 </View>

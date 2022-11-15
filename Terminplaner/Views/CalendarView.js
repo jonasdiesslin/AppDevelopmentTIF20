@@ -1,10 +1,12 @@
 import {useState} from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, FlatList } from "react-native";
 
 import { getCalendar } from "../Utils/Storage";
+import Event from '../Components/Event'
 
-import { getCurrentMonth, getCurrentYear, getDaysInMonth, monthNames } from "../Utils/Calendar";
+import { getCurrentMonth, getCurrentYear, getDaysInMonth, getEventsWithinRange, monthNames } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CalendarView({ navigation }){
     //Extract user context
@@ -55,25 +57,55 @@ export default function CalendarView({ navigation }){
         });
     }
 
-    //Get all the events in the current month
-    getCalendar(currentUser).then((calendar) => {
+    //Get the calendar for the month currently displayed
+    async function getEventsInMonth(){
+        const fullCalendar = await getCalendar(currentUser);
+        const startOfMonth = new Date(timeSelected.year, timeSelected.month, 1, 0, 0, 0);
+        const endOfMonth = new Date(timeSelected.year, timeSelected.month + 1, 0, 23, 59, 59);
+        //NOTE: Day = 0 -> Last day of the previous month
+        const monthCalendar = getEventsWithinRange(fullCalendar, startOfMonth, endOfMonth)
+        setEventsInMonth(monthCalendar);
+    }
+    getEventsInMonth();
 
-    })
+    function renderDay({item: day}){
+        const startOfToday = new Date(timeSelected.year, timeSelected.month, day, 0, 0, 0);
+        const endOfToday = new Date(timeSelected.year, timeSelected.month, day, 23, 59, 59);
+        const eventsInDay = getEventsWithinRange(eventsInMonth, startOfToday, endOfToday);
+        return (
+            <View>
+                <Text>{day}</Text>
+                {eventsInDay.map((calendarItem, index) => {
+                                return (<Event calendarItem={calendarItem} key={index}/>)
+                            })}
+            </View>
+        )
+    }
 
     return (
-        <View>
+        <View style={{flex: 1}}>
             <Text>{monthNames[timeSelected.month]} {timeSelected.year}</Text> 
             <Button title="<" onPress={() => oneMonthBack()}/>
             <Button title=">" onPress={()=> oneMonthForward()}/>
-            <View>
+            <FlatList data={dayList} renderItem={renderDay} keyExtractor={(item, index) => index}/>
+        </View>
+    )
+}
+
+/**
+ * <View>
                 {dayList.map((day, index) => {
+                    const startOfToday = new Date(timeSelected.year, timeSelected.month, day, 0, 0, 0);
+                    const endOfToday = new Date(timeSelected.year, timeSelected.month, day, 23, 59, 59);
+                    const eventsInDay = getEventsWithinRange(eventsInMonth, startOfToday, endOfToday);
                     return (
                         <View key={index}>
                             <Text>{day}</Text>
+                            {eventsInDay.map((calendarItem, index) => {
+                                return (<Event calendarItem={calendarItem} key={index}/>)
+                            })}
                         </View>
                     )
                 })}
             </View>
-        </View>
-    )
-}
+ */

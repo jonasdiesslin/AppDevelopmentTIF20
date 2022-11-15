@@ -1,7 +1,9 @@
 //Various utilities for dealing with calendars and times
 
 //Selects all events from calendar that start at or after rangeStart and before rangeEnd
+//and sorts them for good measure
 export function getEventsWithinRange(calendar, rangeStart, rangeEnd){
+    //Check if an event is in the given range
     function isInRange(event){
         const eventStart = new Date(event.start);
         if ((eventStart >= rangeStart) && (rangeEnd > eventStart)){
@@ -10,10 +12,16 @@ export function getEventsWithinRange(calendar, rangeStart, rangeEnd){
             return false;
         }
     }
-    return calendar.filter(isInRange);
+    //Compare events for sorting
+    function compareEvents(eventA, eventB){
+        return new Date(eventA.start) - new Date(eventB.start);
+    }
+
+    return calendar.filter(isInRange).sort(compareEvents);
 }
 
 //Selects all events from calendar that start at or after startDate
+//and sorts them for good measure
 export function getEventsAfterDate(calendar, startDate){
     function isInRange(event){
         const eventStart = new Date(event.start);
@@ -23,7 +31,12 @@ export function getEventsAfterDate(calendar, startDate){
             return false;
         }
     }
-    return calendar.filter(isInRange);
+    //Compare events for sorting
+    function compareEvents(eventA, eventB){
+        return new Date(eventA.start) - new Date(eventB.start);
+    }
+
+    return calendar.filter(isInRange).sort(compareEvents);
 }
 
 //Returns the date object for today, 0:00
