@@ -45,6 +45,10 @@ export default function App() {
           !loggedIn &&  (
                         <Stack.Navigator initialRouteName="Initial"
                                          screenOptions={{
+                                           headerTitleStyle: {
+                                             // color: "white",
+                                           },
+                                           // headerTitle: '',
                                              headerTransparent: true,
                                          }}
                         >
