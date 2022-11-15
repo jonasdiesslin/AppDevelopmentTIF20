@@ -20,7 +20,7 @@ export async function createUser(newUsername, newPassword){
     }
     authentificationInfo = getAuthenticationInfo()
 
-    authentificationInfo.append(authentificationObject)
+    authentificationInfo.push(authentificationObject)
     storeAuthentificationInfo(authentificationInfo)
 }
 
