@@ -1,7 +1,7 @@
 //Various functions for login and user management
 
 import * as Crypto from 'expo-crypto';
-import { getAuthenticationInfo, getPasswordHash, storeAuthentificationInfo } from './Storage';
+import { getAuthenticationInfo, getPasswordHash, storeAuthenticationInfo } from './Storage';
 
 export async function authenticateUser(username, enteredPassword){
     const enteredPasswordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
@@ -14,27 +14,27 @@ export async function authenticateUser(username, enteredPassword){
 export async function createUser(newUsername, newPassword){
     const passwordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
                                                         newPassword)
-    authentificationObject = {
+    let authenticationObject = {
         username: newUsername,
         passwordHash: passwordHash
     }
-    authentificationInfo = getAuthenticationInfo()
+    let authenticationInfo = await getAuthenticationInfo()
 
-    authentificationInfo.push(authentificationObject)
-    storeAuthentificationInfo(authentificationInfo)
+    authenticationInfo.push(authenticationObject)
+    storeAuthenticationInfo(authenticationInfo)
 }
 
 export async function deleteUser(usernameToDelete){
     const authenticationInfo = await getAuthenticationInfo();
     //Keep only users with a different username
-    let newAuthentificationInfo = authenticationInfo.filter((authObj) => (authObj.username !== usernameToDelete));
-    await storeAuthentificationInfo(newAuthentificationInfo);
+    let newAuthenticationInfo = authenticationInfo.filter((authObj) => (authObj.username !== usernameToDelete));
+    await storeAuthenticationInfo(newAuthenticationInfo);
 }
 
 export async function checkIfUsernameExists(usernameToFind){
     const authenticationInfo = await getAuthenticationInfo();
-    for (const i in authentificationInfo){
-        if (authentificationInfo[i].username == usernameToFind){
+    for (const i in authenticationInfo){
+        if (authenticationInfo[i].username == usernameToFind){
             return true
         }
     }

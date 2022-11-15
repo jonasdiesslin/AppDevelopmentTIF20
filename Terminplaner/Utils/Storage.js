@@ -77,8 +77,8 @@ export async function getAuthenticationInfo(){
 }
 
 //Stores a new authenticationInfo-Array
-export async function storeAuthentificationInfo(newAuthentificationInfo){
-    await AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthentificationInfo))
+export async function storeAuthenticationInfo(newAuthenticationInfo){
+    await AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthenticationInfo))
 }
 
 //Returns the password hash associated with a given username (or the empty string if the username doesn't exist)
