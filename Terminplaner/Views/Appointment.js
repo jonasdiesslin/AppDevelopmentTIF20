@@ -1,5 +1,6 @@
 import React from "react";
-import {useState} from "react";
+import { useState } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   View,
   Button,
@@ -8,20 +9,44 @@ import {
   Switch,
   TextInput,
   Text,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 
-const Appointment = ({ navigation }) => {
+export const Appointment = ({ navigation }) => {
   const [titel, onChangeTitel] = useState();
   const [comment, onChangeComment] = useState();
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState(false);
+  const [time, setTime] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+    
+    let tempdate = new Date(currentDate);
+    let fDate = tempdate.getDate() + '/' + (tempdate.getMonth() + 1) + '/' + tempdate.getFullYear();
+    let fTime = tempdate.getHours() + ':' + tempdate.getMinutes() + 'Uhr';
+    setText(fDate + '\n' + fTime)
+    setTime(fTime)
+
+    console.log(fDate + ' (' + fTime + ' )')
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
   return (
     <SafeAreaView>
-      <Text style={styles.header}>
-        Neuer Termin
-      </Text>
+      <Text style={styles.header}>Neuer Termin</Text>
       <TextInput
         style={styles.input}
         onChangeTitel={onChangeTitel}
@@ -34,15 +59,28 @@ const Appointment = ({ navigation }) => {
         placeholder={"Bemerkungen"}
         value={comment}
       />
-      <View style={styles.container}>
+      <View style={styles.flexbox}>
         <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+          trackColor={{ false: "#767577", true: "#767577" }}
+          thumbColor={isEnabled ? "#767577" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
           value={isEnabled}
         />
+        <Text>Ganztägig?</Text>
       </View>
+      <View>
+      <Text style={styles.input} title='DatePicker' onPress={() => showMode('date') } >{text}</Text>
+      <Text style={styles.input} title='TimePicker' onPress={() => showMode('time') } >{time}</Text>
+    </View>
+    {show && (<DateTimePicker
+      testID="dateTimePicker"
+      value={date}
+      mode={mode}
+      is24Hour={true}
+      display='default'
+      onChange={onChange}
+    />)}
       <View style={{ flexDirection: "row" }}>
         <View style={styles.felx}>
           <Button title="Speichern" onPress={() => Alert.alert("gespeichert")}>
@@ -85,6 +123,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center"
+  },
+  flexbox: {
+    flexDirection: "row",
+    height: 50,
+    marginHorizontal: 20,
+    marginTop: 5,
+    margin: 5
   }
 });
 
