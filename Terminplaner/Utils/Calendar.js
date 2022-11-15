@@ -13,6 +13,19 @@ export function getEventsWithinRange(calendar, rangeStart, rangeEnd){
     return calendar.filter(isInRange);
 }
 
+//Selects all events from calendar that start at or after startDate
+export function getEventsAfterDate(calendar, startDate){
+    function isInRange(event){
+        const eventStart = new Date(event.start);
+        if (eventStart >= startDate){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return calendar.filter(isInRange);
+}
+
 //Returns the date object for today, 0:00
 export function getTodayTimestamp(){
     const now = new Date();

@@ -1,13 +1,23 @@
 import {useState} from "react";
 import { View, Text, Button } from "react-native";
+
+import { getCalendar } from "../Utils/Storage";
+
 import { getCurrentMonth, getCurrentYear, getDaysInMonth, monthNames } from "../Utils/Calendar";
+import { useCurrentUserContext } from '../Utils/userContext';
 
 export default function CalendarView({ navigation }){
+    //Extract user context
+    const {
+        username: currentUser
+    } = useCurrentUserContext();
+
     //Store the time interval/the month currently displayed
     const [timeSelected, setTimeSelected] = useState({
         year: getCurrentYear(),
         month: getCurrentMonth()
     });
+    const [eventsInMonth, setEventsInMonth] = useState([])
 
     //Store the days of the month
     let dayList = [];
@@ -45,6 +55,11 @@ export default function CalendarView({ navigation }){
         });
     }
 
+    //Get all the events in the current month
+    getCalendar(currentUser).then((calendar) => {
+
+    })
+
     return (
         <View>
             <Text>{monthNames[timeSelected.month]} {timeSelected.year}</Text> 
@@ -53,7 +68,9 @@ export default function CalendarView({ navigation }){
             <View>
                 {dayList.map((day, index) => {
                     return (
-                        <Text key={index}>{day}</Text>
+                        <View key={index}>
+                            <Text>{day}</Text>
+                        </View>
                     )
                 })}
             </View>
