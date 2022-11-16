@@ -1,9 +1,9 @@
-import {View,Text, Button, TextInput, SafeAreaView, Alert} from "react-native";
+import { View, Text, TouchableHighlight } from "react-native";
 
 import { padWithLeadingZero } from "../Utils/Calendar";
 
 //This component can display basic information for a single calendar entry
-export default function Event({ calendarItem }) {
+export default function Event({ calendarItem, navigation }) {
     const startDate = new Date(calendarItem.start)
     const endDate = new Date(calendarItem.end)
 
@@ -15,10 +15,12 @@ export default function Event({ calendarItem }) {
     const calendarDateString = `${startDate.getDate()}.${startDate.getMonth() + 1}.${startDate.getFullYear()}`
 
     return (
-        <View>
-            <Text>{calendarItem.title}</Text>
-            <Text>{startTimeString} - {endTimeString}</Text>
-            <Text>{calendarDateString}</Text>
-        </View>
+        <TouchableHighlight onPress={() => {navigation.navigate("EventDetails", {calendarItem: calendarItem})}}>
+            <View>
+                <Text>{calendarItem.title}</Text>
+                <Text>{startTimeString} - {endTimeString}</Text>
+                <Text>{calendarDateString}</Text>
+            </View>
+        </TouchableHighlight>
     )
 }

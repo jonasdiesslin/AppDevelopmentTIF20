@@ -19,6 +19,7 @@ export default function CalendarView({ navigation }){
         year: getCurrentYear(),
         month: getCurrentMonth()
     });
+    //This state stores all the calendar events in the month currently selected
     const [eventsInMonth, setEventsInMonth] = useState([])
 
     //Store the days of the month
@@ -76,7 +77,7 @@ export default function CalendarView({ navigation }){
             <View>
                 <Text>{day}</Text>
                 {eventsInDay.map((calendarItem, index) => {
-                                return (<Event calendarItem={calendarItem} key={index}/>)
+                                return (<Event calendarItem={calendarItem} navigation={navigation} key={`${calendarItem.start}${calendarItem.end}${calendarItem.title}`}/>)
                             })}
             </View>
         )
@@ -87,25 +88,7 @@ export default function CalendarView({ navigation }){
             <Text>{monthNames[timeSelected.month]} {timeSelected.year}</Text> 
             <Button title="<" onPress={() => oneMonthBack()}/>
             <Button title=">" onPress={()=> oneMonthForward()}/>
-            <FlatList data={dayList} renderItem={renderDay} keyExtractor={(item, index) => index}/>
+            <FlatList data={dayList} renderItem={renderDay} keyExtractor={(item) => item.toString()}/>
         </View>
     )
 }
-
-/**
- * <View>
-                {dayList.map((day, index) => {
-                    const startOfToday = new Date(timeSelected.year, timeSelected.month, day, 0, 0, 0);
-                    const endOfToday = new Date(timeSelected.year, timeSelected.month, day, 23, 59, 59);
-                    const eventsInDay = getEventsWithinRange(eventsInMonth, startOfToday, endOfToday);
-                    return (
-                        <View key={index}>
-                            <Text>{day}</Text>
-                            {eventsInDay.map((calendarItem, index) => {
-                                return (<Event calendarItem={calendarItem} key={index}/>)
-                            })}
-                        </View>
-                    )
-                })}
-            </View>
- */
