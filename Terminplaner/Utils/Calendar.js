@@ -1,5 +1,46 @@
 //Various utilities for dealing with calendars and times
 
+import { getCalendar, storeCalendar } from "./Storage";
+
+function eventEqualityCheck(event1, event2){
+    return (
+        (event1.title === event2.title) &&
+        (event1.start === event2.start) &&
+        (event1.end === event2.end) &&
+        (event1.description === event2.description)
+    )
+}
+
+export async function addEvent(username, newEvent){
+    let calendar = await getCalendar(username);
+    //Check if such an event already exists so we don't create duplicates
+    for (const i in calendar){
+        if (eventEqualityCheck(calendar[i], eventToDelete)){
+            return;
+        }
+    }
+    //No equal event found -> we can add it to the calendar
+    calendar.push(newEvent);
+    await storeCalendar(username, calendar);
+}
+
+export async function deleteEvent(username, eventToDelete){
+    let calendar = await getCalendar(username);
+    //Look through the calendar to find similar events
+    let indexToDelete = -1;
+    for (const i in calendar){
+        if (eventEqualityCheck(calendar[i], eventToDelete)){
+            indexToDelete = i;
+            break;
+        }
+    }
+    //Delete the event and store new calendar
+    //NOTE: This function is only called from EventDetails with an existing event as argument
+    //  -> we will always find eventToDelete in the calendar
+    calendar.splice(indexToDelete, 1);
+    await storeCalendar(username, calendar)
+}
+
 //Selects all events from calendar that start at or after rangeStart and before rangeEnd
 //and sorts them for good measure
 export function getEventsWithinRange(calendar, rangeStart, rangeEnd){

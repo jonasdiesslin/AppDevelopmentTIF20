@@ -1,9 +1,16 @@
 import { View,Text, Button, Alert } from "react-native";
 
-import { padWithLeadingZero } from "../Utils/Calendar";
+import { padWithLeadingZero, deleteEvent } from "../Utils/Calendar";
+import { useCurrentUserContext } from '../Utils/userContext';
 
 //This component shows all details for an event. It is reachable by clicking on an event in the main view or the calendar view.
 export default function EventDetails({ route, navigation }) {
+    //Extract user context
+    const {
+        username: currentUser
+    } = useCurrentUserContext();
+
+    //Get the event to display from the route parameters
     const { calendarItem } = route.params;
     const startDate = new Date(calendarItem.start);
     const endDate = new Date(calendarItem.end);
@@ -25,7 +32,20 @@ export default function EventDetails({ route, navigation }) {
                                 calendarItem.description :
                                 "-"}
             </Text>
-            <Button title="Löschen" onPress={() => Alert.alert("TBD")} />
+            <Button title="Bearbeiten" onPress={() => Alert.alert("TBD")} />
+            <Button title="Löschen" onPress={() => Alert.alert("Löschen Bestätigen",
+                "Wollen Sie diesen Termin wirklich löschen?", [
+                {
+                    text: "Löschen",
+                    onPress: () => {
+                        //deleteEvent(currentUser, calendarItem);
+                        navigation.goBack();
+                    } 
+                },
+                {
+                    text: "Abbrechen"
+                }
+            ])} />
         </View>
     )
 }

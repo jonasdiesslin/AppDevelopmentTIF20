@@ -21,8 +21,10 @@ Ein Kalender ist ein Array mit Objekten von folgendem Format:
     description: 'Beschreibung',
     start: Timestamp, //Timestamps are stored as Strings
     end: Timestamp,
-    notification: true/false
+    notification: true/false,
+    notificationInfo: [Dependent on which notification library we'll use]
 }
 ```
 Aktuell werden die Kalender aller Benutzer (als JSON-Strings) im AsyncStorage gespeichert.
 Der Key lautet dabei jeweils "${nutzername}-calendar", also bspw. für Benutzer "test2" "test2-calendar".
+NOTE: title, description, start, end should uniquely identify an event.
