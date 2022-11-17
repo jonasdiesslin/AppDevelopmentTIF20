@@ -64,7 +64,16 @@ export function getEndTomorrowTimestamp(){
     const today = getTodayTimestamp();
     const oneDayMilliseconds = 24*60*60*1000;
 
-    const endOfTomorrow = newDate(today.getTime() + (2 * oneDayMilliseconds))
+    const endOfTomorrow = new  Date(today.getTime() + (2 * oneDayMilliseconds))
+    return endOfTomorrow;
+}
+
+//Returns the date object for seven days after today, 24:00
+export function getSevenDaysHenceTimestamp(){
+    const today = getTodayTimestamp();
+    const oneDayMilliseconds = 24*60*60*1000;
+
+    const endOfTomorrow = new  Date(today.getTime() + (7 * oneDayMilliseconds))
     return endOfTomorrow;
 }
 

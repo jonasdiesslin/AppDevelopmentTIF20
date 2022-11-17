@@ -1,11 +1,18 @@
 import {useState} from "react";
-import { StyleSheet, Button, Text, View, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
 
 import {getCalendar} from '../Utils/Storage';
 import Event from '../Components/Event'
 
 import { useCurrentUserContext } from '../Utils/userContext';
-import { getEventsAfterDate, getTodayTimestamp } from "../Utils/Calendar";
+import { getEventsWithinRange, getEventsAfterDate, getTodayTimestamp, getStartTomorrowTimestamp, getEndTomorrowTimestamp, getSevenDaysHenceTimestamp } from "../Utils/Calendar";
+
+function getCalendarSeparator(text){
+    return {
+        isSeparator: true,
+        text: text
+    }
+}
 
 export default function Main({ navigation }) {
 
@@ -26,14 +33,33 @@ export default function Main({ navigation }) {
 
     //Load calendar initially
     loadCalendar();
+    //Get various dates
+    const startOfToday = getTodayTimestamp();
+    const startOfTomorrow = getStartTomorrowTimestamp();
+    const endOfTomorrow = getEndTomorrowTimestamp();
+    const endOfWeek = getSevenDaysHenceTimestamp();
+
+    //Construct a prettier calendar (with separators) for the display
+    let finishedCalendar = [getCalendarSeparator("Heute:")];
+    finishedCalendar = finishedCalendar.concat(getEventsWithinRange(mainCalendar, startOfToday, startOfTomorrow));
+    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Morgen:")]);
+    finishedCalendar = finishedCalendar.concat(getEventsWithinRange(mainCalendar, startOfTomorrow, endOfTomorrow));
+    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Nächste sieben Tage:")]);
+    finishedCalendar = finishedCalendar.concat(getEventsWithinRange(mainCalendar, endOfTomorrow, endOfWeek));
+    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Später:")]);
+    finishedCalendar = finishedCalendar.concat(getEventsAfterDate(mainCalendar, endOfWeek));
 
     function renderCalendarItem({item: calendarItem}){
-        return (<Event calendarItem={calendarItem} navigation={navigation}/>)
+        if(calendarItem.isSeparator === true) {
+            return (<Text>{calendarItem.text}</Text>)
+        } else {
+            return (<Event calendarItem={calendarItem} navigation={navigation}/>)
+        }
     }
 
     return (
         <>
-            <View style={{flex: 1}}>
+            <SafeAreaView style={{flex: 1}}>
                 <Button title="Logout" onPress={() => {
                     setCurrentUser(null);
                     setLoggedIn(false);//Now we'll go back to the login component
@@ -46,8 +72,11 @@ export default function Main({ navigation }) {
                 <Text>Hallo, {currentUser}!</Text>
                 <Text>Ihre Termine:</Text>
 
-                <FlatList data={mainCalendar} renderItem={renderCalendarItem} keyExtractor={(item) => `${item.start}${item.end}${item.title}`}/>                
-            </View>
+                <FlatList   data={finishedCalendar}
+                            renderItem={renderCalendarItem} 
+                            keyExtractor={(item) => ((item.isSeparator === true) ? `${item.text}` : `${item.start}${item.end}${item.title}`)}
+                            style={{flexGrow: 1}}/>
+            </SafeAreaView>
             <TouchableOpacity activeOpacity={0.5} style={styles.touchableOpacityStyle} onPress={() => navigation.navigate("Appointment")}>
                 <Text style={styles.FABTextStyle}>+</Text>
             </TouchableOpacity>
