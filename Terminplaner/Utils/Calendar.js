@@ -163,3 +163,8 @@ export function getCurrentMonth(){
     const now = new Date();
     return now.getMonth();
 }
+
+export function getCurrentDay(){
+    const now = new Date();
+    return now.getDate();
+}

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import { View, Text, Button, FlatList } from "react-native";
+import { View, Text, Button, FlatList, TouchableHighlight } from "react-native";
 
 import { getCalendar } from "../Utils/Storage";
 import Event from '../Components/Event'
@@ -67,9 +67,19 @@ export default function CalendarView({ navigation }){
         const monthCalendar = getEventsWithinRange(fullCalendar, startOfMonth, endOfMonth)
         setEventsInMonth(monthCalendar);
     }
-    getEventsInMonth();
+    //getEventsInMonth();
 
     function renderDay({item: day}){
+        return (
+            <TouchableHighlight onPress={() => {navigation.navigate("DayView", {
+                yearSelected: timeSelected.year,
+                monthSelected: timeSelected.month,
+                daySelected: day
+            })}}>
+                <Text>{day}</Text>
+            </TouchableHighlight>
+        )
+        /*
         const startOfToday = new Date(timeSelected.year, timeSelected.month, day, 0, 0, 0);
         const endOfToday = new Date(timeSelected.year, timeSelected.month, day, 23, 59, 59);
         const eventsInDay = getEventsWithinRange(eventsInMonth, startOfToday, endOfToday);
@@ -81,6 +91,7 @@ export default function CalendarView({ navigation }){
                             })}
             </View>
         )
+        */
     }
 
     return (

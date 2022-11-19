@@ -27,7 +27,8 @@
     "react-native-screens": "~3.15.0",
     "react-native-svg": "^12.3.0",
     "react-native-web": "~0.18.7",
-    "tailwindcss": "^3.2.4"
+    "tailwindcss": "^3.2.4",
+    "expo-notifications": "~0.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
