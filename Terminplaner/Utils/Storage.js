@@ -49,6 +49,11 @@ var testCalendars = {
     ]
 }
 
+//Local variables for caching authentication info and calendars
+//NOTE: Experimental. Ditch this if there are any problems.
+let authenticationInfoCache = [];
+let calendarCache = {};
+
 //Checks if the local storage is empty and initializes it with example data, if necessary
 //Returns true if storage was empty (and had to be initialized) and false if some data was already stored.
 export async function initLocalStorage(){
@@ -68,17 +73,34 @@ export async function initLocalStorage(){
     }
 }
 
-
 //Returns all of the authenticationInfo-Array
 export async function getAuthenticationInfo(){
+    if (authenticationInfoCache.length === 0){
+        //Cache empty -> fill it and return when ready
+        const jsonValue = await AsyncStorage.getItem("authenticationInfo");
+        const authenticationInfo = JSON.parse(jsonValue);
+        authenticationInfoCache = authenticationInfo;
+        return authenticationInfo;
+    } else {
+        //Cache full -> return cached value
+        return authenticationInfoCache;
+    }
+    /** old version (pre-caching) 
     const jsonValue = await AsyncStorage.getItem("authenticationInfo");
     const authenticationInfo = JSON.parse(jsonValue);
     return authenticationInfo;
+    */
 }
 
 //Stores a new authenticationInfo-Array
 export async function storeAuthenticationInfo(newAuthenticationInfo){
-    await AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthenticationInfo))
+    //Store new authenticationInfo-Array in cache and in AsyncStorage (but without waiting)
+    authenticationInfoCache = newAuthenticationInfo;
+    AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthenticationInfo));
+
+    /** old version (pre-caching) 
+     * await AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthenticationInfo));
+    */
 }
 
 //Returns the password hash associated with a given username (or the empty string if the username doesn't exist)
