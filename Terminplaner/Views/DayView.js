@@ -6,7 +6,6 @@ import Event from '../Components/Event'
 
 import { getEventsWithinRange, monthNames } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DayView({ route, navigation }){
     //Extract user context

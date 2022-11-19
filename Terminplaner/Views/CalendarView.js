@@ -2,11 +2,9 @@ import {useState} from "react";
 import { View, Text, Button, FlatList, TouchableHighlight } from "react-native";
 
 import { getCalendar } from "../Utils/Storage";
-import Event from '../Components/Event'
 
 import { getCurrentMonth, getCurrentYear, getDaysInMonth, getEventsWithinRange, monthNames } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CalendarView({ navigation }){
     //Extract user context
