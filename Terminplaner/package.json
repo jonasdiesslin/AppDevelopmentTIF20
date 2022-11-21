@@ -15,7 +15,9 @@
     "@react-navigation/native-stack": "^6.9.1",
     "expo": "~46.0.16",
     "expo-crypto": "~11.0.0",
+    "expo-notifications": "~0.16.1",
     "expo-status-bar": "~1.4.0",
+    "firebase": "^9.14.0",
     "nativewind": "^2.0.11",
     "react": "18.0.0",
     "react-dom": "18.0.0",
@@ -27,8 +29,7 @@
     "react-native-screens": "~3.15.0",
     "react-native-svg": "^12.3.0",
     "react-native-web": "~0.18.7",
-    "tailwindcss": "^3.2.4",
-    "expo-notifications": "~0.16.1"
+    "tailwindcss": "^3.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
