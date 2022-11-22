@@ -5,10 +5,10 @@ import { Calendar } from "react-native-calendars";
 
 import { getCalendar } from "../Utils/Storage";
 
-import { getCurrentMonth, getCurrentYear, getDaysInMonth, getEventsWithinRange, monthNames, padWithLeadingZero } from "../Utils/Calendar";
+import { getCurrentDay, getCurrentMonth, getCurrentYear, getDaysInMonth, getEventsWithinRange, monthNames, padWithLeadingZero } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
-export default function CalendarView({ navigation }){
+export default function CalendarView({ route, navigation }){
     //Extract user context
     const {
         username: currentUser
@@ -16,8 +16,8 @@ export default function CalendarView({ navigation }){
 
     //Store the time interval/the month currently displayed
     const [timeSelected, setTimeSelected] = useState({
-        year: getCurrentYear(),
-        month: getCurrentMonth()
+        year: route.params.yearSelected,
+        month: route.params.monthSelected
     });
     //This state stores all the calendar events in the month currently selected
     const [eventsInMonth, setEventsInMonth] = useState([])
@@ -96,7 +96,8 @@ export default function CalendarView({ navigation }){
 
     return (
         <View style={{flex: 1}}>
-            <Calendar 
+            <Calendar
+                initialDate={`${route.params.yearSelected}-${padWithLeadingZero(route.params.monthSelected + 1)}-${padWithLeadingZero(getCurrentDay())}`} 
                 firstDay={1}
                 onDayPress={dayPressed => {
                     navigation.navigate("DayView", {

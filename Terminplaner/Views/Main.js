@@ -35,7 +35,7 @@ export default function Main({ navigation }) {
     useEffect(() => {
         loadCalendar();
     }, [])
-    
+
     //Get various dates
     const startOfToday = getTodayTimestamp();
     const startOfTomorrow = getStartTomorrowTimestamp();
@@ -69,7 +69,10 @@ export default function Main({ navigation }) {
                 }}/>
                 <Button title="Kalendaransicht" onPress={() => {
                     //navigate to calendar view
-                    navigation.navigate("CalendarView");
+                    navigation.navigate("CalendarView", {
+                        yearSelected: getTodayTimestamp().getFullYear(),
+                        monthSelected: getTodayTimestamp().getMonth()
+                    });
                 }}/>
 
                 <Text>Hallo, {currentUser}!</Text>
