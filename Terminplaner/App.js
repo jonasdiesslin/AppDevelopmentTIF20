@@ -14,6 +14,7 @@ import DayView from './Views/DayView';
 
 import { currentUserContext } from './Utils/userContext';
 import { initLocalStorage } from './Utils/Storage'
+import { initializeFirebaseStorage } from './Utils/fbStorage';
 
 const background = require("./public/images/bg.jpg")
 
@@ -30,7 +31,9 @@ export default function App() {
       const initialized = await initLocalStorage();
       if(initialized){
         Alert.alert("Leerer LocalStorage erkannt. Testwerte initialisiert.");
-      } 
+      }
+      //Test firebase
+      initializeFirebaseStorage();
     }
     initialize();
   }, []) //Empty dependencies -> Effect used only one

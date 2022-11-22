@@ -1,29 +1,103 @@
 import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, getDoc, collection, setDoc, onSnapshot } from "firebase/firestore";
 
-// Optionally import the services that you want to use
-// import {...} from "firebase/auth";
-// import {...} from "firebase/database";
-// import {...} from "firebase/firestore";
-// import {...} from "firebase/functions";
-// import {...} from "firebase/storage";
+//Global variables to hold authenticationInfo and calendars
+let authenticationInfo = [];
+//let calendars = {};
 
+//For efficiency reasons, we keep only a single active calendar in memory at a time (there's only one user logged in at any time as well).
+let currentCalendar = [];
+let currentCalendarUsername = ""; //Stores which users calendar is currently stored in currentCalendar
+let unsubCurrentCalendar = () => {}; //Initially, we are not subscribed to anything, so unsub has no work to do.
+
+//Set up Firebase connection
 const firebaseConfig = {
-
     apiKey: "AIzaSyDtoXY_PF4N9T_gjaahc_WizlmGtdbHacA",
-  
     authDomain: "terminplaner-f5a14.firebaseapp.com",
-  
     projectId: "terminplaner-f5a14",
-  
     storageBucket: "terminplaner-f5a14.appspot.com",
-  
     messagingSenderId: "404188597929",
-  
     appId: "1:404188597929:web:66b87373d424ec6deaa3b8"
-  
 };
-  
 
 const app = initializeApp(firebaseConfig);
-// For more information on how to access Firebase in your project,
-// see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
+const db = getFirestore(app);
+
+export async function initializeFirebaseStorage(){
+    //Set up listeners for authenticationInfo and calendars
+    const unsubAuthenticationInfo = onSnapshot(doc(db, "Terminplaner", "authenticationInfo"), (doc) => {
+        authenticationInfo = doc.data().authenticationInfoArray;
+        console.log("New authenticationInfo: ", authenticationInfo);
+
+    });
+
+    console.log(await getCalendar("test"));
+    /*
+    const unsubCalendars = onSnapshot(doc(db, "Terminplaner", "calendars"), (doc) => {
+        calendars = doc.data().calendarMap;
+        console.log("New calendars: ", calendars);
+    });
+    */
+}
+
+//Returns all of the authenticationInfo-Array
+export async function getAuthenticationInfo(){
+    return authenticationInfo;
+}
+
+//Stores a new authenticationInfo-Array
+export async function storeAuthenticationInfo(newAuthenticationInfo){
+    setDoc(doc(db, "Terminplaner", "authentificationInfo"), {
+        authenticationInfoArray: newAuthenticationInfo
+    });
+}
+
+//Returns the password hash associated with a given username (or the empty string if the username doesn't exist)
+export async function getPasswordHash(username){
+    const authentificationInfo = await getAuthenticationInfo()
+    for (const i in authentificationInfo){
+        if (authentificationInfo[i].username == username){
+            return authentificationInfo[i].passwordHash
+        }
+    }
+    //If we are here, the username has not been found
+    return ""
+}
+
+export async function getCalendar(username){
+    if (currentCalendarUsername === username) {
+        //We already have the correct calendar stored locally
+        console.log("Found correct calendar stored locally.");
+        return currentCalendar;
+    } else {
+        //We need to load a different calendar
+        console.log("Loading new calendar");
+
+        unsubCurrentCalendar();
+        
+        //Wait for the correct calendar to be loaded
+        const docRef = doc(db, "Terminplaner", `calendar-${username}`);
+        const docSnap = await getDoc(docRef);
+        currentCalendar = docSnap.data().calendarArray;
+
+        //Set up a snapshot listener for this calendar (not sure if this is necessary)
+        const newUnsub = onSnapshot(doc(db, "Terminplaner", `calendar-${username}`), (doc) => {
+            currentCalendar = doc.data().calendarArray;
+            console.log("New calendar for user " + username  + ":");
+            console.log(currentCalendar);
+        });
+
+        //Update unsubscriber and username for the current calender
+        unsubCurrentCalendar = newUnsub;
+        currentCalendarUsername = username;
+
+        //And return what we've got
+        return currentCalendar;
+    }
+}
+
+export async function storeCalendar(username, newCalendar){
+    setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
+        calendarArray: newCalendar
+    });
+}
