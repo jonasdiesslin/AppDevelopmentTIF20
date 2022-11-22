@@ -13,8 +13,8 @@ import EventDetails from './Views/EventDetails';
 import DayView from './Views/DayView';
 
 import { currentUserContext } from './Utils/userContext';
-import { initLocalStorage } from './Utils/Storage'
-import { initializeFirebaseStorage } from './Utils/fbStorage';
+//import { initLocalStorage } from './Utils/Storage'
+import { initializeFirebaseStorage } from './Utils/Storage';
 
 const background = require("./public/images/bg.jpg")
 
@@ -25,17 +25,9 @@ export default function App() {
   let [loggedIn, setLoggedIn] = useState(false); //Boolean. Stores if there is currently a user logged into the app.
   let [currentUser, setCurrentUser] = useState(null); //The username of the currently active user. Null if no user logged in currently.
 
-  //Initialize local storage once at startup, if necessary
+  //Initialize storage once at startup, if necessary
   useEffect(() => {
-    async function initialize(){
-      const initialized = await initLocalStorage();
-      if(initialized){
-        Alert.alert("Leerer LocalStorage erkannt. Testwerte initialisiert.");
-      }
-      //Test firebase
-      initializeFirebaseStorage();
-    }
-    initialize();
+    initializeFirebaseStorage();
   }, []) //Empty dependencies -> Effect used only one
 
   return (

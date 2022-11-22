@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
 
 import {getCalendar} from '../Utils/Storage';
@@ -32,7 +32,10 @@ export default function Main({ navigation }) {
     }
 
     //Load calendar initially
-    loadCalendar();
+    useEffect(() => {
+        loadCalendar();
+    }, [])
+    
     //Get various dates
     const startOfToday = getTodayTimestamp();
     const startOfTomorrow = getStartTomorrowTimestamp();

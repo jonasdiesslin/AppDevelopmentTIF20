@@ -1,106 +1,45 @@
-//Various functions for dealing with storage
+import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, getDoc, collection, setDoc, onSnapshot } from "firebase/firestore";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//Global variables to hold authenticationInfo and calendars
+let authenticationInfo = [];
+//let calendars = {};
 
-//Use these constants while we don't have a local storage set up yet.
-var testAuthentificationInfo = [
-    {
-        username: 'test',
-        passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08' //Base-64 of SHA256('test'), i.e. the password is 'test'
-    },
-    {
-        username: 'test2',
-        passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08' //Base-64 of SHA256('test'), i.e. the password is 'test'
-    }
-]
+//For efficiency reasons, we keep only a single active calendar in memory at a time (there's only one user logged in at any time as well).
+let currentCalendar = [];
+let currentCalendarUsername = ""; //Stores which users calendar is currently stored in currentCalendar
+let unsubCurrentCalendar = () => {}; //Initially, we are not subscribed to anything, so unsub has no work to do.
 
-var testCalendars = {
-    test: [
-        {
-            title: 'Titel',
-            description: 'Beschreibung',
-            start: '2022-11-29T12:00:00+01:00', //start and end are ISO standard time strings
-            end: '2022-11-29T14:29:00+01:00',
-            notification: true
-        },
-        {
-            title: 'Titel2',
-            description: 'Beschreibung',
-            start: '2022-11-30T12:00:00+01:00',
-            end: '2022-11-30T14:00:00+01:00',
-            notification: true
-        },
-        {
-            title: 'Titel3',
-            description: 'Beschreibung',
-            start: '2022-12-01T12:00:00+01:00',
-            end: '2022-12-01T14:00:00+01:00',
-            notification: true
-        }
-    ],
-    test2: [
-        {
-            title: 'Titel',
-            description: 'Beschreibung',
-            start: '2022-11-29T12:00:00+01:00', //start and end are ISO standard time strings
-            end: '2022-11-29T14:29:00+01:00',
-            notification: true
-        }
-    ]
-}
+//Set up Firebase connection
+const firebaseConfig = {
+    apiKey: "AIzaSyDtoXY_PF4N9T_gjaahc_WizlmGtdbHacA",
+    authDomain: "terminplaner-f5a14.firebaseapp.com",
+    projectId: "terminplaner-f5a14",
+    storageBucket: "terminplaner-f5a14.appspot.com",
+    messagingSenderId: "404188597929",
+    appId: "1:404188597929:web:66b87373d424ec6deaa3b8"
+};
 
-//Local variables for caching authentication info and calendars
-//NOTE: Experimental. Ditch this if there are any problems.
-let authenticationInfoCache = [];
-let calendarCache = {};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-//Checks if the local storage is empty and initializes it with example data, if necessary
-//Returns true if storage was empty (and had to be initialized) and false if some data was already stored.
-export async function initLocalStorage(){
-    const keys = await AsyncStorage.getAllKeys();
-    if (keys.length == 0){
-        //Local storage empty, set up example data
-        //First the authentication info
-        await AsyncStorage.setItem("authenticationInfo", JSON.stringify(testAuthentificationInfo));
-        //Then the individual calendars
-        for (const currentUsername in testCalendars){
-            await AsyncStorage.setItem((currentUsername + "-calendar"), JSON.stringify(testCalendars[currentUsername]));
-        }
-        return true;
-    } else {
-        //Something is stored in localStorage already -> nothing to do for us
-        return false;
-    }
+export async function initializeFirebaseStorage(){
+    //Set up listener for authenticationInfo
+    const unsubAuthenticationInfo = onSnapshot(doc(db, "Terminplaner", "authenticationInfo"), (doc) => {
+        authenticationInfo = doc.data().authenticationInfoArray;
+    });
 }
 
 //Returns all of the authenticationInfo-Array
 export async function getAuthenticationInfo(){
-    if (authenticationInfoCache.length === 0){
-        //Cache empty -> fill it and return when ready
-        const jsonValue = await AsyncStorage.getItem("authenticationInfo");
-        const authenticationInfo = JSON.parse(jsonValue);
-        authenticationInfoCache = authenticationInfo;
-        return authenticationInfo;
-    } else {
-        //Cache full -> return cached value
-        return authenticationInfoCache;
-    }
-    /** old version (pre-caching) 
-    const jsonValue = await AsyncStorage.getItem("authenticationInfo");
-    const authenticationInfo = JSON.parse(jsonValue);
     return authenticationInfo;
-    */
 }
 
 //Stores a new authenticationInfo-Array
 export async function storeAuthenticationInfo(newAuthenticationInfo){
-    //Store new authenticationInfo-Array in cache and in AsyncStorage (but without waiting)
-    authenticationInfoCache = newAuthenticationInfo;
-    AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthenticationInfo));
-
-    /** old version (pre-caching) 
-     * await AsyncStorage.setItem("authenticationInfo", JSON.stringify(newAuthenticationInfo));
-    */
+    setDoc(doc(db, "Terminplaner", "authentificationInfo"), {
+        authenticationInfoArray: newAuthenticationInfo
+    });
 }
 
 //Returns the password hash associated with a given username (or the empty string if the username doesn't exist)
@@ -108,7 +47,7 @@ export async function getPasswordHash(username){
     const authentificationInfo = await getAuthenticationInfo()
     for (const i in authentificationInfo){
         if (authentificationInfo[i].username == username){
-            return authentificationInfo[i].passwordHash
+            return authentificationInfo[i].passwordHash;
         }
     }
     //If we are here, the username has not been found
@@ -116,11 +55,34 @@ export async function getPasswordHash(username){
 }
 
 export async function getCalendar(username){
-    const jsonValue = await AsyncStorage.getItem(username + "-calendar");
-    const calendar = JSON.parse(jsonValue);
-    return calendar //NOTE: The authentication code makes sure that only valid usernames will be passed as arguments
+    if (currentCalendarUsername === username) {
+        //We already have the correct calendar stored locally
+        return currentCalendar;
+    } else {
+        //We need to load a different calendar
+        unsubCurrentCalendar();
+        
+        //Wait for the correct calendar to be loaded
+        const docRef = doc(db, "Terminplaner", `calendar-${username}`);
+        const docSnap = await getDoc(docRef);
+        currentCalendar = docSnap.data().calendarArray;
+
+        //Set up a snapshot listener for this calendar (not sure if this is necessary)
+        const newUnsub = onSnapshot(doc(db, "Terminplaner", `calendar-${username}`), (doc) => {
+            currentCalendar = doc.data().calendarArray;
+        });
+
+        //Update unsubscriber and username for the current calender
+        unsubCurrentCalendar = newUnsub;
+        currentCalendarUsername = username;
+
+        //And return what we've got
+        return currentCalendar;
+    }
 }
 
 export async function storeCalendar(username, newCalendar){
-    await AsyncStorage.setItem((username + "-calendar"), JSON.stringify(newCalendar));
+    setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
+        calendarArray: newCalendar
+    });
 }

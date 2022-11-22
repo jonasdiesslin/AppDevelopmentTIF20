@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { View, Text, Button, FlatList } from "react-native";
 
 import { getCalendar } from "../Utils/Storage";
@@ -57,7 +57,10 @@ export default function DayView({ route, navigation }){
         const dayCalendar = getEventsWithinRange(fullCalendar, startOfDay, endOfDay)
         setEventsInDay(dayCalendar);
     }
-    getEventsInDay();
+
+    useEffect(() => {
+        getEventsInDay();
+    }, [timeSelected]);
 
     function renderCalendarItem({item: calendarItem}){
         return (<Event calendarItem={calendarItem} navigation={navigation}/>)

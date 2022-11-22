@@ -7,7 +7,6 @@ export async function authenticateUser(username, enteredPassword){
     const enteredPasswordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
                                                                enteredPassword)
     const storedPasswordHash = await getPasswordHash(username)
-
     return enteredPasswordHash === storedPasswordHash;
 }
 
