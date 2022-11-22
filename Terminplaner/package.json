@@ -22,6 +22,7 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.6",
+    "react-native-calendars": "^1.1291.1",
     "react-native-heroicons": "^3.2.0",
     "react-native-modal-datetime-picker": "^14.0.0",
     "react-native-modern-datepicker": "^1.0.0-beta.91",

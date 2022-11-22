@@ -1,9 +1,11 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { View, Text, Button, FlatList, TouchableHighlight } from "react-native";
+
+import { Calendar } from "react-native-calendars";
 
 import { getCalendar } from "../Utils/Storage";
 
-import { getCurrentMonth, getCurrentYear, getDaysInMonth, getEventsWithinRange, monthNames } from "../Utils/Calendar";
+import { getCurrentMonth, getCurrentYear, getDaysInMonth, getEventsWithinRange, monthNames, padWithLeadingZero } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
 export default function CalendarView({ navigation }){
@@ -65,7 +67,59 @@ export default function CalendarView({ navigation }){
         const monthCalendar = getEventsWithinRange(fullCalendar, startOfMonth, endOfMonth)
         setEventsInMonth(monthCalendar);
     }
-    //getEventsInMonth();
+    
+    useEffect(() => {
+        getEventsInMonth();
+    }, [timeSelected]);
+
+    const [datesToMark, setDatesToMark] = useState({});
+    function updateDatesToMark(){
+        let newDatesToMark = {};
+        //For every day in this month, see if there is at least one event scheduled on it.
+        //If yes, we'll mark that day
+        for (const date of dayList){
+            const startOfDay = new Date(timeSelected.year, timeSelected.month, date, 0, 0, 0);
+            const endOfDay = new Date(timeSelected.year, timeSelected.month, date, 23, 59, 59);
+            const noEventsOnDay = getEventsWithinRange(eventsInMonth, startOfDay, endOfDay).length
+            if (noEventsOnDay > 0){
+                //NOTE: The marked-dates-object apparently requires timestrings with zero-padded, one-indexed days and months.
+                //We'll therefore have to do a few little calculations.
+                const dateString = `${timeSelected.year}-${padWithLeadingZero(timeSelected.month + 1)}-${padWithLeadingZero(date)}`;
+                newDatesToMark[dateString] = {marked: true};
+            }
+        }
+        setDatesToMark(newDatesToMark);
+    }
+    useEffect(() => {
+        updateDatesToMark();
+    }, [eventsInMonth]);
+
+    return (
+        <View style={{flex: 1}}>
+            <Calendar 
+                firstDay={1}
+                onDayPress={dayPressed => {
+                    navigation.navigate("DayView", {
+                        yearSelected: timeSelected.year,
+                        monthSelected: timeSelected.month,
+                        daySelected: dayPressed.day
+                    });
+                }}
+                onPressArrowLeft={subtractMonth => {
+                    oneMonthBack();
+                    subtractMonth();
+                }}
+                onPressArrowRight={addMonth => {
+                    oneMonthForward();
+                    addMonth();
+                }}
+                markedDates={datesToMark}
+            />
+        </View>
+    )
+
+    /*
+    {'2022-10-29': {marked: true}, '2022-10-30': {marked: true}}
 
     function renderDay({item: day}){
         return (
@@ -77,27 +131,11 @@ export default function CalendarView({ navigation }){
                 <Text>{day}</Text>
             </TouchableHighlight>
         )
-        /*
-        const startOfToday = new Date(timeSelected.year, timeSelected.month, day, 0, 0, 0);
-        const endOfToday = new Date(timeSelected.year, timeSelected.month, day, 23, 59, 59);
-        const eventsInDay = getEventsWithinRange(eventsInMonth, startOfToday, endOfToday);
-        return (
-            <View>
-                <Text>{day}</Text>
-                {eventsInDay.map((calendarItem, index) => {
-                                return (<Event calendarItem={calendarItem} navigation={navigation} key={`${calendarItem.start}${calendarItem.end}${calendarItem.title}`}/>)
-                            })}
-            </View>
-        )
-        */
     }
 
-    return (
-        <View style={{flex: 1}}>
-            <Text>{monthNames[timeSelected.month]} {timeSelected.year}</Text> 
+    <Text>{monthNames[timeSelected.month]} {timeSelected.year}</Text> 
             <Button title="<" onPress={() => oneMonthBack()}/>
             <Button title=">" onPress={()=> oneMonthForward()}/>
-            <FlatList data={dayList} renderItem={renderDay} keyExtractor={(item) => item.toString()}/>
-        </View>
-    )
+    <FlatList data={dayList} renderItem={renderDay} keyExtractor={(item) => item.toString()}/>
+    */
 }

@@ -1,7 +1,32 @@
 //Various utilities for dealing with calendars and times
 
 import { getCalendar, storeCalendar } from "./Storage";
+import {LocaleConfig} from 'react-native-calendars';
 
+//Set up locale for the calendar view
+LocaleConfig.locales['de'] = {
+  monthNames: [
+    'Januar',
+    'Februar',
+    'März',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Dezember'
+  ],
+  monthNamesShort: ['Jan.', 'Feb.', 'Mär', 'Apr.', 'Mai', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Okt.', 'Nov.', 'Dez.'],
+  dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+  dayNamesShort: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam'],
+  today: "Heute"
+};
+LocaleConfig.defaultLocale = 'de';
+
+//Various functions for dealing with calendar arrays
 function eventEqualityCheck(event1, event2){
     return (
         (event1.title === event2.title) &&
@@ -79,6 +104,8 @@ export function getEventsAfterDate(calendar, startDate){
 
     return calendar.filter(isInRange).sort(compareEvents);
 }
+
+//Various utilities for handling dates
 
 //Returns the date object for today, 0:00
 export function getTodayTimestamp(){
