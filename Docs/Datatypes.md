@@ -25,6 +25,6 @@ Ein Kalender ist ein Array mit Objekten von folgendem Format:
     notificationInfo: [Dependent on which notification library we'll use]
 }
 ```
-Aktuell werden die Kalender aller Benutzer (als JSON-Strings) im AsyncStorage gespeichert.
-Der Key lautet dabei jeweils "${nutzername}-calendar", also bspw. für Benutzer "test2" "test2-calendar".
-NOTE: title, description, start, end should uniquely identify an event.
+Aktuell werden die Authentifizierungsinformationen und Kalender in Firestore gespeichert.
+Die Authentifizierungsinformationen befinden sich in der Collection "Terminplaner" im Dokument "authenticationInfo".
+Der Kalender des Benutzer "user" befindet sich in der Collection "Terminplaner" im Dokument "calendar-user".
