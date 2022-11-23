@@ -15,7 +15,7 @@ export default function Register({route, navigation}) {
 
     const isFormValid = useMemo(() => {
         return usernameInput.length > 0 && (passwordInput.length > 0 && passwordInputRepeat.length > 0)
-    }, [usernameInput, passwordInput]);
+    }, [usernameInput, passwordInput, passwordInputRepeat]);
 
     async function attemptRegister(){
         if(passwordInput === passwordInputRepeat){
@@ -37,7 +37,7 @@ export default function Register({route, navigation}) {
                         })
                     );
                 }, 1200);
-c           //register wasn't successful, show error
+            //register wasn't successful, show error
             } else {
                 setUsernameInput("");
                 setPasswordInput("");
@@ -55,7 +55,7 @@ c           //register wasn't successful, show error
     return (
     <ImageBackground source={image} className="flex-1">
         <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : height}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
             className="flex-1"
             enabled={Platform.OS === "ios"}
         >

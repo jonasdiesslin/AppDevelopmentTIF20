@@ -1,26 +1,34 @@
 //Various functions for login and user management
 
 import * as Crypto from 'expo-crypto';
-import { getAuthenticationInfo, getPasswordHash, storeAuthenticationInfo } from './Storage';
+import { getAuthenticationInfo, getPasswordHash, storeAuthenticationInfo, initializeCalendar } from './Storage';
 
 export async function authenticateUser(username, enteredPassword){
     const enteredPasswordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
-                                                               enteredPassword)
-    const storedPasswordHash = await getPasswordHash(username)
+                                                               enteredPassword);
+    const storedPasswordHash = await getPasswordHash(username);
     return enteredPasswordHash === storedPasswordHash;
 }
 
 export async function createUser(newUsername, newPassword){
     const passwordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
-                                                        newPassword)
+                                                        newPassword);
+    //First, check if a user with this name already exists
+    let authenticationInfo = await getAuthenticationInfo();
+    if (authenticationInfo.filter((authObj) => (authObj.username === newUsername)).length > 0){
+        return false;
+    }
+    //username not in use yet -> we can create a new user
     let authenticationObject = {
         username: newUsername,
         passwordHash: passwordHash
-    }
-    let authenticationInfo = await getAuthenticationInfo()
+    };
 
-    authenticationInfo.push(authenticationObject)
-    storeAuthenticationInfo(authenticationInfo)
+    authenticationInfo.push(authenticationObject);
+    storeAuthenticationInfo(authenticationInfo);
+    initializeCalendar(newUsername);
+
+    return true;
 }
 
 export async function deleteUser(usernameToDelete){

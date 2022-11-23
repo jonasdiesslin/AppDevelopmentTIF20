@@ -37,7 +37,7 @@ export async function getAuthenticationInfo(){
 
 //Stores a new authenticationInfo-Array
 export async function storeAuthenticationInfo(newAuthenticationInfo){
-    setDoc(doc(db, "Terminplaner", "authentificationInfo"), {
+    setDoc(doc(db, "Terminplaner", "authenticationInfo"), {
         authenticationInfoArray: newAuthenticationInfo
     });
 }
@@ -85,4 +85,19 @@ export async function storeCalendar(username, newCalendar){
     setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
         calendarArray: newCalendar
     });
+}
+
+export async function initializeCalendar(username){
+    //First, create a new calendar document for this user
+    await setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
+        calendarArray: []
+    });
+
+    //And switch over to the new calendar
+    unsubCurrentCalendar();
+    const newUnsub = onSnapshot(doc(db, "Terminplaner", `calendar-${username}`), (doc) => {
+        currentCalendar = doc.data().calendarArray;
+    });
+    unsubCurrentCalendar = newUnsub;
+    currentCalendarUsername = username;
 }

@@ -28,7 +28,7 @@ export default function App() {
   //Initialize storage once at startup, if necessary
   useEffect(() => {
     initializeFirebaseStorage();
-  }, []) //Empty dependencies -> Effect used only one
+  }, []) //Empty dependencies -> Effect used only once
 
   return (
       <NavigationContainer>

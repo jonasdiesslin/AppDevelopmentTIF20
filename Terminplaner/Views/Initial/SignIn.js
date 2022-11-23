@@ -43,7 +43,7 @@ export default function SignIn({route, navigation}) {
 
             <ImageBackground source={image} className="flex-1">
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : height}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
                     className="flex-1"
                     enabled={Platform.OS === "ios"}
                 >
