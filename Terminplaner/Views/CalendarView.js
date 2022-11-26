@@ -20,7 +20,7 @@ export default function CalendarView({ route, navigation }){
         month: route.params.monthSelected
     });
     //This state stores all the calendar events in the month currently selected
-    const [eventsInMonth, setEventsInMonth] = useState([])
+    const [eventsInMonth, setEventsInMonth] = useState([]);
 
     //Store the days of the month
     let dayList = [];
@@ -83,7 +83,7 @@ export default function CalendarView({ route, navigation }){
             const noEventsOnDay = getEventsWithinRange(eventsInMonth, startOfDay, endOfDay).length
             if (noEventsOnDay > 0){
                 //NOTE: The marked-dates-object apparently requires timestrings with zero-padded, one-indexed days and months.
-                //We'll therefore have to do a few little calculations.
+                //We'll therefore have to do a few calculations.
                 const dateString = `${timeSelected.year}-${padWithLeadingZero(timeSelected.month + 1)}-${padWithLeadingZero(date)}`;
                 newDatesToMark[dateString] = {marked: true};
             }

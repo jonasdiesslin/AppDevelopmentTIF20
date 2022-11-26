@@ -27,7 +27,26 @@ export default function DayView({ route, navigation }){
         day: daySelected
     });
     //This state stores all the calendar events in the month currently selected
-    const [eventsInDay, setEventsInDay] = useState([])
+    const [eventsInDay, setEventsInDay] = useState([]);
+
+    //Prevent default "back" behaviour
+    //Go back to CalendarView as intended, but select the month of the day currently selected in this view
+    useEffect(() => {
+        navigation.addListener("beforeRemove", (e) => {
+            //If this event was triggered by the user (e.g. by pressing the back button),
+            //we replace it with one that goes back to the correct calendar month
+            if(e.data.action.payload.params === undefined) {
+                e.preventDefault();
+                navigation.navigate("CalendarView", {
+                    yearSelected: timeSelected.year,
+                    monthSelected: timeSelected.month
+                });
+            } else {
+                //This event was triggered by us, i.e. it already contains the correct route parameters
+                return;
+            }
+        });
+    }, [timeSelected]);
 
     function oneDayBack(){
         //Offload the hard parts to the standard library
@@ -58,6 +77,7 @@ export default function DayView({ route, navigation }){
         setEventsInDay(dayCalendar);
     }
 
+    //Reload event list every time the user goes to a new day
     useEffect(() => {
         getEventsInDay();
     }, [timeSelected]);
