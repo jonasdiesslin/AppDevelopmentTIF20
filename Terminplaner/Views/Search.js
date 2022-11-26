@@ -33,9 +33,10 @@ export default function Search({ navigation }){
 
         const lowerSearchString = searchString.toLowerCase();
 
-        const newSearchResults = mainCalendar.filter((calendarEvent) => calendarEvent.title.toLowerCase().includes(lowerSearchString));
+        let newSearchResults = mainCalendar.filter((calendarEvent) => 
+            calendarEvent.title.toLowerCase().includes(lowerSearchString));
+        newSearchResults = newSearchResults.sort(compareEvents);
         setSearchResults(newSearchResults);
-        console.log(newSearchResults);
     }, [searchString, mainCalendar]);
 
     function renderCalendarItem({ item: calendarItem }){
