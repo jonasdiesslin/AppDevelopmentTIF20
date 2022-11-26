@@ -74,6 +74,9 @@ export default function Main({ navigation }) {
                         monthSelected: getTodayTimestamp().getMonth()
                     });
                 }}/>
+                <Button title="Suche" onPress={() => {
+                    navigation.navigate("Search");
+                }}/>
 
                 <Text>Hallo, {currentUser}!</Text>
                 <Text>Ihre Termine:</Text>

@@ -11,6 +11,7 @@ import Appointment from "./Views/Appointment";
 import CalendarView from './Views/CalendarView';
 import EventDetails from './Views/EventDetails';
 import DayView from './Views/DayView';
+import Search from './Views/Search';
 
 import { currentUserContext } from './Utils/userContext';
 //import { initLocalStorage } from './Utils/Storage'
@@ -64,6 +65,7 @@ export default function App() {
                           <Stack.Screen name="CalendarView" component={CalendarView} options={{ title:"Kalenderansicht" }}/>
                           <Stack.Screen name="DayView" component={DayView} options={{ title:"Tagesansicht" }}/>
                           <Stack.Screen name="EventDetails" component={EventDetails} options={{ title: "Termindetails"}}/>
+                          <Stack.Screen name="Search" component={Search} options={{ title: "Suche" }}/>
                         </Stack.Navigator>
                       )
         }  
