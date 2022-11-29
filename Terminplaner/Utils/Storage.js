@@ -29,8 +29,6 @@ export async function initializeFirebaseStorage(){
     const unsubAuthenticationInfo = onSnapshot(doc(db, "Terminplaner", "authenticationInfo"), (doc) => {
         authenticationInfo = doc.data().authenticationInfoArray;
         managementInfo = doc.data().userManagementInfo;
-        console.log("New managementInfo: ");;
-        console.log(managementInfo);
     });
 }
 
