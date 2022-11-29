@@ -4,12 +4,15 @@ import { UserCircleIcon } from "react-native-heroicons/outline";
 import { authenticateUser } from '../../Utils/Authentication';
 
 import { useCurrentUserContext } from '../../Utils/userContext';
+import {CommonActions} from "@react-navigation/native";
+
 
 //The component for the login screen
-export default function SignIn({route, navigation}) {
+export default function UserChoiceAuth({route, navigation}) {
 
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
+    const [pin, setPin] = useState("");
 
     const {image} = route.params;
 
@@ -21,12 +24,28 @@ export default function SignIn({route, navigation}) {
 
 
     async function attemptLogin(){
+        //use commented await statement as soon gateway for authentication is available
+        // const loginSuccessful = await authenticateUser(usernameInput, passwordInput, pin)
         const loginSuccessful = await authenticateUser(usernameInput, passwordInput)
 
         if(loginSuccessful){
-            //Password was correct, log in this user
-            setCurrentUser(usernameInput);
-            setLoggedIn(true); //Now we'll switch over to the Main component
+            //Password was correct, switch to user choice
+            Alert.alert(`Benutzer ${usernameInput} wurde erfolgreich zur Benutzerverwaltung authorisiert.`);
+            setTimeout(()=> {
+                //replaces the existing navigation state with the new one, preventing going back to the register screen
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 1,
+                        routes: [
+                            { name: 'Startseite' },
+                            {
+                                name: 'Benutzerauswahl', params: { image: image }
+                            },
+                        ],
+                    })
+                );
+            }, 1200);
+
         } else {
             setUsernameInput("");
             setPasswordInput("");
@@ -37,20 +56,18 @@ export default function SignIn({route, navigation}) {
 
     return (
 
-
-
-            <ImageBackground source={image} className="flex-1">
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    className="flex-1"
-                    enabled={Platform.OS === "ios"}
-                >
+        <ImageBackground source={image} className="flex-1">
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                className="flex-1"
+                enabled={Platform.OS === "ios"}
+            >
                 <TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
 
 
-              <View className="flex-1 justify-center items-center relative pb-72">
+                    <View className="flex-1 justify-center items-center relative pb-72">
 
-                        <Text className="text-3xl bottom-7 font-bold text-white ">Login</Text>
+                        <Text className="text-3xl bottom-7 font-bold text-white ">Benutzerverwaltung</Text>
                         <UserCircleIcon color="white" size={170} />
 
                         <View className="top-36">
@@ -75,12 +92,23 @@ export default function SignIn({route, navigation}) {
                                 value={passwordInput}
                                 onChangeText={setPasswordInput}
                             />
-                            <TouchableOpacity className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptLogin}><Text className="self-center bottom-1 text-lg text-white p-2">Login</Text></TouchableOpacity>
+                            <TextInput
+                                placeholder="Verifizierungscode"
+                                placeholderTextColor="white"
+                                autoComplete="sms-otp"
+                                textContentType="oneTimeCode"
+                                className="text-white top-4 border-2 border-stone-400 rounded-md p-2 w-80 h-11"
+                                style={{color: "white"}}
+                                secureTextEntry={true}
+                                value={pin}
+                                onChangeText={setPin}
+                            />
+                            <TouchableOpacity className="top-12 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptLogin}><Text className="self-center bottom-1 text-lg text-white p-2">Login</Text></TouchableOpacity>
                         </View>
-                </View>
-        </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-            </ImageBackground>
+        </ImageBackground>
 
 
 

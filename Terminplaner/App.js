@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Initial from "./Views/Initial/Initial";
 import SignIn from "./Views/Initial/SignIn";
 import Register from "./Views/Initial/Register";
+import UserChoiceAuth from "./Views/Initial/UserChoiceAuth";
+import UserChoice from "./Views/Initial/UserChoice";
 import Main from "./Views/Main";
 import Appointment from "./Views/Appointment";
 import CalendarView from './Views/CalendarView';
@@ -53,7 +54,8 @@ export default function App() {
                             <Stack.Screen name="Startseite" component={Initial}/>
                             <Stack.Screen name="Anmelden" component={SignIn}/>
                             <Stack.Screen name="Registrieren" component={Register}/>
-                            <Stack.Screen name="Benutzerauswahl" component={Register}/>
+                            <Stack.Screen name="BenutzerauswahlAuth" component={UserChoiceAuth}/>
+                            <Stack.Screen name="Benutzerauswahl" component={UserChoice}/>
                         </Stack.Navigator>
                         )
         }
