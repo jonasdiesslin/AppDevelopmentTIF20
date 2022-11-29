@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
-import { View, Text, Button, FlatList } from "react-native";
+import { View, Text, Button, FlatList, TouchableOpacity } from "react-native";
+import { ChevronLeftIcon, ChevronRightIcon } from "react-native-heroicons/outline";
 
 import { getCalendar } from "../Utils/Storage";
 import Event from '../Components/Event'
@@ -88,9 +89,13 @@ export default function DayView({ route, navigation }){
 
     return (
         <View style={{flex: 1}}>
-            <Text>{timeSelected.day}.{monthNames[timeSelected.month]} {timeSelected.year}</Text> 
-            <Button title="<" onPress={() => oneDayBack()}/>
-            <Button title=">" onPress={()=> oneDayForward()}/>
+            <Text>{timeSelected.day}. {monthNames[timeSelected.month]} {timeSelected.year}</Text> 
+            <TouchableOpacity onPress={() => oneDayBack()}>
+                <ChevronLeftIcon color="dodgerblue"/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => oneDayForward()}>
+                <ChevronRightIcon color="dodgerblue"/>
+            </TouchableOpacity>
             <FlatList   data={eventsInDay}
                             renderItem={renderCalendarItem} 
                             keyExtractor={(item) => (`${item.start}${item.end}${item.title}`)}
@@ -99,3 +104,7 @@ export default function DayView({ route, navigation }){
         </View>
     )
 }
+
+
+//<Button title="<" onPress={() => oneDayBack()}/>
+//<Button title=">" onPress={()=> oneDayForward()}/>

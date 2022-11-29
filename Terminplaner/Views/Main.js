@@ -1,13 +1,12 @@
 import {useEffect, useState} from "react";
 import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image } from 'react-native';
+import { PlusIcon } from "react-native-heroicons/outline";
 
 import {getCalendar} from '../Utils/Storage';
 import Event from '../Components/Event'
 
 import { useCurrentUserContext } from '../Utils/userContext';
 import { getEventsWithinRange, getEventsAfterDate, getTodayTimestamp, getStartTomorrowTimestamp, getEndTomorrowTimestamp, getSevenDaysHenceTimestamp } from "../Utils/Calendar";
-
-const plusImage = require("../public/images/iconmonstr-plus-thin-240.png")
 
 function getCalendarSeparator(text){
     return {
@@ -100,7 +99,7 @@ export default function Main({ navigation }) {
                 
             </SafeAreaView>
             <TouchableOpacity activeOpacity={0.5} style={styles.touchableOpacityStyle} onPress={() => navigation.navigate("Appointment")}>
-                <Image source={plusImage} style={{ width: 40, height: 40}}/>
+                <PlusIcon color="white" size="50"/>
             </TouchableOpacity>
         </>
     );
@@ -125,6 +124,3 @@ const styles = StyleSheet.create({
         includeFontPadding: false,
     }
 })
-
-
-// <Text style={styles.FABTextStyle}>+</Text>
