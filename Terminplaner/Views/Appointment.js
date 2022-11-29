@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useCurrentUserContext } from '../Utils/userContext';
 import {
   View,
   Button,
@@ -10,8 +11,10 @@ import {
   TextInput,
   Text,
   Alert,
+  Image,
   Platform
 } from "react-native";
+import { addEvent } from "../Utils/Calendar";
 
 export const Appointment = ({ navigation }) => {
   const [titel, onChangeTitel] = useState();
@@ -29,11 +32,11 @@ export const Appointment = ({ navigation }) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
-    
+
     let tempdate = new Date(currentDate);
     let fDate = tempdate.getDate() + '/' + (tempdate.getMonth() + 1) + '/' + tempdate.getFullYear();
-    let fTime = tempdate.getHours() + ':' + tempdate.getMinutes() + 'Uhr';
-    setText(fDate + '\n' + fTime)
+    let fTime = tempdate.getHours() + ':' + tempdate.getMinutes() + ' Uhr';
+    setText(fDate)
     setTime(fTime)
 
     console.log(fDate + ' (' + fTime + ' )')
@@ -43,6 +46,13 @@ export const Appointment = ({ navigation }) => {
     setShow(true);
     setMode(currentMode);
   };
+
+  function eventCreation() {
+    const title = titel;
+    const bemerkung = comment;
+    const start = text;
+    addEvent();
+  }
 
   return (
     <SafeAreaView>
@@ -59,7 +69,25 @@ export const Appointment = ({ navigation }) => {
         placeholder={"Bemerkungen"}
         value={comment}
       />
-      <View style={styles.flexbox}>
+      <View style={{margin: 12, borderWidth:1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
+      <Image style={styles.tinyLogo}
+            source={require('../public/images/clock.png')}></Image>
+             <Text placeholder={"Start"}>{currentUser}</Text>
+      </View>
+      <View>
+        <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
+          <Text>Ganztägig?</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#767577" }}
+            thumbColor={isEnabled ? "#767577" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        </View>
+      </View>
+      <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
+        <Text>Benachrichtigung?</Text>
         <Switch
           trackColor={{ false: "#767577", true: "#767577" }}
           thumbColor={isEnabled ? "#767577" : "#f4f3f4"}
@@ -67,29 +95,38 @@ export const Appointment = ({ navigation }) => {
           onValueChange={toggleSwitch}
           value={isEnabled}
         />
-        <Text>Ganztägig?</Text>
       </View>
       <View>
-      <Text style={styles.input} title='DatePicker' onPress={() => showMode('date') } >{text}</Text>
-      <Text style={styles.input} title='TimePicker' onPress={() => showMode('time') } >{time}</Text>
-    </View>
-    {show && (<DateTimePicker
-      testID="dateTimePicker"
-      value={date}
-      mode={mode}
-      is24Hour={true}
-      display='default'
-      onChange={onChange}
-    />)}
+        <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }} >
+          <Image style={styles.tinyLogo}
+            source={require('../public/images/clock.png')}></Image>
+          <Text>  Von</Text>
+          <Text placeholder={"Start"} style={styles.input2} title='DatePicker' onPress={() => showMode('date')} >{text}</Text>
+          <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode('time')} >{time}</Text>
+        </View>
+        <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
+          <Image style={styles.tinyLogo}
+            source={require('../public/images/clock.png')}></Image>
+          <Text>    Bis</Text>
+          <Text placeholder={"Ende"} style={styles.input2} title='DatePicker' onPress={() => showMode('date')} >{text}</Text>
+          <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode('time')} >{time}</Text>
+        </View>
+      </View>
+      {show && (<DateTimePicker
+        testID="dateTimePicker"
+        value={date}
+        mode={mode}
+        is24Hour={true}
+        display='default'
+        onChange={onChange}
+      />)}
       <View style={{ flexDirection: "row" }}>
         <View style={styles.felx}>
-          <Button title="Speichern" onPress={() => Alert.alert("gespeichert")}>
-            Button 1
+          <Button title="Speichern" onPress={() => eventCreation()}>
           </Button>
         </View>
         <View style={styles.felx}>
           <Button title="Abbrechen" onPress={() => Alert.alert("abgebrochen")}>
-            Button 2
           </Button>
         </View>
       </View>
@@ -100,6 +137,13 @@ export const Appointment = ({ navigation }) => {
 const styles = StyleSheet.create({
   input: {
     height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10
+  },
+  input2: {
+    height: 40,
+    width: 100,
     margin: 12,
     borderWidth: 1,
     padding: 10
@@ -130,6 +174,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 5,
     margin: 5
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
   }
 });
 
