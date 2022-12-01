@@ -2,6 +2,7 @@ import {Alert, ImageBackground, Text, TextInput, TouchableOpacity, View, Keyboar
 import {UserCircleIcon} from "react-native-heroicons/outline";
 import React, {useState, useMemo} from "react";
 import {createUser} from "../../Utils/Authentication";
+import {checkIfUsernameExists} from "../../Utils/Authentication";
 import { CommonActions } from '@react-navigation/native';
 
 
@@ -18,7 +19,10 @@ export default function Register({route, navigation}) {
     }, [usernameInput, passwordInput, passwordInputRepeat]);
 
     async function attemptRegister(){
-        if(passwordInput === passwordInputRepeat){
+        if (checkIfUsernameExists(usernameInput)) {
+            Alert.alert("Benutzername bereits vergeben.");
+        }
+        else if(passwordInput === passwordInputRepeat){
             const registerSuccessful = await createUser(usernameInput, passwordInput)
             if(registerSuccessful){
                 //register was correct, switch to login

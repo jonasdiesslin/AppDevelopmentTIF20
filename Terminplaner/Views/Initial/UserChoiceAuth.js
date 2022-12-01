@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View,Text, TextInput, Alert, TouchableOpacity,ImageBackground, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard   } from "react-native";
 import { UserCircleIcon } from "react-native-heroicons/outline";
-import { authenticateUser } from '../../Utils/Authentication';
+import { authenticateManager } from '../../Utils/Authentication';
 
 import { useCurrentUserContext } from '../../Utils/userContext';
 import {CommonActions} from "@react-navigation/native";
@@ -25,8 +25,7 @@ export default function UserChoiceAuth({route, navigation}) {
 
     async function attemptLogin(){
         //use commented await statement as soon gateway for authentication is available
-        // const loginSuccessful = await authenticateUser(usernameInput, passwordInput, pin)
-        const loginSuccessful = await authenticateUser(usernameInput, passwordInput)
+        const loginSuccessful = await authenticateManager(usernameInput, passwordInput, pin)
 
         if(loginSuccessful){
             //Password was correct, switch to user choice
@@ -49,7 +48,7 @@ export default function UserChoiceAuth({route, navigation}) {
         } else {
             setUsernameInput("");
             setPasswordInput("");
-            Alert.alert("Benutzername oder Passwort fehlerhaft.");
+            Alert.alert("Benutzername, Passwort oder Pin fehlerhaft.");
         }
     }
 

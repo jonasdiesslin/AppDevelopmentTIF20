@@ -38,7 +38,6 @@ export default function SignIn({route, navigation}) {
     return (
 
 
-
             <ImageBackground source={image} className="flex-1">
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
