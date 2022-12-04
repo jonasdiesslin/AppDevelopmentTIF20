@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image } from 'react-native';
-import { PlusIcon } from "react-native-heroicons/outline";
+import { PlusIcon, CalendarDaysIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
 
 import {getCalendar} from '../Utils/Storage';
 import Event from '../Components/Event'
@@ -67,30 +67,39 @@ export default function Main({ navigation }) {
         <>
             <SafeAreaView style={{flex: 1}}>
 
-                <View className="mb-2">
-                    <Button title="Kalendaransicht" onPress={() => {
-                        //navigate to calendar view
-                        navigation.navigate("CalendarView", {
-                            yearSelected: getTodayTimestamp().getFullYear(),
-                            monthSelected: getTodayTimestamp().getMonth()
-                        });
-                    }}/>
+                <View className="flex-row m-2">
+                    <TouchableOpacity 
+                        className="flex-auto w-1 bg-dodgerblue p-2 rounded flex-row items-center mr-1"
+                        onPress={() => {
+                            //navigate to calendar view
+                            navigation.navigate("CalendarView", {
+                                yearSelected: getTodayTimestamp().getFullYear(),
+                                monthSelected: getTodayTimestamp().getMonth()
+                            });
+                    }}>
+                        <CalendarDaysIcon size="25" color="white"/>
+                        <Text className="text-white ml-2">Kalenderansicht</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        className="flex-auto w-1 bg-dodgerblue p-2 rounded flex-row items-center ml-1"
+                        onPress={() => {
+                            navigation.navigate("Search");
+                    }}>
+                        <MagnifyingGlassIcon size="25" color="white"/>
+                        <Text className="text-white ml-2">Suche</Text>
+                    </TouchableOpacity>
                 </View>
-                    
-                <View className=""></View>
-                    <Button title="Suche" onPress={() => {
-                        navigation.navigate("Search");
-                    }}/>
-                <View/>
 
                 <View className="mt-2 p-1">
                     <Text>Hallo, {currentUser}!</Text>
                     <Text className="mb-2">Ihre Termine:</Text>
 
-                    <FlatList   data={finishedCalendar}
-                                renderItem={renderCalendarItem} 
-                                keyExtractor={(item) => ((item.isSeparator === true) ? `${item.text}` : `${item.start}${item.end}${item.title}`)}
-                                style={{flexGrow: 1}}/>
+                    <FlatList 
+                        className=""  
+                        data={finishedCalendar}
+                        renderItem={renderCalendarItem} 
+                        keyExtractor={(item) => ((item.isSeparator === true) ? `${item.text}` : `${item.start}${item.end}${item.title}`)}
+                        style={{flexGrow: 1}}/>
                 </View>
                 
             </SafeAreaView>
@@ -120,3 +129,21 @@ const styles = StyleSheet.create({
         includeFontPadding: false,
     }
 })
+
+/*
+<View className="mb-2">
+                    <Button title="Kalendaransicht" onPress={() => {
+                        //navigate to calendar view
+                        navigation.navigate("CalendarView", {
+                            yearSelected: getTodayTimestamp().getFullYear(),
+                            monthSelected: getTodayTimestamp().getMonth()
+                        });
+                    }}/>
+                </View>
+                    
+                <View className=""></View>
+                    <Button title="Suche" onPress={() => {
+                        navigation.navigate("Search");
+                    }}/>
+                <View/>
+*/

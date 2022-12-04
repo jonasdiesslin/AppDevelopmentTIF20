@@ -74,7 +74,9 @@ export default function SignIn({route, navigation}) {
                                 value={passwordInput}
                                 onChangeText={setPasswordInput}
                             />
-                            <TouchableOpacity className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptLogin}><Text className="self-center bottom-1 text-lg text-white p-2">Login</Text></TouchableOpacity>
+                            <TouchableOpacity className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptLogin}>
+                                <Text className="self-center bottom-0 text-lg text-white p-1">Login</Text>
+                            </TouchableOpacity>
                         </View>
                 </View>
         </TouchableWithoutFeedback>

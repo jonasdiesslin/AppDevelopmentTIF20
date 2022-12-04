@@ -16,7 +16,7 @@ export default function Event({ calendarItem, navigation }) {
 
     return (
         <TouchableHighlight 
-            classNames="p-5"
+            classNames=""
             activeOpacity={0.9}
             underlayColor="grey"
             onPress={() => {navigation.navigate("EventDetails", {calendarItem: calendarItem})}}
