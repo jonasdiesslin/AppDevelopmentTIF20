@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Button, TouchableOpacity } from 'react-native';
+import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
 
 import Initial from "./Views/Initial/Initial";
 import SignIn from "./Views/Initial/SignIn";
@@ -45,10 +47,11 @@ export default function App() {
                         <Stack.Navigator initialRouteName="Initial"
                                          screenOptions={{
                                            headerTitleStyle: {
-                                             // color: "white",
+                                              //color: "white",
                                            },
-                                           // headerTitle: '',
+                                             headerTitle: '',
                                              headerTransparent: true,
+                                             headerTintColor: "#fff"
                                          }}
                         >
                             <Stack.Screen name="Startseite" component={Initial}/>
@@ -62,7 +65,20 @@ export default function App() {
         {
           loggedIn && ( 
                         <Stack.Navigator initialRouteName="Main">
-                          <Stack.Screen name="Main" component={Main} options={{ title:"Übersicht" }}/>
+                          <Stack.Screen
+                            name="Main" component={Main}
+                            options={{ 
+                              title:"Übersicht",
+                              //Make a logout button in this screen's header
+                              headerRight: () => (
+                                <TouchableOpacity onPress={() => {
+                                  setCurrentUser(null);
+                                  setLoggedIn(false);//Now we'll go back to the login component
+                                }}>
+                                  <ArrowLeftOnRectangleIcon size="30" color="dodgerblue"/>
+                                </TouchableOpacity>
+                              )
+                            }}/>
                           <Stack.Screen name="Appointment" component={Appointment} options={{ title:"Neuer Termin" }}/>
                           <Stack.Screen name="CalendarView" component={CalendarView} options={{ title:"Kalenderansicht" }}/>
                           <Stack.Screen name="DayView" component={DayView} options={{ title:"Tagesansicht" }}/>

@@ -36,7 +36,7 @@ export default function DayView({ route, navigation }){
         navigation.addListener("beforeRemove", (e) => {
             //If this event was triggered by the user (e.g. by pressing the back button),
             //we replace it with one that goes back to the correct calendar month
-            if(e.data.action.payload.params === undefined) {
+            if(e.data.action.payload === undefined) {
                 e.preventDefault();
                 navigation.navigate("CalendarView", {
                     yearSelected: timeSelected.year,
@@ -89,13 +89,16 @@ export default function DayView({ route, navigation }){
 
     return (
         <View style={{flex: 1}}>
-            <Text>{timeSelected.day}. {monthNames[timeSelected.month]} {timeSelected.year}</Text> 
-            <TouchableOpacity onPress={() => oneDayBack()}>
-                <ChevronLeftIcon color="dodgerblue"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => oneDayForward()}>
-                <ChevronRightIcon color="dodgerblue"/>
-            </TouchableOpacity>
+            <View className="flex-row items-center mb-5 mt-2">
+                <TouchableOpacity onPress={() => oneDayBack()}>
+                    <ChevronLeftIcon color="dodgerblue" size="30"/>
+                </TouchableOpacity>
+                <Text className="flex-auto text-center">{timeSelected.day}. {monthNames[timeSelected.month]} {timeSelected.year}</Text> 
+                <TouchableOpacity onPress={() => oneDayForward()}>
+                    <ChevronRightIcon color="dodgerblue" size="30"/>
+                </TouchableOpacity>
+            </View>
+            
             <FlatList   data={eventsInDay}
                             renderItem={renderCalendarItem} 
                             keyExtractor={(item) => (`${item.start}${item.end}${item.title}`)}

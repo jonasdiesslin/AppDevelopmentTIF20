@@ -44,18 +44,20 @@ export default function Main({ navigation }) {
     const endOfWeek = getSevenDaysHenceTimestamp();
 
     //Construct a prettier calendar (with separators) for the display
-    let finishedCalendar = [getCalendarSeparator("Heute:")];
+    let finishedCalendar = [getCalendarSeparator("Heute")];
     finishedCalendar = finishedCalendar.concat(getEventsWithinRange(mainCalendar, startOfToday, startOfTomorrow));
-    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Morgen:")]);
+    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Morgen")]);
     finishedCalendar = finishedCalendar.concat(getEventsWithinRange(mainCalendar, startOfTomorrow, endOfTomorrow));
-    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Nächste sieben Tage:")]);
+    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Nächste sieben Tage")]);
     finishedCalendar = finishedCalendar.concat(getEventsWithinRange(mainCalendar, endOfTomorrow, endOfWeek));
-    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Später:")]);
+    finishedCalendar = finishedCalendar.concat([getCalendarSeparator("Später")]);
     finishedCalendar = finishedCalendar.concat(getEventsAfterDate(mainCalendar, endOfWeek));
 
     function renderCalendarItem({item: calendarItem}){
         if(calendarItem.isSeparator === true) {
-            return (<Text>{calendarItem.text}</Text>)
+            return (<Text className="bg-gray-300 p-1">
+                        {calendarItem.text}
+                    </Text>)
         } else {
             return (<Event calendarItem={calendarItem} navigation={navigation}/>)
         }
@@ -64,12 +66,6 @@ export default function Main({ navigation }) {
     return (
         <>
             <SafeAreaView style={{flex: 1}}>
-                <View className="mb-2">
-                    <Button title="Logout" onPress={() => {
-                        setCurrentUser(null);
-                        setLoggedIn(false);//Now we'll go back to the login component
-                    }}/>
-                </View>
 
                 <View className="mb-2">
                     <Button title="Kalendaransicht" onPress={() => {
@@ -87,9 +83,9 @@ export default function Main({ navigation }) {
                     }}/>
                 <View/>
 
-                <View className="mt-4">
+                <View className="mt-2 p-1">
                     <Text>Hallo, {currentUser}!</Text>
-                    <Text>Ihre Termine:</Text>
+                    <Text className="mb-2">Ihre Termine:</Text>
 
                     <FlatList   data={finishedCalendar}
                                 renderItem={renderCalendarItem} 

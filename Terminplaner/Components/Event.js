@@ -1,4 +1,4 @@
-import { View, Text, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 
 import { padWithLeadingZero } from "../Utils/Calendar";
 
@@ -15,12 +15,28 @@ export default function Event({ calendarItem, navigation }) {
     const calendarDateString = `${startDate.getDate()}.${startDate.getMonth() + 1}.${startDate.getFullYear()}`
 
     return (
-        <TouchableHighlight onPress={() => {navigation.navigate("EventDetails", {calendarItem: calendarItem})}}>
+        <TouchableHighlight 
+            classNames="p-5"
+            activeOpacity={0.9}
+            underlayColor="grey"
+            onPress={() => {navigation.navigate("EventDetails", {calendarItem: calendarItem})}}
+        >
             <View>
                 <Text>{calendarItem.title}</Text>
                 <Text>{startTimeString} - {endTimeString}</Text>
                 <Text>{calendarDateString}</Text>
+
+                <View style = {styles.viewStyleForLine}></View>
             </View>
         </TouchableHighlight>
     )
 }
+
+const styles = StyleSheet.create({
+    viewStyleForLine: {
+        borderBottomColor: "gray", 
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        alignSelf:'center',
+        width: "98%"
+    }
+})

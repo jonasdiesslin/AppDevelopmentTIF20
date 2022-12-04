@@ -102,7 +102,9 @@ export default function Register({route, navigation}) {
                             value={passwordInputRepeat}
                             onChangeText={setpasswordInputRepeat}
                         />
-                        <TouchableOpacity disabled={!isFormValid} className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptRegister}><Text className="self-center bottom-1 text-lg text-white p-2">Registrieren</Text></TouchableOpacity>
+                        <TouchableOpacity disabled={!isFormValid} className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptRegister}>
+                            <Text className="self-center bottom-0 text-lg text-white p-1">Registrieren</Text>
+                        </TouchableOpacity>
                     </View>
 
                 </View>

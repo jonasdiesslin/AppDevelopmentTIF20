@@ -13,6 +13,8 @@ import {
   Platform
 } from "react-native";
 
+import { padWithLeadingZero } from "../Utils/Calendar";
+
 export const Appointment = ({ navigation }) => {
   const [titel, onChangeTitel] = useState();
   const [comment, onChangeComment] = useState();
@@ -32,11 +34,12 @@ export const Appointment = ({ navigation }) => {
     
     let tempdate = new Date(currentDate);
     let fDate = tempdate.getDate() + '/' + (tempdate.getMonth() + 1) + '/' + tempdate.getFullYear();
-    let fTime = tempdate.getHours() + ':' + tempdate.getMinutes() + 'Uhr';
+    let fTime = tempdate.getHours() + ':' + padWithLeadingZero(tempdate.getMinutes()) + ' Uhr';
     setText(fDate + '\n' + fTime)
     setTime(fTime)
 
-    console.log(fDate + ' (' + fTime + ' )')
+    console.log(fDate + ' (' + fTime + ')')
+    console.log(selectedDate.toString())
   };
 
   const showMode = (currentMode) => {
@@ -59,15 +62,15 @@ export const Appointment = ({ navigation }) => {
         placeholder={"Bemerkungen"}
         value={comment}
       />
-      <View style={styles.flexbox}>
+      <View className="flex-row pl-5 items-center">
         <Switch
-          trackColor={{ false: "#767577", true: "#767577" }}
-          thumbColor={isEnabled ? "#767577" : "#f4f3f4"}
+          trackColor={{ false: "#AAAAAA", true: "#b5d9fc" }}
+          thumbColor={isEnabled ? "dodgerblue" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
           value={isEnabled}
         />
-        <Text>Ganztägig?</Text>
+        <Text className="ml-2">Ganztägig?</Text>
       </View>
       <View>
       <Text style={styles.input} title='DatePicker' onPress={() => showMode('date') } >{text}</Text>
@@ -82,13 +85,17 @@ export const Appointment = ({ navigation }) => {
       onChange={onChange}
     />)}
       <View style={{ flexDirection: "row" }}>
-        <View style={styles.felx}>
-          <Button title="Speichern" onPress={() => Alert.alert("gespeichert")}>
+        <View style={styles.flex}>
+          <Button title="Speichern" onPress={() => {
+              Alert.alert("gespeichert");
+            }}>
             Button 1
           </Button>
         </View>
-        <View style={styles.felx}>
-          <Button title="Abbrechen" onPress={() => Alert.alert("abgebrochen")}>
+        <View style={styles.flex}>
+          <Button title="Abbrechen" onPress={() => {
+              Alert.alert("abgebrochen");
+            }}>
             Button 2
           </Button>
         </View>
@@ -113,7 +120,7 @@ const styles = StyleSheet.create({
   header: {
     margin: 12
   },
-  felx: {
+  flex: {
     flex: 1,
     height: 50,
     marginHorizontal: 20,
