@@ -59,7 +59,9 @@ export default function UserChoice({route, navigation}) {
                                       className=""/>
 
                             {/*Check if User is chosen*/}
-                            <TouchableOpacity disabled={!isFormValid} className="top-2 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptDelete}><Text className="self-center bottom-1 text-lg text-white p-2">Löschen</Text></TouchableOpacity>
+                            <TouchableOpacity disabled={!isFormValid} className="top-2 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptDelete}>
+                                <Text className="self-center bottom-1 text-lg text-white p-2">Löschen</Text>
+                            </TouchableOpacity>
                         </View>
 
                     </View>

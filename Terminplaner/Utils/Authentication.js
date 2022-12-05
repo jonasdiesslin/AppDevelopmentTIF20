@@ -42,7 +42,7 @@ export async function deleteUser(usernameToDelete){
 export async function checkIfUsernameExists(usernameToFind){
     const authenticationInfo = await getAuthenticationInfo();
     for (const i in authenticationInfo){
-        if (authenticationInfo[i].username == usernameToFind){
+        if (authenticationInfo[i].username === usernameToFind){
             return true
         }
     }

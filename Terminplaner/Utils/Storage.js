@@ -40,7 +40,9 @@ export async function getAuthenticationInfo(){
 //Stores a new authenticationInfo-Array
 export async function storeAuthenticationInfo(newAuthenticationInfo){
     setDoc(doc(db, "Terminplaner", "authenticationInfo"), {
-        authenticationInfoArray: newAuthenticationInfo
+        authenticationInfoArray: newAuthenticationInfo,
+        //Store the managementInfo as well, otherwise it'll get deleted from the document
+        userManagementInfo: managementInfo
     });
 }
 

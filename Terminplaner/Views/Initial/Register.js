@@ -19,14 +19,15 @@ export default function Register({route, navigation}) {
     }, [usernameInput, passwordInput, passwordInputRepeat]);
 
     async function attemptRegister(){
-        if (checkIfUsernameExists(usernameInput)) {
+        const usernameTaken = await checkIfUsernameExists(usernameInput);
+        if (usernameTaken) {
             Alert.alert("Benutzername bereits vergeben.");
         }
         else if(passwordInput === passwordInputRepeat){
             const registerSuccessful = await createUser(usernameInput, passwordInput)
             if(registerSuccessful){
                 //register was correct, switch to login
-                Alert.alert(`Benutzer ${usernameInput} wurde erfolgreich registriert. Bitte melden Sie sich an.`);
+                Alert.alert("Anmeldung erfolgreich", `Benutzer ${usernameInput} wurde erfolgreich registriert. Bitte melden Sie sich an.`);
                 setTimeout(()=> {
                     //replaces the existing navigation state with the new one, preventing going back to the register screen
                     navigation.dispatch(
@@ -45,6 +46,7 @@ export default function Register({route, navigation}) {
             } else {
                 setUsernameInput("");
                 setPasswordInput("");
+                setpasswordInputRepeat("");
                 Alert.alert("Benutzername oder Passwort fehlerhaft.");
             }
         }
