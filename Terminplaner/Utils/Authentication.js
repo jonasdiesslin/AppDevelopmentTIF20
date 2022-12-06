@@ -37,12 +37,16 @@ export async function deleteUser(usernameToDelete){
     //Keep only users with a different username
     let newAuthenticationInfo = authenticationInfo.filter((authObj) => (authObj.username !== usernameToDelete));
     await storeAuthenticationInfo(newAuthenticationInfo);
+        for (const i in newAuthenticationInfo){
+        return newAuthenticationInfo[i].username !== usernameToDelete;
+    }
 }
 
 export async function checkIfUsernameExists(usernameToFind){
     const authenticationInfo = await getAuthenticationInfo();
     for (const i in authenticationInfo){
         if (authenticationInfo[i].username == usernameToFind){
+
             return true
         }
     }

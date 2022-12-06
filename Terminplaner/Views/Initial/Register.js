@@ -19,7 +19,7 @@ export default function Register({route, navigation}) {
     }, [usernameInput, passwordInput, passwordInputRepeat]);
 
     async function attemptRegister(){
-        if (checkIfUsernameExists(usernameInput)) {
+        if (await checkIfUsernameExists(usernameInput)) {
             Alert.alert("Benutzername bereits vergeben.");
         }
         else if(passwordInput === passwordInputRepeat){
