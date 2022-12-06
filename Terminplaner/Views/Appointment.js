@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useCurrentUserContext } from '../Utils/userContext';
+import { Event } from "../Components/Event";
 import {
   View,
   Button,
@@ -17,6 +18,11 @@ import {
 import { addEvent } from "../Utils/Calendar";
 
 export const Appointment = ({ navigation }) => {
+
+  const {
+    username: currentUser
+  } = useCurrentUserContext();
+
   const [titel, onChangeTitel] = useState();
   const [comment, onChangeComment] = useState();
   const [isEnabled, setIsEnabled] = useState(false);
@@ -27,6 +33,8 @@ export const Appointment = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [text, setText] = useState(false);
   const [time, setTime] = useState(false);
+  const [text2, setText2] = useState(false);
+  const [time2, setTime2] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -41,6 +49,7 @@ export const Appointment = ({ navigation }) => {
 
     console.log(fDate + ' (' + fTime + ' )')
   };
+  
 
   const showMode = (currentMode) => {
     setShow(true);
@@ -48,10 +57,14 @@ export const Appointment = ({ navigation }) => {
   };
 
   function eventCreation() {
-    const title = titel;
-    const bemerkung = comment;
-    const start = text;
-    addEvent();
+    var event = { 
+          title: titel,
+          description: comment,
+          start: '2022-12-24T12:00:00+01:00', //start and end are ISO standard time strings
+          end: '2022-12-24T14:29:00+01:00',
+          notification: isEnabled
+      }
+    addEvent(currentUser,event);
   }
 
   return (
@@ -108,8 +121,8 @@ export const Appointment = ({ navigation }) => {
           <Image style={styles.tinyLogo}
             source={require('../public/images/clock.png')}></Image>
           <Text>    Bis</Text>
-          <Text placeholder={"Ende"} style={styles.input2} title='DatePicker' onPress={() => showMode('date')} >{text}</Text>
-          <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode('time')} >{time}</Text>
+          <Text placeholder={"Ende"} style={styles.input2} title='DatePicker' onPress={() => showMode('date')} >{text2}</Text>
+          <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode('time')} >{time2}</Text>
         </View>
       </View>
       {show && (<DateTimePicker
