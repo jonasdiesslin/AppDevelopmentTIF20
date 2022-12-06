@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, collection, setDoc, onSnapshot } from "firebase/firestore";
+import { getFirestore, doc, getDoc, collection, setDoc, onSnapshot, deleteDoc } from "firebase/firestore";
 
 //Global variables to hold authenticationInfo and calendars
 let authenticationInfo = [];
@@ -40,7 +40,9 @@ export async function getAuthenticationInfo(){
 //Stores a new authenticationInfo-Array
 export async function storeAuthenticationInfo(newAuthenticationInfo){
     setDoc(doc(db, "Terminplaner", "authenticationInfo"), {
-        authenticationInfoArray: newAuthenticationInfo
+        authenticationInfoArray: newAuthenticationInfo,
+        //Store the managementInfo as well, otherwise it'll get deleted from the document
+        userManagementInfo: managementInfo
     });
 }
 
@@ -102,6 +104,11 @@ export async function initializeCalendar(username){
     });
     unsubCurrentCalendar = newUnsub;
     currentCalendarUsername = username;
+}
+
+export async function deleteCalendar(username){
+    deleteDoc(doc(db, "Terminplaner", `calendar-${username}`));
+    return;
 }
 
 export async function getManagementInfo(){
