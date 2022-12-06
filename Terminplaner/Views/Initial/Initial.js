@@ -22,14 +22,14 @@ export default function Intitial({navigation}) {
                         onPress={() => navigation.navigate('Anmelden', {image: background})}
                         className="border-2 border-stone-400 rounded-md w-80 h-11"
                     >
-                        <Text className="self-center bottom-1 text-lg text-white p-2">Login</Text>
+                        <Text className="self-center bottom-0 text-lg text-white p-1">Login</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Registrieren', {image: background})}
                         className="text-white top-2 border-2 bg-blue-300 border-blue-300 rounded-md  w-80 h-11">
-                        <Text className="self-center bottom-1 text-lg text-white p-2">Registrieren</Text>
+                        <Text className="self-center bottom-0 text-lg text-white p-1">Registrieren</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity className="top-10 border-2  border-stone-400 rounded-md  w-80 h-11"  onPress={() => navigation.navigate('Startseite', {image: background})}><Text className="self-center bottom-1 text-lg text-white p-2">Benutzerauswahl</Text></TouchableOpacity>
+                    <TouchableOpacity className="top-10 border-2  border-stone-400 rounded-md  w-80 h-11"  onPress={() => navigation.navigate('BenutzerauswahlAuth', {image: background})}><Text className="self-center bottom-1 text-lg text-white p-2">Benutzerauswahl</Text></TouchableOpacity>
                 </View>
 
             </View>

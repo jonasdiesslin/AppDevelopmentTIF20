@@ -2,6 +2,7 @@ import {Alert, ImageBackground, Text, TextInput, TouchableOpacity, View, Keyboar
 import {UserCircleIcon} from "react-native-heroicons/outline";
 import React, {useState, useMemo} from "react";
 import {createUser} from "../../Utils/Authentication";
+import {checkIfUsernameExists} from "../../Utils/Authentication";
 import { CommonActions } from '@react-navigation/native';
 
 
@@ -18,11 +19,15 @@ export default function Register({route, navigation}) {
     }, [usernameInput, passwordInput, passwordInputRepeat]);
 
     async function attemptRegister(){
-        if(passwordInput === passwordInputRepeat){
+        const usernameTaken = await checkIfUsernameExists(usernameInput);
+        if (usernameTaken) {
+            Alert.alert("Benutzername bereits vergeben.");
+        }
+        else if(passwordInput === passwordInputRepeat){
             const registerSuccessful = await createUser(usernameInput, passwordInput)
             if(registerSuccessful){
                 //register was correct, switch to login
-                Alert.alert(`Benutzer ${usernameInput} wurde erfolgreich registriert. Bitte melden Sie sich an.`);
+                Alert.alert("Anmeldung erfolgreich", `Benutzer ${usernameInput} wurde erfolgreich registriert. Bitte melden Sie sich an.`);
                 setTimeout(()=> {
                     //replaces the existing navigation state with the new one, preventing going back to the register screen
                     navigation.dispatch(
@@ -41,6 +46,7 @@ export default function Register({route, navigation}) {
             } else {
                 setUsernameInput("");
                 setPasswordInput("");
+                setpasswordInputRepeat("");
                 Alert.alert("Benutzername oder Passwort fehlerhaft.");
             }
         }
@@ -98,7 +104,9 @@ export default function Register({route, navigation}) {
                             value={passwordInputRepeat}
                             onChangeText={setpasswordInputRepeat}
                         />
-                        <TouchableOpacity disabled={!isFormValid} className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptRegister}><Text className="self-center bottom-1 text-lg text-white p-2">Registrieren</Text></TouchableOpacity>
+                        <TouchableOpacity disabled={!isFormValid} className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptRegister}>
+                            <Text className="self-center bottom-0 text-lg text-white p-1">Registrieren</Text>
+                        </TouchableOpacity>
                     </View>
 
                 </View>

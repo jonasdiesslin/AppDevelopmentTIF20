@@ -4,7 +4,6 @@ import { UserCircleIcon } from "react-native-heroicons/outline";
 import { authenticateUser } from '../../Utils/Authentication';
 
 import { useCurrentUserContext } from '../../Utils/userContext';
-import { useHeaderHeight } from '@react-navigation/elements'
 
 //The component for the login screen
 export default function SignIn({route, navigation}) {
@@ -13,7 +12,6 @@ export default function SignIn({route, navigation}) {
     const [passwordInput, setPasswordInput] = useState("");
 
     const {image} = route.params;
-    const height = useHeaderHeight();
 
     const {
         loginFunction: setLoggedIn,
@@ -38,7 +36,6 @@ export default function SignIn({route, navigation}) {
 
 
     return (
-
 
 
             <ImageBackground source={image} className="flex-1">
@@ -77,7 +74,9 @@ export default function SignIn({route, navigation}) {
                                 value={passwordInput}
                                 onChangeText={setPasswordInput}
                             />
-                            <TouchableOpacity className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptLogin}><Text className="self-center bottom-1 text-lg text-white p-2">Login</Text></TouchableOpacity>
+                            <TouchableOpacity className="top-10 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptLogin}>
+                                <Text className="self-center bottom-0 text-lg text-white p-1">Login</Text>
+                            </TouchableOpacity>
                         </View>
                 </View>
         </TouchableWithoutFeedback>

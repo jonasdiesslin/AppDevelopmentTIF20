@@ -1,7 +1,8 @@
 //Various functions for login and user management
 
 import * as Crypto from 'expo-crypto';
-import { getAuthenticationInfo, getPasswordHash, storeAuthenticationInfo, initializeCalendar } from './Storage';
+import { TurboModuleRegistry } from 'react-native';
+import { getAuthenticationInfo, getPasswordHash, storeAuthenticationInfo, initializeCalendar, getManagementInfo } from './Storage';
 
 export async function authenticateUser(username, enteredPassword){
     const enteredPasswordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
@@ -41,10 +42,24 @@ export async function deleteUser(usernameToDelete){
 export async function checkIfUsernameExists(usernameToFind){
     const authenticationInfo = await getAuthenticationInfo();
     for (const i in authenticationInfo){
-        if (authenticationInfo[i].username == usernameToFind){
+        if (authenticationInfo[i].username === usernameToFind){
             return true
         }
     }
     //If we're here, the username wasn't found in the authenticationInfo-array -> it doesn't exist yet
     return false;
+}
+
+export async function authenticateManager(enteredUsername, enteredPassword, enteredManagementPassword){
+    const managementInfo = await getManagementInfo();
+    const enteredManagementPasswordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
+                                                                enteredManagementPassword); 
+    const userAuthenticated = await authenticateUser(enteredUsername, enteredPassword);
+    
+    if(userAuthenticated &&
+        enteredManagementPasswordHash === managementInfo.passwordHash){
+        return true;
+    } else {
+        return false;
+    }
 }

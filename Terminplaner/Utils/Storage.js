@@ -3,6 +3,7 @@ import { getFirestore, doc, getDoc, collection, setDoc, onSnapshot } from "fireb
 
 //Global variables to hold authenticationInfo and calendars
 let authenticationInfo = [];
+let managementInfo = {};
 //let calendars = {};
 
 //For efficiency reasons, we keep only a single active calendar in memory at a time (there's only one user logged in at any time as well).
@@ -27,6 +28,7 @@ export async function initializeFirebaseStorage(){
     //Set up listener for authenticationInfo
     const unsubAuthenticationInfo = onSnapshot(doc(db, "Terminplaner", "authenticationInfo"), (doc) => {
         authenticationInfo = doc.data().authenticationInfoArray;
+        managementInfo = doc.data().userManagementInfo;
     });
 }
 
@@ -38,7 +40,9 @@ export async function getAuthenticationInfo(){
 //Stores a new authenticationInfo-Array
 export async function storeAuthenticationInfo(newAuthenticationInfo){
     setDoc(doc(db, "Terminplaner", "authenticationInfo"), {
-        authenticationInfoArray: newAuthenticationInfo
+        authenticationInfoArray: newAuthenticationInfo,
+        //Store the managementInfo as well, otherwise it'll get deleted from the document
+        userManagementInfo: managementInfo
     });
 }
 
@@ -100,4 +104,8 @@ export async function initializeCalendar(username){
     });
     unsubCurrentCalendar = newUnsub;
     currentCalendarUsername = username;
+}
+
+export async function getManagementInfo(){
+    return managementInfo;
 }

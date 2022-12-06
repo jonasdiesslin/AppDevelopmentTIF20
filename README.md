@@ -9,3 +9,6 @@ Passwort:       test
 
 Benutzername:   test2
 Passwort:       test
+
+Das Passwort für die Benutzerverwaltung lautet: 
+password

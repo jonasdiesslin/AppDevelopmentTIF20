@@ -17,12 +17,16 @@ import {
 } from "react-native";
 import { addEvent } from "../Utils/Calendar";
 
+import { padWithLeadingZero } from "../Utils/Calendar";
+
 export const Appointment = ({ navigation }) => {
 
   const {
     username: currentUser
   } = useCurrentUserContext();
 
+  const [startDate, changestartDate] = useState();
+  const [endDate, changeendDate] = useState();
   const [titel, onChangeTitel] = useState();
   const [comment, onChangeComment] = useState();
   const [isEnabled, setIsEnabled] = useState(false);
@@ -33,6 +37,9 @@ export const Appointment = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [text, setText] = useState(false);
   const [time, setTime] = useState(false);
+  const [date2, setDate2] = useState(new Date());
+  const [mode2, setMode2] = useState('date');
+  const [show2, setShow2] = useState(false);
   const [text2, setText2] = useState(false);
   const [time2, setTime2] = useState(false);
 
@@ -42,29 +49,58 @@ export const Appointment = ({ navigation }) => {
     setDate(currentDate);
 
     let tempdate = new Date(currentDate);
-    let fDate = tempdate.getDate() + '/' + (tempdate.getMonth() + 1) + '/' + tempdate.getFullYear();
-    let fTime = tempdate.getHours() + ':' + tempdate.getMinutes() + ' Uhr';
+    let fDate = padWithLeadingZero(tempdate.getDate()) + '/' + (tempdate.getMonth() + 1) + '/' + tempdate.getFullYear();
+    let fTime = padWithLeadingZero(tempdate.getHours()) + ':' + padWithLeadingZero(tempdate.getMinutes()) + ' Uhr';
     setText(fDate)
     setTime(fTime)
 
-    console.log(fDate + ' (' + fTime + ' )')
+    changestartDate(tempdate.toISOString())
+    console.log(tempdate.toISOString())
+
+    console.log(fDate + ' (' + fTime + ')')
   };
-  
 
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
 
+  const onChange2 = (event, selectedDate) => {
+    const currentDate = selectedDate || date2;
+    setShow2(Platform.OS === "ios");
+    setDate2(currentDate);
+
+    let tempdate = new Date(currentDate);
+    let fDate = padWithLeadingZero(tempdate.getDate()) + '/' + (tempdate.getMonth() + 1) + '/' + tempdate.getFullYear();
+    let fTime = padWithLeadingZero(tempdate.getHours()) + ':' + padWithLeadingZero(tempdate.getMinutes()) + ' Uhr';
+    setText2(fDate)
+    setTime2(fTime)
+
+    changeendDate(tempdate.toISOString())
+
+    console.log(fDate + ' (' + fTime + ')')
+    console.log(selectedDate.toString())
+  };
+
+  const showMode2 = (currentMode) => {
+    setShow2(true);
+    setMode2(currentMode);
+  };
+
   function eventCreation() {
-    var event = { 
-          title: titel,
-          description: comment,
-          start: '2022-12-24T12:00:00+01:00', //start and end are ISO standard time strings
-          end: '2022-12-24T14:29:00+01:00',
-          notification: isEnabled
-      }
-    addEvent(currentUser,event);
+    let event = {
+      title: titel,
+      description: comment,
+      start: startDate,
+      end: endDate,
+      notification: isEnabled
+    }
+    console.log(event)
+    addEvent(currentUser, event);
+  }
+
+  function clearAll(){
+
   }
 
   return (
@@ -72,7 +108,7 @@ export const Appointment = ({ navigation }) => {
       <Text style={styles.header}>Neuer Termin</Text>
       <TextInput
         style={styles.input}
-        onChangeTitel={onChangeTitel}
+        onChangeText={onChangeTitel}
         placeholder={"Titel hinzufügen"}
         value={titel}
       />
@@ -82,28 +118,14 @@ export const Appointment = ({ navigation }) => {
         placeholder={"Bemerkungen"}
         value={comment}
       />
-      <View style={{margin: 12, borderWidth:1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
-      <Image style={styles.tinyLogo}
-            source={require('../public/images/clock.png')}></Image>
-             <Text placeholder={"Start"}>{currentUser}</Text>
-      </View>
-      <View>
-        <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
-          <Text>Ganztägig?</Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#767577" }}
-            thumbColor={isEnabled ? "#767577" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
-        </View>
+      <View style={{ margin: 12, borderWidth: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
+        <Text placeholder={"Start"}>Benutzer: {currentUser}</Text>
       </View>
       <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
         <Text>Benachrichtigung?</Text>
         <Switch
-          trackColor={{ false: "#767577", true: "#767577" }}
-          thumbColor={isEnabled ? "#767577" : "#f4f3f4"}
+          trackColor={{ false: "#AAAAAA", true: "#b5d9fc" }}
+          thumbColor={isEnabled ? "dodgerblue" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
           value={isEnabled}
@@ -116,30 +138,38 @@ export const Appointment = ({ navigation }) => {
           <Text>  Von</Text>
           <Text placeholder={"Start"} style={styles.input2} title='DatePicker' onPress={() => showMode('date')} >{text}</Text>
           <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode('time')} >{time}</Text>
+          {show && (<DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            display='default'
+            onChange={onChange}
+          />)}
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
           <Image style={styles.tinyLogo}
             source={require('../public/images/clock.png')}></Image>
           <Text>    Bis</Text>
-          <Text placeholder={"Ende"} style={styles.input2} title='DatePicker' onPress={() => showMode('date')} >{text2}</Text>
-          <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode('time')} >{time2}</Text>
+          <Text placeholder={"Ende"} style={styles.input2} title='DatePicker' onPress={() => showMode2('date')} >{text2}</Text>
+          <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode2('time')} >{time2}</Text>
+          {show2 && (<DateTimePicker
+            testID="dateTimePicker2"
+            value={date2}
+            mode={mode2}
+            is24Hour={true}
+            display='default'
+            onChange={onChange2}
+          />)}
         </View>
       </View>
-      {show && (<DateTimePicker
-        testID="dateTimePicker"
-        value={date}
-        mode={mode}
-        is24Hour={true}
-        display='default'
-        onChange={onChange}
-      />)}
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.felx}>
+      <View>
+        <View>
           <Button title="Speichern" onPress={() => eventCreation()}>
           </Button>
         </View>
-        <View style={styles.felx}>
-          <Button title="Abbrechen" onPress={() => Alert.alert("abgebrochen")}>
+        <View>
+          <Button title="Abbrechen" onPress={() => console.log(titel)}>
           </Button>
         </View>
       </View>
@@ -170,7 +200,7 @@ const styles = StyleSheet.create({
   header: {
     margin: 12
   },
-  felx: {
+  flex: {
     flex: 1,
     height: 50,
     marginHorizontal: 20,

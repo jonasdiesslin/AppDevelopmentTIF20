@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
-import { View, Text, Button, FlatList, TouchableHighlight } from "react-native";
+import { View } from "react-native";
+import { ChevronLeftIcon, ChevronRightIcon } from "react-native-heroicons/outline";
 
 import { Calendar } from "react-native-calendars";
 
@@ -100,9 +101,15 @@ export default function CalendarView({ route, navigation }){
                 initialDate={`${route.params.yearSelected}-${padWithLeadingZero(route.params.monthSelected + 1)}-${padWithLeadingZero(getCurrentDay())}`} 
                 firstDay={1}
                 onDayPress={dayPressed => {
+                    if(dayPressed.month !== (timeSelected.month + 1)){
+                        setTimeSelected({
+                            year: dayPressed.year,
+                            month: (dayPressed.month - 1)
+                        })
+                    }
                     navigation.navigate("DayView", {
-                        yearSelected: timeSelected.year,
-                        monthSelected: timeSelected.month,
+                        yearSelected: dayPressed.year,
+                        monthSelected: dayPressed.month - 1,
                         daySelected: dayPressed.day
                     });
                 }}
@@ -115,6 +122,7 @@ export default function CalendarView({ route, navigation }){
                     addMonth();
                 }}
                 markedDates={datesToMark}
+                renderArrow={direction => (direction === "left") ? <ChevronLeftIcon color="dodgerblue"/> : <ChevronRightIcon color="dodgerblue"/>}
             />
         </View>
     )

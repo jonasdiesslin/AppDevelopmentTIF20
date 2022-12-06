@@ -4,7 +4,11 @@ module.exports = {
     "./Views/**/*.{js,ts,jsx,tsx}",
     "./Components/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'dodgerblue': '#1e90ff',
+      },
+    },
   },
   plugins: [],
 }
