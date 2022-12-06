@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
-import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image } from 'react-native';
+import React from "react";
+import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
 import { PlusIcon, CalendarDaysIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
+import { useFocusEffect } from "@react-navigation/native"
 
 import {getCalendar} from '../Utils/Storage';
 import Event from '../Components/Event'
@@ -36,6 +38,15 @@ export default function Main({ navigation }) {
     useEffect(() => {
         loadCalendar();
     }, [])
+
+    //Reload calendar on rerender
+    useFocusEffect(
+        React.useCallback(() => {
+            loadCalendar();
+            
+            return () => {}
+        }, [])
+    );
 
     //Get various dates
     const startOfToday = getTodayTimestamp();

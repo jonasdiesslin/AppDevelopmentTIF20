@@ -40,7 +40,7 @@ export async function addEvent(username, newEvent){
     let calendar = await getCalendar(username);
     //Check if such an event already exists so we don't create duplicates
     for (const i in calendar){
-        if (eventEqualityCheck(calendar[i], eventToDelete)){
+        if (eventEqualityCheck(calendar[i], newEvent)){
             return;
         }
     }
