@@ -2,7 +2,7 @@
 
 import * as Crypto from 'expo-crypto';
 import { TurboModuleRegistry } from 'react-native';
-import { getAuthenticationInfo, getPasswordHash, storeAuthenticationInfo, initializeCalendar, getManagementInfo } from './Storage';
+import { getAuthenticationInfo, getPasswordHash, storeAuthenticationInfo, initializeCalendar, getManagementInfo, deleteCalendar } from './Storage';
 
 export async function authenticateUser(username, enteredPassword){
     const enteredPasswordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256,
@@ -37,9 +37,10 @@ export async function deleteUser(usernameToDelete){
     //Keep only users with a different username
     let newAuthenticationInfo = authenticationInfo.filter((authObj) => (authObj.username !== usernameToDelete));
     await storeAuthenticationInfo(newAuthenticationInfo);
-        for (const i in newAuthenticationInfo){
-        return newAuthenticationInfo[i].username !== usernameToDelete;
-    }
+    
+    deleteCalendar(usernameToDelete);
+
+    return true;
 }
 
 export async function checkIfUsernameExists(usernameToFind){

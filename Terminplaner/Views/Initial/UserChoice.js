@@ -13,32 +13,65 @@ export default function UserChoice({route, navigation}) {
 
     //Reload event list every time action is performed
     useEffect(() => {
-        getUser();
-    });
+        getUsers();
+    }, []);
 
     const [authInfo, setAuthInfo] = useState([]);
-    const [deletetion, setDeletetion] = useState(false);
+    //console.log(authInfo);
+    let selectedUsers = [];
 
-    let selectedUserList = [];
-
-    async function getUser() {
+    async function getUsers() {
         let res = await getAuthenticationInfo();
         setAuthInfo(res);
-        setDeletetion(false)
-        console.log(authInfo);
     }
 
+    async function doDelete(){
+        for (let i = 0; i < selectedUsers.length; i++) {
+            await deleteUser(selectedUsers[i])
+        }
 
+        Alert.alert(
+            `Löschen erfolgreich`,
+            `${selectedUsers.length} Benutzer erfolgreich gelöscht`,
+            [
+                {
+                    text: "OK",
+                    onPress: () => {
+                        getUsers();
+                    }
+                }
+            ]
+        );
+    }
 
     async function attemptDelete(){
-        if (selectedUserList.length === 0) {
+        if (selectedUsers.length === 0) {
             Alert.alert("Bitte wählen Sie einen Benutzer aus, den Sie entfernen möchten.");
         }else {
-            for (let i = 0; i < selectedUserList.length; i++) {
-                await deleteUser(selectedUserList[i])
+            let selectedUsersString = "";
+            for (const i in selectedUsers){
+                selectedUsersString = selectedUsersString + selectedUsers[i] + "\n";
             }
-            setDeletetion(true)
-            Alert.alert(`Ausgewählte Benutzer wurden erfolgreich entfernt.`);
+
+            Alert.alert(
+                "Löschen bestätigen:",
+                "Wollen Sie diese Benutzer wirklich löschen?\n\n" + selectedUsersString,
+                [
+                    {
+                        text: "Löschen",
+                        onPress: () => {
+                            doDelete();
+                        }
+                        
+                    },
+                    {
+                        text: "Abbrechen",
+                        onPress: () => {
+                            Alert.alert("Löschvorgang abgebrochen");
+                        }
+                    }
+                ]
+            )
         }
     }
 
@@ -46,16 +79,16 @@ export default function UserChoice({route, navigation}) {
         <View className="flex-row flex-nowrap justify-evenly mx-1 my-2 p-3 bg-transparent border-2 border-stone-400 rounded-md">
             <BouncyCheckbox
                 className="self-center"
-                onPress={() => {
-                    if(selectedUserList.length !==0){
-                    selectedUserList.forEach((item) => {
-                        if (item !== title ) {
-                            selectedUserList.push(title)
-                        }else{
-                            selectedUserList.splice(selectedUserList.indexOf(title), 1)
-                        }})
-                }else{
-                        selectedUserList.push(title)
+                onPress={(isChecked) => {
+                    if(isChecked) {
+                        //console.log(`User ${title} checked.`);
+                        selectedUsers.push(title);
+                        //console.log(selectedUsers);
+                    } else {
+                        //console.log(`User ${title} unchecked.`);
+                        //Remove this user from the selectedUsers list -> keep only users with different name
+                        selectedUsers = selectedUsers.filter((username) => (username !== title));
+                        //console.log(selectedUsers);
                     }
                 }}
             />
@@ -63,9 +96,10 @@ export default function UserChoice({route, navigation}) {
             <View className="self-center left-7"><UserCircleIcon color="white" size={50} /></View>
         </View>
     );
-        const renderItem = ({ item }) => (
-            <Item className="flex-1 " title={item.username} />
-        );
+                
+    const renderItem = ({ item }) => (
+        <Item className="flex-1 " title={item.username} />
+    );
     return (
         <ImageBackground source={image} className="flex-1">
                     <View className="flex-auto justify-center items-center relative pb-60">
@@ -79,7 +113,9 @@ export default function UserChoice({route, navigation}) {
                                       className=""/>
 
                             {/*Check if User is chosen*/}
-                            <TouchableOpacity className="top-16 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptDelete}><Text className="self-center bottom-1 text-lg text-white p-2">Löschen</Text></TouchableOpacity>
+                            <TouchableOpacity className="top-16 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptDelete}>
+                                <Text className="self-center bottom-1 text-lg text-white p-2">Löschen</Text>
+                            </TouchableOpacity>
                         </View>
 
                     </View>
