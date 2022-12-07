@@ -66,7 +66,7 @@ export default function Main({ navigation }) {
 
     function renderCalendarItem({item: calendarItem}){
         if(calendarItem.isSeparator === true) {
-            return (<Text className="bg-gray-300 p-1">
+            return (<Text className="bg-gray-300 p-1 mb-1">
                         {calendarItem.text}
                     </Text>)
         } else {
@@ -101,16 +101,17 @@ export default function Main({ navigation }) {
                     </TouchableOpacity>
                 </View>
 
-                <View className="mt-2 p-1">
+                <View className="mt-2 p-1 flex-1">
                     <Text>Hallo, {currentUser}!</Text>
                     <Text className="mb-2">Ihre Termine:</Text>
 
-                    <FlatList 
-                        className=""  
-                        data={finishedCalendar}
-                        renderItem={renderCalendarItem} 
-                        keyExtractor={(item) => ((item.isSeparator === true) ? `${item.text}` : `${item.start}${item.end}${item.title}`)}
-                        style={{flexGrow: 1}}/>
+                        <FlatList 
+                            className=""  
+                            data={finishedCalendar}
+                            renderItem={renderCalendarItem} 
+                            keyExtractor={(item) => ((item.isSeparator === true) ? `${item.text}` : `${item.start}${item.end}${item.title}`)}
+                            style={{flexGrow: 1}}/>
+                    
                 </View>
                 
             </SafeAreaView>
