@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import { View, Text, Button, FlatList, TouchableOpacity } from "react-native";
 import { ChevronLeftIcon, ChevronRightIcon } from "react-native-heroicons/outline";
+import { HeaderBackButton } from "@react-navigation/elements";
 
 import { getCalendar } from "../Utils/Storage";
 import Event from '../Components/Event'
@@ -33,11 +34,13 @@ export default function DayView({ route, navigation }){
     //Prevent default "back" behaviour
     //Go back to CalendarView as intended, but select the month of the day currently selected in this view
     useEffect(() => {
-        navigation.addListener("beforeRemove", (e) => {
+        console.log("Added listener.")
+        const unsubscribe = navigation.addListener("beforeRemove", (e) => {
             //If this event was triggered by the user (e.g. by pressing the back button),
             //we replace it with one that goes back to the correct calendar month
             if(e.data.action.payload === undefined) {
                 e.preventDefault();
+                console.log("called event listener")
                 navigation.navigate("CalendarView", {
                     yearSelected: timeSelected.year,
                     monthSelected: timeSelected.month
@@ -47,6 +50,24 @@ export default function DayView({ route, navigation }){
                 return;
             }
         });
+
+        navigation.setOptions({
+            headerLeft: () => {
+                return (<HeaderBackButton
+                            style={{
+                                left: -15,
+                                top: 0
+                            }}
+                            onPress={() => {
+                                navigation.navigate("CalendarView", {
+                                    yearSelected: timeSelected.year,
+                                    monthSelected: timeSelected.month
+                            });
+                }}/>)
+            }
+        });
+
+        return unsubscribe;
     }, [timeSelected]);
 
     function oneDayBack(){
@@ -107,7 +128,3 @@ export default function DayView({ route, navigation }){
         </View>
     )
 }
-
-
-//<Button title="<" onPress={() => oneDayBack()}/>
-//<Button title=">" onPress={()=> oneDayForward()}/>

@@ -13,7 +13,8 @@ import {
   Text,
   Alert,
   Image,
-  Platform
+  Platform,
+  TouchableOpacity
 } from "react-native";
 import { addEvent } from "../Utils/Calendar";
 
@@ -93,7 +94,8 @@ export const Appointment = ({ navigation }) => {
       description: comment,
       start: startDate,
       end: endDate,
-      notification: isEnabled
+      notification: isEnabled,
+      notificationInfo: ""
     }
     console.log(event)
     addEvent(currentUser, event);
@@ -115,7 +117,8 @@ export const Appointment = ({ navigation }) => {
       <TextInput
         style={styles.comment}
         onChangeText={onChangeComment}
-        placeholder={"Bemerkungen"}
+        placeholder={"Bemerkungen (optional)"}
+        multiline={true}
         value={comment}
       />
       <View style={{ margin: 12, borderWidth: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 0 }}>
@@ -152,7 +155,7 @@ export const Appointment = ({ navigation }) => {
             source={require('../public/images/clock.png')}></Image>
           <Text>    Bis</Text>
           <Text placeholder={"Ende"} style={styles.input2} title='DatePicker' onPress={() => showMode2('date')} >{text2}</Text>
-          <Text placeholder={"Start"} style={styles.input2} title='TimePicker' onPress={() => showMode2('time')} >{time2}</Text>
+          <Text placeholder={"Ende"} style={styles.input2} title='TimePicker' onPress={() => showMode2('time')} >{time2}</Text>
           {show2 && (<DateTimePicker
             testID="dateTimePicker2"
             value={date2}
@@ -163,15 +166,38 @@ export const Appointment = ({ navigation }) => {
           />)}
         </View>
       </View>
-      <View>
-        <View>
-          <Button title="Speichern" onPress={() => eventCreation()}>
-          </Button>
-        </View>
-        <View>
-          <Button title="Abbrechen" onPress={() => console.log(titel)}>
-          </Button>
-        </View>
+      <View className="flex-row m-2">
+          <TouchableOpacity 
+            className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
+            onPress={() => {
+              if (  (startDate === undefined) ||
+                    (endDate === undefined) ||
+                    (titel === undefined) ||
+                    (titel === "")){
+                  Alert.alert("Angaben unvollständig",
+                    "Ihre Angaben sind noch unvollständig. Bitte füllen Sie alle Eingabefelder aus.");
+                    return;
+              }
+              eventCreation();
+              Alert.alert("Event erfolgreich gespeichert", "", [
+                {
+                  text: "OK",
+                  onPress: () => {
+                    navigation.goBack();
+                  }
+                }
+              ]);
+            }}>
+              <Text className="text-white">Speichern</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
+            onPress={() => {
+              console.log(titel);
+              navigation.goBack();
+            }}>
+              <Text className="text-white">Abbrechen</Text>
+          </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
