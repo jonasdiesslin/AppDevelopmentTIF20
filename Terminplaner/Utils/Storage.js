@@ -89,7 +89,7 @@ export async function getCalendar(username){
 }
 
 export async function storeCalendar(username, newCalendar){
-    setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
+    await setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
         calendarArray: newCalendar
     });
 }

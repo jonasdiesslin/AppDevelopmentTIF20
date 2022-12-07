@@ -115,7 +115,13 @@ export default function Main({ navigation }) {
                 </View>
                 
             </SafeAreaView>
-            <TouchableOpacity activeOpacity={0.5} style={styles.touchableOpacityStyle} onPress={() => navigation.navigate("Appointment")}>
+            <TouchableOpacity 
+                activeOpacity={0.5}
+                style={styles.touchableOpacityStyle}
+                onPress={() => 
+                    navigation.navigate("Appointment", {newEvent: true})
+                }
+            >
                 <PlusIcon color="white" size="50"/>
             </TouchableOpacity>
         </>

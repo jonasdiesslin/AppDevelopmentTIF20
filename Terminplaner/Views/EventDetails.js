@@ -1,17 +1,21 @@
+import React from "react"
+import { useEffect } from "react";
 import { View,Text, Button, Alert, TouchableOpacity } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { padWithLeadingZero, deleteEvent } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
 //This component shows all details for an event. It is reachable by clicking on an event in the main view or the calendar view.
 export default function EventDetails({ route, navigation }) {
+    console.log("EventDetails rendered");
     //Extract user context
     const {
         username: currentUser
     } = useCurrentUserContext();
 
     //Get the event to display from the route parameters
-    const { calendarItem } = route.params;
+    let { calendarItem } = route.params;
     const startDate = new Date(calendarItem.start);
     const endDate = new Date(calendarItem.end);
 
@@ -38,7 +42,12 @@ export default function EventDetails({ route, navigation }) {
             <View className="flex-row m-1">
                 <TouchableOpacity
                     className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
-                    onPress={() => Alert.alert("TBD")}
+                    onPress={() => {
+                        navigation.navigate("Appointment", {
+                            newEvent: false,
+                            oldEvent: calendarItem
+                        })
+                    }}
                 >
                     <Text className="text-white">Bearbeiten</Text>
                 </TouchableOpacity>

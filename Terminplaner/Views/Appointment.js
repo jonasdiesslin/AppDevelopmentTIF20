@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useCurrentUserContext } from '../Utils/userContext';
@@ -16,21 +16,27 @@ import {
   Platform,
   TouchableOpacity
 } from "react-native";
-import { addEvent } from "../Utils/Calendar";
+import { deleteEvent, addEvent } from "../Utils/Calendar";
 
 import { padWithLeadingZero } from "../Utils/Calendar";
 
-export const Appointment = ({ navigation }) => {
+export const Appointment = ({ route, navigation }) => {
+
+  const {
+    newEvent: isNewEvent
+  } = route.params
+
+  console.log("New Event?: " + isNewEvent)
 
   const {
     username: currentUser
   } = useCurrentUserContext();
 
-  const [startDate, changestartDate] = useState();
-  const [endDate, changeendDate] = useState();
-  const [titel, onChangeTitel] = useState();
-  const [comment, onChangeComment] = useState();
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [startDate, changestartDate] = useState((isNewEvent ? undefined : route.params.oldEvent.start));
+  const [endDate, changeendDate] = useState((isNewEvent ? undefined : route.params.oldEvent.end));
+  const [titel, onChangeTitel] = useState((isNewEvent ? undefined : route.params.oldEvent.title));
+  const [comment, onChangeComment] = useState((isNewEvent ? undefined : route.params.oldEvent.description));
+  const [isEnabled, setIsEnabled] = useState((isNewEvent ? false : route.params.oldEvent.notification));
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const [date, setDate] = useState(new Date());
@@ -88,6 +94,7 @@ export const Appointment = ({ navigation }) => {
     setMode2(currentMode);
   };
 
+  //Creates a new event based on the inputs, stores it and returns it
   function eventCreation() {
     let event = {
       title: titel,
@@ -99,10 +106,19 @@ export const Appointment = ({ navigation }) => {
     }
     console.log(event)
     addEvent(currentUser, event);
+    return event;
   }
 
   function clearAll(){
 
+  }
+
+  //initialize the date/time pickers, if this is an old event
+  if (!isNewEvent){
+    useEffect(() => {
+      onChange(undefined, new Date(startDate));
+      onChange2(undefined, new Date(endDate));
+    }, [])   
   }
 
   return (
@@ -170,6 +186,7 @@ export const Appointment = ({ navigation }) => {
           <TouchableOpacity 
             className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
             onPress={() => {
+              //Don't do anything if any inputs are missing
               if (  (startDate === undefined) ||
                     (endDate === undefined) ||
                     (titel === undefined) ||
@@ -178,12 +195,23 @@ export const Appointment = ({ navigation }) => {
                     "Ihre Angaben sind noch unvollständig. Bitte füllen Sie alle Eingabefelder aus.");
                     return;
               }
-              eventCreation();
+              //Delete the old event if necessary (in case the user is editing an existing event)
+              if(!isNewEvent){
+                deleteEvent(currentUser, route.params.oldEvent);
+              }
+              //Create the new event
+              let newEvent = eventCreation();
               Alert.alert("Event erfolgreich gespeichert", "", [
                 {
                   text: "OK",
                   onPress: () => {
-                    navigation.goBack();
+                    if(isNewEvent){
+                      console.log("Created new Event")
+                      navigation.goBack();
+                    } else {
+                      console.log("Modified Event");
+                      navigation.navigate("EventDetails", {calendarItem: newEvent})
+                    }
                   }
                 }
               ]);
@@ -212,7 +240,7 @@ const styles = StyleSheet.create({
   },
   input2: {
     height: 40,
-    width: 100,
+    width: 110,
     margin: 12,
     borderWidth: 1,
     padding: 10
