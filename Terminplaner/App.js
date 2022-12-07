@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { HeaderBackButton } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Button, TouchableOpacity } from 'react-native';
+import { Button, TouchableOpacity, Text, Alert } from 'react-native';
 import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
 
 import Initial from "./Views/Initial/Initial";
@@ -64,7 +65,10 @@ export default function App() {
         }
         {
           loggedIn && ( 
-                        <Stack.Navigator initialRouteName="Main">
+                        <Stack.Navigator 
+                          initialRouteName="Main"
+                          screenOptions={{ gestureEnabled: false }}
+                        >
                           <Stack.Screen
                             name="Main" component={Main}
                             options={{ 
@@ -81,7 +85,12 @@ export default function App() {
                             }}/>
                           <Stack.Screen name="Appointment" component={Appointment} options={{ title:"Neuer Termin" }}/>
                           <Stack.Screen name="CalendarView" component={CalendarView} options={{ title:"Kalenderansicht" }}/>
-                          <Stack.Screen name="DayView" component={DayView} options={{ title:"Tagesansicht" }}/>
+                          <Stack.Screen name="DayView" component={DayView} options={{ 
+                            title: "Tagesansicht",
+                            headerLeft: () => (
+                              <HeaderBackButton onPress={() => {Alert.alert("Klick.")}}/>
+                            )
+                          }}/>
                           <Stack.Screen name="EventDetails" component={EventDetails} options={{ title: "Termindetails"}}/>
                           <Stack.Screen name="Search" component={Search} options={{ title: "Suche" }}/>
                         </Stack.Navigator>
