@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { HeaderBackButton } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, TouchableOpacity, Text, Alert } from 'react-native';
 import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { scheduleTestPushNotification, registerForPushNotificationsAsync } from "./Utils/Notifications";
 
 import Initial from "./Views/Initial/Initial";
 import SignIn from "./Views/Initial/SignIn";
@@ -35,6 +38,34 @@ export default function App() {
     initializeFirebaseStorage();
   }, []) //Empty dependencies -> Effect used only once
 
+  //Initialize notification handling
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    //registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  //Schedule test notification
+  //scheduleTestPushNotification().then(id => console.log(`notificationID: ${id}`));
+
+  //Now return the actual app body
+
   return (
       <NavigationContainer>
         <currentUserContext.Provider value={{
@@ -45,7 +76,7 @@ export default function App() {
         }}>
         {
           !loggedIn &&  (
-                        <Stack.Navigator initialRouteName="Initial"
+                        <Stack.Navigator initialRouteName="Startseite"
                                          screenOptions={{
                                            headerTitleStyle: {
                                               //color: "white",
