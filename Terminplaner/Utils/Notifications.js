@@ -31,11 +31,38 @@ export async function scheduleTestPushNotification() {
 }
 
 export async function scheduleEventNotification(event, username){
-    return;
+  //Takes in a number and pads with a leading zero if less than ten. Use for displaying minutes.
+  function padWithLeadingZero(input){
+    if(input < 10)
+        return "0" + input.toString()
+    else
+        return input.toString()
+  }
+
+  const startDate = new Date(event.start);
+  //15 min before the start of the event
+  const notificationDate = new Date(startDate.getTime() - 15*60*1000);
+
+  const timeString = `${startDate.getHours()}:${padWithLeadingZero(startDate.getMinutes())}`;
+
+  const id = await Notifications.scheduleNotificationAsync({
+    content: {
+      title: `Anstehender Termin: ${event.title}`,
+      body: `Beginnt um ${timeString}`,
+      data: {
+        event: event,
+        username: username
+      },
+    },
+    trigger: notificationDate,
+  });
+
+  console.log("Scheduled notification for " + notificationDate.toISOString() + ".");
+  return id;
 }
 
 export async function registerForPushNotificationsAsync() {
-    let token;
+    //let token;
   
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync('default', {
@@ -46,6 +73,7 @@ export async function registerForPushNotificationsAsync() {
       });
     }
   
+    /*
     if (Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
@@ -64,6 +92,7 @@ export async function registerForPushNotificationsAsync() {
     }
   
     return token;
+    */
 }
 
 export async function cancelNotification(notifId){

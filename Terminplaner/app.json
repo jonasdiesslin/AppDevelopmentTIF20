@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Terminplaner",
+    "scheme": "terminplaner",
     "slug": "Terminplaner",
     "version": "1.0.0",
     "orientation": "portrait",

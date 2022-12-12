@@ -26,7 +26,7 @@ export const Appointment = ({ route, navigation }) => {
     newEvent: isNewEvent
   } = route.params
 
-  console.log("New Event?: " + isNewEvent)
+  //console.log("New Event?: " + isNewEvent)
 
   const {
     username: currentUser
@@ -186,13 +186,17 @@ export const Appointment = ({ route, navigation }) => {
           <TouchableOpacity 
             className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
             onPress={() => {
-              //Don't do anything if any inputs are missing
+              //Don't do anything if any inputs are missing or the times selected are inconsistent
               if (  (startDate === undefined) ||
                     (endDate === undefined) ||
                     (titel === undefined) ||
                     (titel === "")){
                   Alert.alert("Angaben unvollständig",
                     "Ihre Angaben sind noch unvollständig. Bitte füllen Sie alle Eingabefelder aus.");
+                    return;
+              } else if (date > date2) {
+                Alert.alert("Angaben fehlerhaft",
+                    "Der Endzeitpunkt eines Ereignisses muss NACH dem Startzeitpunkt liegen.");
                     return;
               }
               //Delete the old event if necessary (in case the user is editing an existing event)

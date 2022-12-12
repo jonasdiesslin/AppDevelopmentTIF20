@@ -4,7 +4,6 @@ import { HeaderBackButton } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, TouchableOpacity, Text, Alert } from 'react-native';
 import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
-import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { scheduleTestPushNotification, registerForPushNotificationsAsync } from "./Utils/Notifications";
 
@@ -39,13 +38,16 @@ export default function App() {
   }, []) //Empty dependencies -> Effect used only once
 
   //Initialize notification handling
+  /*
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  */
 
+  /*
   useEffect(() => {
-    //registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    registerForPushNotificationsAsync()
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
@@ -53,16 +55,18 @@ export default function App() {
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
+      //What do we have to do here?
     });
+
+    //Schedule test notification
+    //scheduleTestPushNotification().then(id => console.log(`notificationID: ${id}`));
 
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-
-  //Schedule test notification
-  //scheduleTestPushNotification().then(id => console.log(`notificationID: ${id}`));
+  */
 
   //Now return the actual app body
 

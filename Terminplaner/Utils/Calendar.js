@@ -1,7 +1,8 @@
 //Various utilities for dealing with calendars and times
+import {LocaleConfig} from 'react-native-calendars';
 
 import { getCalendar, storeCalendar } from "./Storage";
-import {LocaleConfig} from 'react-native-calendars';
+import { scheduleEventNotification, cancelNotification } from './Notifications';
 
 //Set up locale for the calendar view
 LocaleConfig.locales['de'] = {
@@ -38,6 +39,20 @@ function eventEqualityCheck(event1, event2){
 
 export async function addEvent(username, newEvent){
     let calendar = await getCalendar(username);
+
+    //Deep-copy newEvent so we can later modify it, if necessary
+    let eventToStore = {
+        start: newEvent.start,
+        end: newEvent.end,
+        notification: newEvent.notification,
+        title: newEvent.title,
+        description: newEvent.description
+    };
+
+    if(newEvent.notification){
+        const id = await scheduleEventNotification(newEvent, username);
+        eventToStore.notificationInfo = id;
+    }
     //Check if such an event already exists so we don't create duplicates
     for (const i in calendar){
         if (eventEqualityCheck(calendar[i], newEvent)){
@@ -45,7 +60,7 @@ export async function addEvent(username, newEvent){
         }
     }
     //No equal event found -> we can add it to the calendar
-    calendar.push(newEvent);
+    calendar.push(eventToStore);
     await storeCalendar(username, calendar);
 }
 
@@ -59,9 +74,13 @@ export async function deleteEvent(username, eventToDelete){
             break;
         }
     }
-    //Delete the event and store new calendar
+    //Delete the event (and its notification, if any) and store new calendar
     //NOTE: This function is only called from EventDetails with an existing event as argument
-    //  -> we will always find eventToDelete in the calendar
+    //  -> we will always find eventToDelete in the calendar, unless something else has gone (badly) wrong
+    if(eventToDelete.notification){
+        cancelNotification(eventToDelete.notificationInfo);
+    }
+
     calendar.splice(indexToDelete, 1);
     await storeCalendar(username, calendar)
 }
