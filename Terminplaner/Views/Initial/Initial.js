@@ -14,6 +14,7 @@ export default function Intitial({navigation}) {
         background: background,
     } = useCurrentUserContext();
 
+    /*
     //Initialize notification handling
     const [expoPushToken, setExpoPushToken] = useState('');
     const [notification, setNotification] = useState(false);
@@ -28,9 +29,9 @@ export default function Intitial({navigation}) {
         });
     
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-          console.log(response);
+          console.log("Response received", response);
           //What do we have to do here?
-          Linking.openURL("terminplaner://test");
+          //Linking.openURL("terminplaner://test");
         });
     
         //Schedule test notification
@@ -41,6 +42,7 @@ export default function Intitial({navigation}) {
           Notifications.removeNotificationSubscription(responseListener.current);
         };
       }, []);
+      */
 
     return (
         <ImageBackground source={background } className="flex-1">

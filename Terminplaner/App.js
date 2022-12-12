@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, TouchableOpacity, Text, Alert } from 'react-native';
 import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
 import * as Notifications from 'expo-notifications';
+import * as Linking from 'expo-linking';
 import { scheduleTestPushNotification, registerForPushNotificationsAsync } from "./Utils/Notifications";
 
 import Initial from "./Views/Initial/Initial";
@@ -38,17 +39,15 @@ export default function App() {
   }, []) //Empty dependencies -> Effect used only once
 
   //Initialize notification handling
-  /*
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-  */
 
-  /*
   useEffect(() => {
     registerForPushNotificationsAsync()
 
+    /*
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });
@@ -57,16 +56,16 @@ export default function App() {
       console.log(response);
       //What do we have to do here?
     });
+    */
 
     //Schedule test notification
     //scheduleTestPushNotification().then(id => console.log(`notificationID: ${id}`));
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
+      //Notifications.removeNotificationSubscription(notificationListener.current);
+      //Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-  */
 
   //Now return the actual app body
 
@@ -122,6 +121,9 @@ export default function App() {
                           <Stack.Screen name="CalendarView" component={CalendarView} options={{ title:"Kalenderansicht" }}/>
                           <Stack.Screen name="DayView" component={DayView} options={{ 
                             title: "Tagesansicht",
+                            //This button is only a placeholder. 
+                            //Immediately after loading DayView, it is replaced with a custom back button.
+                            //We only use it so the user doesn't see any flickering.
                             headerLeft: () => (
                               <HeaderBackButton onPress={() => {Alert.alert("Klick.")}}/>
                             )

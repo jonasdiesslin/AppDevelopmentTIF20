@@ -92,7 +92,7 @@ export default function UserChoiceAuth({route, navigation}) {
                                 onChangeText={setPasswordInput}
                             />
                             <TextInput
-                                placeholder="Verifizierungscode"
+                                placeholder="Benutzerverwaltungspasswort"
                                 placeholderTextColor="white"
                                 autoComplete="sms-otp"
                                 textContentType="oneTimeCode"
