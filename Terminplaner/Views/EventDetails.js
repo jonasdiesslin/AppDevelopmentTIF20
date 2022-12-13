@@ -70,6 +70,19 @@ export default function EventDetails({ route, navigation }) {
                     <Text className="text-white">Löschen</Text>
                 </TouchableOpacity>
             </View>
+
+            <View className="flex-row m-1">
+                <TouchableOpacity
+                    className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
+                    onPress={() => {
+                        navigation.navigate("ShareEvent", {
+                            calendarItem: calendarItem
+                        })
+                    }}
+                >
+                    <Text className="text-white">Teilen</Text>
+                </TouchableOpacity>
+            </View>
             
         </View>
     )
