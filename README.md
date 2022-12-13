@@ -40,12 +40,13 @@ Folgende Must-Haves wurden umgesetzt:
     - ausgeloggt
     - gelöscht
     werden
-- Termin können
+- Termine können
     - angelegt
     - in einer Liste eingesehen
     - in einem Kalender eingesehen
     - bearbeitet
     - gelöscht
+    - mit anderen Benutzern geteilt
     werden
 - Termine haben
     - einen Titel
