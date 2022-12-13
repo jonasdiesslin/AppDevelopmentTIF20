@@ -16,10 +16,14 @@ Sie wurde mithilfe von React Native, Expo und Nativewind (der Native-Version von
 Der Code der App befindet sich im Ordner "Terminplaner".
 
 Nach der Installation von Expo und dem Ausführen der Befehle
+
 > npm install
+
 (zum installieren der Abhängigkeiten)
 und
+
 > npx expo start
+
 kann die App mit Expo Go ausgeführt werden.
 
 Eine APK für die Standalone-App findet sich unter:
