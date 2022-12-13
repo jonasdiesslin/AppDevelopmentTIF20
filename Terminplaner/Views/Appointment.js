@@ -98,7 +98,7 @@ export const Appointment = ({ route, navigation }) => {
   function eventCreation() {
     let event = {
       title: titel,
-      description: comment,
+      description: (comment === undefined ? "" : comment),
       start: startDate,
       end: endDate,
       notification: isEnabled,

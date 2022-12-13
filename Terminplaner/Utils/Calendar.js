@@ -77,7 +77,7 @@ export async function deleteEvent(username, eventToDelete){
     //Delete the event (and its notification, if any) and store new calendar
     //NOTE: This function is only called from EventDetails with an existing event as argument
     //  -> we will always find eventToDelete in the calendar, unless something else has gone (badly) wrong
-    if(eventToDelete.notification){
+    if(eventToDelete.notification && (eventToDelete.notificationInfo !== "")){
         cancelNotification(eventToDelete.notificationInfo);
     }
 
