@@ -46,7 +46,6 @@ Folgende Must-Haves wurden umgesetzt:
     - in einem Kalender eingesehen
     - bearbeitet
     - gelöscht
-    - mit anderen Benutzern geteilt
     werden
 - Termine haben
     - einen Titel
@@ -60,6 +59,7 @@ Folgende Must-Haves wurden umgesetzt:
 Folgende Nice-To-Haves wurden umgesetzt:
 - Termine werden in der Cloud (mittels Firebase/Firestore) gespeichert
 - Es existiert eine Suchfunktion für Termine
+- Termine können mit anderen Benutzern geteilt werden
 
 ## Login-Daten
 
