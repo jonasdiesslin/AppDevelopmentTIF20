@@ -9,6 +9,20 @@ Simon Schneider
 ## Zur App
 
 Bei dieser App handelt es sich um einen Terminkalender für mehrere Benutzer.
+Sie wurde mithilfe von React Native, Expo und Nativewind (der Native-Version von Tailwind) erstellt.
+
+## Code, Installation und Ausführung
+
+Der Code der App befindet sich im Ordner "Terminplaner".
+
+Nach der Installation von Expo und dem Ausführen der Befehle
+> npm install
+(zum installieren der Abhängigkeiten)
+und
+> npx expo start
+kann die App mit Expo Go ausgeführt werden.
+
+Eine APK für die Standalone-App findet sich unter:
 
 ## Must-Haves
 
