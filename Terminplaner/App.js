@@ -79,41 +79,30 @@ export default function App() {
           userFunction: setCurrentUser,
           background: background
         }}>
-        {
-          !loggedIn &&  (
-                        <Stack.Navigator initialRouteName="Startseite"
-                                         screenOptions={{
-                                           headerTitleStyle: {
-                                              //color: "white",
-                                           },
-                                             headerTitle: '',
-                                             headerTransparent: true,
-                                             headerTintColor: "#fff"
-                                         }}
+          <Stack.Navigator initialRouteName="Startseite"
+                          screenOptions={{
+                            headerTitleStyle: {
+                              //color: "white",
+                            },
+                            headerTransparent: (!loggedIn ? true : false),
+                            headerTintColor: (!loggedIn ? "#fff" : "#000"),
+                            gestureEnabled: false
+                          }}
                         >
-                            <Stack.Screen name="Startseite" component={Initial}/>
-                            <Stack.Screen name="Anmelden" component={SignIn}/>
-                            <Stack.Screen name="Registrieren" component={Register}/>
-                            <Stack.Screen name="BenutzerauswahlAuth" component={UserChoiceAuth}/>
-                            <Stack.Screen name="Benutzerauswahl" component={UserChoice}/>
-                        </Stack.Navigator>
-                        )
-        }
-        {
-          loggedIn && ( 
-                        <Stack.Navigator 
-                          initialRouteName="Main"
-                          screenOptions={{ gestureEnabled: false }}
-                        >
+                          <Stack.Screen name="Startseite" component={Initial} options={{ title: "" }}/>
+                          <Stack.Screen name="Anmelden" component={SignIn} options={{ title: "" }}/>
+                          <Stack.Screen name="Registrieren" component={Register} options={{ title: "" }}/>
+                          <Stack.Screen name="BenutzerauswahlAuth" component={UserChoiceAuth} options={{ title: "" }}/>
+                          <Stack.Screen name="Benutzerauswahl" component={UserChoice} options={{ title: "" }}/>
+
                           <Stack.Screen
                             name="Main" component={Main}
                             options={{ 
                               title:"Übersicht",
-                              //Make a logout button in this screen's header
+                              //Make a temporary logout button in this screen's header so the user doesn't see any flickering
                               headerRight: () => (
                                 <TouchableOpacity onPress={() => {
-                                  setCurrentUser(null);
-                                  setLoggedIn(false);//Now we'll go back to the login component
+                                  Alert.alert("Klick");
                                 }}>
                                   <ArrowLeftOnRectangleIcon size="30" color="dodgerblue"/>
                                 </TouchableOpacity>
@@ -133,8 +122,6 @@ export default function App() {
                           <Stack.Screen name="EventDetails" component={EventDetails} options={{ title: "Termindetails"}}/>
                           <Stack.Screen name="Search" component={Search} options={{ title: "Suche" }}/>
                         </Stack.Navigator>
-                      )
-        }  
         </currentUserContext.Provider>
       </NavigationContainer>
   );

@@ -27,6 +27,7 @@ export default function SignIn({route, navigation}) {
             //Password was correct, log in this user
             setCurrentUser(usernameInput);
             setLoggedIn(true); //Now we'll switch over to the Main component
+            navigation.navigate("Main");
         } else {
             setUsernameInput("");
             setPasswordInput("");
