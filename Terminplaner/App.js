@@ -23,6 +23,7 @@ import Search from './Views/Search';
 import { currentUserContext } from './Utils/userContext';
 //import { initLocalStorage } from './Utils/Storage'
 import { initializeFirebaseStorage } from './Utils/Storage';
+import ShareEvent from './Views/ShareEvent';
 
 const background = require("./public/images/bg.jpg")
 
@@ -99,6 +100,8 @@ export default function App() {
                             name="Main" component={Main}
                             options={{ 
                               title:"Übersicht",
+                              //Disable back button in this screen so the user is forced to click the logout button
+                              headerBackVisible: false,
                               //Make a temporary logout button in this screen's header so the user doesn't see any flickering
                               headerRight: () => (
                                 <TouchableOpacity onPress={() => {
@@ -121,6 +124,7 @@ export default function App() {
                           }}/>
                           <Stack.Screen name="EventDetails" component={EventDetails} options={{ title: "Termindetails"}}/>
                           <Stack.Screen name="Search" component={Search} options={{ title: "Suche" }}/>
+                          <Stack.Screen name="ShareEvent" component={ShareEvent} options={{ title: "Termin teilen"}}/>
                         </Stack.Navigator>
         </currentUserContext.Provider>
       </NavigationContainer>

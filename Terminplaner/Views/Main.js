@@ -28,6 +28,24 @@ export default function Main({ navigation }) {
 
     const [mainCalendar, setMainCalendar] = useState([]);
 
+    //Override back behaviour
+    //The only way out of here is to log out using our custom logout button
+    React.useEffect(
+        () =>
+          navigation.addListener('beforeRemove', (e) => {    
+            //If there are no params, this event was triggered by the user clicking their device's back button
+            // -> Prevent default behavior of leaving the screen
+
+            //Use short-circuiting to prevent accessing undefined objects
+            if (e.data.action.payload === undefined || e.data.action.payload.params === undefined){
+                e.preventDefault();
+            }
+            //If there are params, this event was triggered by the logout button
+            // -> we can let it pass
+          }),
+        []
+      );
+
     //Override logout button behaviour
     //We need to do this in here so we can use navigation.navigate
     useEffect(() => {
@@ -37,7 +55,7 @@ export default function Main({ navigation }) {
                     <TouchableOpacity onPress={() => {
                         setCurrentUser(null);
                         setLoggedIn(false);//Now we'll go back to the login component
-                        navigation.navigate("Startseite"); 
+                        navigation.navigate("Startseite", { reason: "logoutButtonPressed" }); 
                     }}>
                       <ArrowLeftOnRectangleIcon size="30" color="dodgerblue"/>
                     </TouchableOpacity>
