@@ -2,7 +2,7 @@ import React from "react"
 import { useEffect } from "react";
 import { View,Text, Button, Alert, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { ShareIcon, PencilSquareIcon, TrashIcon} from "react-native-heroicons/outline";
 import { padWithLeadingZero, deleteEvent } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
@@ -41,7 +41,7 @@ export default function EventDetails({ route, navigation }) {
             
             <View className="flex-row m-1">
                 <TouchableOpacity
-                    className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
+                    className="flex-auto w-1 bg-dodgerblue p-2 rounded flex-row items-center mr-1"
                     onPress={() => {
                         navigation.navigate("Appointment", {
                             newEvent: false,
@@ -49,10 +49,11 @@ export default function EventDetails({ route, navigation }) {
                         })
                     }}
                 >
+                    <PencilSquareIcon size="25" color="white"/>
                     <Text className="text-white">Bearbeiten</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
+                    className="flex-auto w-1 bg-dodgerblue p-2 rounded flex-row items-center mr-1"
                     onPress={() => Alert.alert("Löschen Bestätigen",
                         "Wollen Sie diesen Termin wirklich löschen?", [
                         {
@@ -67,19 +68,21 @@ export default function EventDetails({ route, navigation }) {
                         }
                     ])}
                 >
+                    <TrashIcon size="25" color="white"/>
                     <Text className="text-white">Löschen</Text>
                 </TouchableOpacity>
             </View>
 
             <View className="flex-row m-1">
                 <TouchableOpacity
-                    className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
+                    className="flex-auto w-1 bg-dodgerblue p-2 rounded flex-row items-center mr-1"
                     onPress={() => {
                         navigation.navigate("ShareEvent", {
                             calendarItem: calendarItem
                         })
                     }}
                 >
+                    <ShareIcon size="25" color="white"/>
                     <Text className="text-white">Teilen</Text>
                 </TouchableOpacity>
             </View>
