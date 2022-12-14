@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, collection, setDoc, onSnapshot, deleteDoc } from "firebase/firestore";
+import { initializeFirestore, getFirestore, doc, getDoc, collection, setDoc, onSnapshot, deleteDoc } from "firebase/firestore";
+import { Alert } from 'react-native';
 
 //Global variables to hold authenticationInfo and calendars
 let authenticationInfo = [];
@@ -22,9 +23,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+//const db = getFirestore(app);
+const db = initializeFirestore(app, {experimentalForceLongPolling: true});
 
 export async function initializeFirebaseStorage(){
+    //Wait for the authentication info to be loaded
+    console.log("InitializeFirebaseStorage called.")
+    try {
+        const docRef = doc(db, "Terminplaner", "authenticationInfo");
+        const docSnap = await getDoc(docRef);
+    } catch (error) {
+        console.log(error);
+        Alert.alert("Netzwerk-Fehler",
+            "Laden der Authentifizierungsinformationen aus Firestore fehlgeschlagen. " +
+            "Bitte überprüfen Sie ihre Netzwerkverbindung und -einstellungen und starten Sie die App neu.")
+        return;
+    }
+
     //Set up listener for authenticationInfo
     const unsubAuthenticationInfo = onSnapshot(doc(db, "Terminplaner", "authenticationInfo"), (doc) => {
         authenticationInfo = doc.data().authenticationInfoArray;
