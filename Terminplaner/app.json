@@ -5,12 +5,12 @@
     "slug": "Terminplaner",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/calendar_icon_white_on_blue.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/calendar_icon_splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1e90ff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,8 +23,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/calendar_icon_white_on_transparent.png",
+        "backgroundColor": "#1e90ff"
       },
       "softwareKeyboardLayoutMode": "pan",
       "package": "com.schnes00.Terminplaner"
