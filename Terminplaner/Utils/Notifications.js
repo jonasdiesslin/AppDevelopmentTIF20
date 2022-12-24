@@ -27,7 +27,7 @@ export async function rescheduleNotificationsForUser(username){
 }
 
 //Schedule all Notifications for the user currently logged in
-export async function scheduleNotificationsForUser(username){
+async function scheduleNotificationsForUser(username){
   const userCalendar = await getCalendar(username);
   let newNotificationIdArray = [];
 
@@ -45,7 +45,7 @@ export async function scheduleNotificationsForUser(username){
 }
 
 //Cancel all notifications currently scheduled on this device
-export async function cancelCurrentNotifications(){
+async function cancelCurrentNotifications(){
   //Get all notification Ids and cancel them one by one
   let notificationIdArray = JSON.parse(await AsyncStorage.getItem("scheduledNotifications"));
 
@@ -80,7 +80,7 @@ export async function scheduleEventNotification(event, username){
   return id;
 }
 
-export async function scheduleEventNotificationInternal(event, username, storeId){
+async function scheduleEventNotificationInternal(event, username, storeId){
   //Takes in a number and pads with a leading zero if less than ten. Use for displaying minutes.
   function padWithLeadingZero(input){
     if(input < 10)
@@ -157,7 +157,7 @@ export async function cancelNotification(notifId){
   await cancelNotificationInternal(notifId, true);
 }
 
-export async function cancelNotificationInternal(notifId, deleteId){
+async function cancelNotificationInternal(notifId, deleteId){
     await Notifications.cancelScheduledNotificationAsync(notifId);
 
     if(deleteId){

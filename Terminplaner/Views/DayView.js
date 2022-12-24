@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { View, Text, Button, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { ChevronLeftIcon, ChevronRightIcon } from "react-native-heroicons/outline";
 import { HeaderBackButton } from "@react-navigation/elements";
 

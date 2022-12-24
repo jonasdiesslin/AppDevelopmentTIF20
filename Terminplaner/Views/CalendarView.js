@@ -6,7 +6,7 @@ import { Calendar } from "react-native-calendars";
 
 import { getCalendar } from "../Utils/Storage";
 
-import { getCurrentDay, getCurrentMonth, getCurrentYear, getDaysInMonth, getEventsWithinRange, monthNames, padWithLeadingZero } from "../Utils/Calendar";
+import { getCurrentDay, getDaysInMonth, getEventsWithinRange, padWithLeadingZero } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
 export default function CalendarView({ route, navigation }){
@@ -126,25 +126,4 @@ export default function CalendarView({ route, navigation }){
             />
         </View>
     )
-
-    /*
-    {'2022-10-29': {marked: true}, '2022-10-30': {marked: true}}
-
-    function renderDay({item: day}){
-        return (
-            <TouchableHighlight onPress={() => {navigation.navigate("DayView", {
-                yearSelected: timeSelected.year,
-                monthSelected: timeSelected.month,
-                daySelected: day
-            })}}>
-                <Text>{day}</Text>
-            </TouchableHighlight>
-        )
-    }
-
-    <Text>{monthNames[timeSelected.month]} {timeSelected.year}</Text> 
-            <Button title="<" onPress={() => oneMonthBack()}/>
-            <Button title=">" onPress={()=> oneMonthForward()}/>
-    <FlatList data={dayList} renderItem={renderDay} keyExtractor={(item) => item.toString()}/>
-    */
 }

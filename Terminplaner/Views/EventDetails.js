@@ -1,7 +1,5 @@
 import React from "react"
-import { useEffect } from "react";
 import { View,Text, Button, Alert, TouchableOpacity } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
 import { ShareIcon, PencilSquareIcon, TrashIcon} from "react-native-heroicons/outline";
 import { padWithLeadingZero, deleteEvent } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';

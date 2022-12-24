@@ -2,11 +2,9 @@ import React, {useEffect, useState, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { HeaderBackButton } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Button, TouchableOpacity, Text, Alert } from 'react-native';
+import { TouchableOpacity, Text, Alert } from 'react-native';
 import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
-import * as Notifications from 'expo-notifications';
-import * as Linking from 'expo-linking';
-import { scheduleTestPushNotification, registerForPushNotificationsAsync } from "./Utils/Notifications";
+import { registerForPushNotificationsAsync } from "./Utils/Notifications";
 
 import Initial from "./Views/Initial/Initial";
 import SignIn from "./Views/Initial/SignIn";
@@ -82,9 +80,6 @@ export default function App() {
         }}>
           <Stack.Navigator initialRouteName="Startseite"
                           screenOptions={{
-                            headerTitleStyle: {
-                              //color: "white",
-                            },
                             headerTransparent: (!loggedIn ? true : false),
                             headerTintColor: (!loggedIn ? "#fff" : "#000"),
                             gestureEnabled: false
@@ -130,16 +125,4 @@ export default function App() {
       </NavigationContainer>
   );
 }
-
-
-/*
-<View className="flex-1 items-center justify-center bg-white">
-  {
-    !loggedIn && ( <SignIn loginFunction={setLoggedIn} userFunction={setCurrentUser}/> )
-  }
-  {
-    loggedIn && ( <Main loginFunction={setLoggedIn} userFunction={setCurrentUser} username={currentUser}/> )
-  }
-</View>
-*/
 

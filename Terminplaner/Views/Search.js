@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import { SafeAreaView, FlatList, TextInput } from 'react-native';
 
 import {getCalendar} from '../Utils/Storage';
 import Event from '../Components/Event'

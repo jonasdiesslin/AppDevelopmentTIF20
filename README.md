@@ -52,7 +52,8 @@ Folgende Must-Haves wurden umgesetzt:
     - eine (optionale) Beschreibung
     - einen Startzeitpunkt
     - einen Endzeitpunkt
-- Vor Terminen kann optional eine Erinnerung (15 Min vor Start) als Push-Benachrichtigung gesendet werden
+- Vor Terminen kann optional eine Erinnerung (15 Min vor Start) als Push-Benachrichtigung gesendet werden.\
+Dabei werden immer nur die Erinnerungen für den Benutzer angezeigt, der sich als letzter angemeldet hat.
 
 ## Nice-To-Haves
 
@@ -66,4 +67,4 @@ Folgende Nice-To-Haves wurden umgesetzt:
 Standardmäßig vorhanden ist ein Benutzer mit dem Namen "test" und dem Passwort "test".
 Weitere Benutzer können auf Wunsch über den "Registrieren"-Button auf der Startseite erstellt werden.
 
-Um sich in die Benutzerverwaltung einloggen zu können, müssen sowohl Benutzername und normales Passwort als auch ein spezielles Benutzerverwaltungspasswort eingegeben werden. Dieses lautet "password".
+Um sich in die Benutzerverwaltung einloggen zu können, müssen sowohl ein Benutzername und das passende normale Passwort als auch ein spezielles Benutzerverwaltungspasswort eingegeben werden. Dieses lautet "password".

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import React from "react";
-import { StyleSheet, Button, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
 import { PlusIcon, CalendarDaysIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { useFocusEffect } from "@react-navigation/native"
 import { ArrowLeftOnRectangleIcon } from "react-native-heroicons/outline";
