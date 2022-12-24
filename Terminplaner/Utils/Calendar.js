@@ -2,7 +2,7 @@
 import {LocaleConfig} from 'react-native-calendars';
 
 import { getCalendar, storeCalendar } from "./Storage";
-import { scheduleEventNotification, cancelNotification } from './Notifications';
+import { scheduleEventNotification, cancelNotification, rescheduleNotificationsForUser } from './Notifications';
 
 //Set up locale for the calendar view
 LocaleConfig.locales['de'] = {
@@ -81,12 +81,21 @@ export async function deleteEvent(username, eventToDelete){
     //Delete the event (and its notification, if any) and store new calendar
     //NOTE: This function is only called from EventDetails with an existing event as argument
     //  -> we will always find eventToDelete in the calendar, unless something else has gone (badly) wrong
+    /*
     if(eventToDelete.notification && (eventToDelete.notificationInfo !== "")){
         cancelNotification(eventToDelete.notificationInfo);
     }
+    */
 
     calendar.splice(indexToDelete, 1);
-    await storeCalendar(username, calendar)
+    await storeCalendar(username, calendar);
+
+    //Simply reschedule Events for this user after we deleted this event.
+    //This will take care of cancelling its notification.
+    //This is not very efficient, sure, but premature optimization is the root of all evil, isn't it?
+    if(eventToDelete.notification){
+        rescheduleNotificationsForUser(username);
+    }
 }
 
 //Selects all events from calendar that start at or after rangeStart and before rangeEnd
