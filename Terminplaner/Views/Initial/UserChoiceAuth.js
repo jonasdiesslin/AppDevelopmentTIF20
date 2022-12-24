@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View,Text, TextInput, Alert, TouchableOpacity,ImageBackground, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard   } from "react-native";
 import { UserCircleIcon } from "react-native-heroicons/outline";
-import {authenticateManager, authenticateUser} from '../../Utils/Authentication';
+import {authenticateManager} from '../../Utils/Authentication';
 
 import { useCurrentUserContext } from '../../Utils/userContext';
 import {CommonActions} from "@react-navigation/native";

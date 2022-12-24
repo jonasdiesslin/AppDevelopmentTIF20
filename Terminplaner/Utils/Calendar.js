@@ -28,6 +28,8 @@ LocaleConfig.locales['de'] = {
 LocaleConfig.defaultLocale = 'de';
 
 //Various functions for dealing with calendar arrays
+
+//Helper function to check if two events are the same
 function eventEqualityCheck(event1, event2){
     return (
         (event1.title === event2.title) &&
@@ -37,6 +39,7 @@ function eventEqualityCheck(event1, event2){
     )
 }
 
+//Add an event to a user's calendar
 export async function addEvent(username, newEvent){
     let calendar = await getCalendar(username);
 
@@ -64,6 +67,7 @@ export async function addEvent(username, newEvent){
     await storeCalendar(username, calendar);
 }
 
+//Remove an event from a user's calendar
 export async function deleteEvent(username, eventToDelete){
     let calendar = await getCalendar(username);
     //Look through the calendar to find similar events
@@ -185,6 +189,7 @@ function isLeapYear(year){
     return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0); //Copied straight from StackOverflow, a sure sign of quality code
 }
 
+//Month name constants
 export const monthNames = [
     "Januar",
     "Februar",
@@ -200,6 +205,7 @@ export const monthNames = [
     "Dezember"
 ]
 
+//Accessor functions for various parts of the current date
 export function getCurrentYear(){
     const now = new Date();
     return now.getFullYear();

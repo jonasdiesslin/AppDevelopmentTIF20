@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View,Text, TextInput, Alert, TouchableOpacity,ImageBackground, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard   } from "react-native";
+import {View,Text, TextInput, Alert, TouchableOpacity,ImageBackground, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { UserCircleIcon } from "react-native-heroicons/outline";
 import { authenticateUser } from '../../Utils/Authentication';
 

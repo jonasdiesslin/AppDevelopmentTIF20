@@ -1,48 +1,13 @@
 import {useCurrentUserContext} from "../../Utils/userContext";
 import React from "react";
-import { useEffect, useState, useRef } from "react";
 import {ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import {CalendarDaysIcon} from "react-native-heroicons/outline";
-
-import * as Notifications from 'expo-notifications';
-import * as Linking from 'expo-linking';
-import { scheduleTestPushNotification, registerForPushNotificationsAsync } from "../../Utils/Notifications";
 
 export default function Intitial({navigation}) {
 
     const {
         background: background,
     } = useCurrentUserContext();
-
-    /*
-    //Initialize notification handling
-    const [expoPushToken, setExpoPushToken] = useState('');
-    const [notification, setNotification] = useState(false);
-    const notificationListener = useRef();
-    const responseListener = useRef();
-
-    useEffect(() => {
-        registerForPushNotificationsAsync()
-    
-        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-          setNotification(notification);
-        });
-    
-        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-          console.log("Response received", response);
-          //What do we have to do here?
-          //Linking.openURL("terminplaner://test");
-        });
-    
-        //Schedule test notification
-        scheduleTestPushNotification().then(id => console.log(`notificationID: ${id}`));
-    
-        return () => {
-          Notifications.removeNotificationSubscription(notificationListener.current);
-          Notifications.removeNotificationSubscription(responseListener.current);
-        };
-      }, []);
-      */
 
     return (
         <ImageBackground source={background } className="flex-1">

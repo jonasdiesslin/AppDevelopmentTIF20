@@ -1,7 +1,7 @@
 import {Alert, FlatList, ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {UserCircleIcon} from "react-native-heroicons/outline";
-import React, {useState, useMemo, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {deleteUser} from "../../Utils/Authentication";
 import {getAuthenticationInfo} from "../../Utils/Storage";
 

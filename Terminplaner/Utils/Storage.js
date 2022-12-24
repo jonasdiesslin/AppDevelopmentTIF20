@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { initializeFirestore, getFirestore, doc, getDoc, collection, setDoc, onSnapshot, deleteDoc } from "firebase/firestore";
+import { initializeFirestore, getFirestore, doc, getDoc, setDoc, onSnapshot, deleteDoc } from "firebase/firestore";
 import { Alert } from 'react-native';
 
 //Global variables to hold authenticationInfo and calendars
@@ -23,6 +23,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+//NOTE: getFirestore gets a timeout when run in the standalone app.
+//I haven no idea why this is the case. Keep this version for now.
 //const db = getFirestore(app);
 const db = initializeFirestore(app, {experimentalForceLongPolling: true});
 
