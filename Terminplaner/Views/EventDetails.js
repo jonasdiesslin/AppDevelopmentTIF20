@@ -50,7 +50,7 @@ export default function EventDetails({ route, navigation }) {
                     }}
                 >
                     <PencilSquareIcon size="25" color="white"/>
-                    <Text className="text-white">Bearbeiten</Text>
+                    <Text className="text-white ml-2">Bearbeiten</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     className="flex-auto w-1 bg-dodgerblue p-2 rounded flex-row items-center mr-1"
@@ -69,7 +69,7 @@ export default function EventDetails({ route, navigation }) {
                     ])}
                 >
                     <TrashIcon size="25" color="white"/>
-                    <Text className="text-white">Löschen</Text>
+                    <Text className="text-white ml-2">Löschen</Text>
                 </TouchableOpacity>
             </View>
 
@@ -83,7 +83,7 @@ export default function EventDetails({ route, navigation }) {
                     }}
                 >
                     <ShareIcon size="25" color="white"/>
-                    <Text className="text-white">Teilen</Text>
+                    <Text className="text-white ml-2">Teilen</Text>
                 </TouchableOpacity>
             </View>
             
