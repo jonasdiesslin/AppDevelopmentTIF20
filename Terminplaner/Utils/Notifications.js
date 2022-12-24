@@ -3,8 +3,12 @@ import * as Notifications from "expo-notifications";
 import * as Device from 'expo-device';
 import React, { useState, useEffect, useRef } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {  Platform } from "react-native";
+
+import { getCalendar } from "./Storage";
+
+//Perform some basic initialization
+AsyncStorage.getItem("scheduledNotifications").then(item => console.log(item))
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -14,8 +18,49 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export async function setupNotificationsForUser(){
+//Reschedule notifications for a given user, i.e. cancel all current notifications and schedule all of this users notifications
+export async function rescheduleNotificationsForUser(username){
+  await cancelCurrentNotifications();
+  await scheduleNotificationsForUser(username);
 
+  return;
+}
+
+//Schedule all Notifications for the user currently logged in
+export async function scheduleNotificationsForUser(username){
+  const userCalendar = await getCalendar(username);
+  let newNotificationIdArray = [];
+
+  for (const calendarItem of userCalendar){
+    if(calendarItem.notification){
+      let newId = await scheduleEventNotificationInternal(calendarItem, username, false);
+      newNotificationIdArray.push(newId);
+    }
+  }
+
+  await AsyncStorage.setItem("scheduledNotifications", JSON.stringify(newNotificationIdArray));
+
+  console.log(newNotificationIdArray);
+  console.log(`Scheduled ${newNotificationIdArray.length} notifications.`);
+}
+
+//Cancel all notifications currently scheduled on this device
+export async function cancelCurrentNotifications(){
+  //Get all notification Ids and cancel them one by one
+  let notificationIdArray = JSON.parse(await AsyncStorage.getItem("scheduledNotifications"));
+
+  if (notificationIdArray != null){
+    for (const notificationId of notificationIdArray){
+      //We can batch delete the Ids when we're done, so cancelNotificationInternal doesn't have to
+      await cancelNotificationInternal(notificationId, false);
+    }
+    console.log(`Cancelled ${notificationIdArray.length} notifications.`);
+  } else {
+    console.log("scheduledNotifications was not initialized");
+  }
+
+  //Store our changes
+  await AsyncStorage.setItem("scheduledNotifications", JSON.stringify([]));
 }
 
 export async function scheduleTestPushNotification() {
@@ -31,6 +76,11 @@ export async function scheduleTestPushNotification() {
 }
 
 export async function scheduleEventNotification(event, username){
+  const id = await scheduleEventNotificationInternal(event, username, true);
+  return id;
+}
+
+export async function scheduleEventNotificationInternal(event, username, storeId){
   //Takes in a number and pads with a leading zero if less than ten. Use for displaying minutes.
   function padWithLeadingZero(input){
     if(input < 10)
@@ -58,6 +108,14 @@ export async function scheduleEventNotification(event, username){
   });
 
   console.log("Scheduled notification for " + notificationDate.toISOString() + ".");
+
+  if(storeId){
+    let notificationIdArrayJSON = await AsyncStorage.getItem("scheduledNotifications");
+    let newNotificationIdArray = JSON.parse(notificationIdArrayJSON);
+    newNotificationIdArray.push(id);
+    await AsyncStorage.setItem("scheduledNotifications", JSON.stringify(newNotificationIdArray));
+  }
+
   return id;
 }
 
@@ -96,6 +154,18 @@ export async function registerForPushNotificationsAsync() {
 }
 
 export async function cancelNotification(notifId){
+  await cancelNotificationInternal(notifId, true);
+}
+
+export async function cancelNotificationInternal(notifId, deleteId){
     await Notifications.cancelScheduledNotificationAsync(notifId);
+
+    if(deleteId){
+      let notificationIdArrayJSON = await AsyncStorage.getItem("scheduledNotifications");
+      let newNotificationIdArray = JSON.parse(notificationIdArrayJSON);
+      //Keep the other Ids in the array, but remove notifId
+      newNotificationIdArray = newNotificationIdArray.filter((id) => (id !== notifId));
+      await AsyncStorage.setItem("scheduledNotifications", JSON.stringify(newNotificationIdArray));
+    }
 }
   

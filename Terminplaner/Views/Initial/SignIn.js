@@ -4,6 +4,7 @@ import { UserCircleIcon } from "react-native-heroicons/outline";
 import { authenticateUser } from '../../Utils/Authentication';
 
 import { useCurrentUserContext } from '../../Utils/userContext';
+import { rescheduleNotificationsForUser } from '../../Utils/Notifications';
 
 //The component for the login screen
 export default function SignIn({route, navigation}) {
@@ -26,7 +27,9 @@ export default function SignIn({route, navigation}) {
         if(loginSuccessful){
             //Password was correct, log in this user
             setCurrentUser(usernameInput);
-            setLoggedIn(true); //Now we'll switch over to the Main component
+            setLoggedIn(true); 
+            rescheduleNotificationsForUser(usernameInput);
+            //Now we'll switch over to the Main component
             navigation.navigate("Main");
         } else {
             setUsernameInput("");
