@@ -27,7 +27,7 @@ und
 kann die App mit der "Expo Go"-App ausgeführt werden.
 Ebenso kann die App mit expo run:android/ios gebaut werden.
 
-Eine APK für die Standalone-App findet sich unter: APK/
+Eine APK für die Standalone-App findet sich unter: APK/app-release.apk
 
 ## Umgesetzte Features
 
