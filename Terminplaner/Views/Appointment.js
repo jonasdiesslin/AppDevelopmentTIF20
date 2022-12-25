@@ -18,17 +18,21 @@ import {
 import { deleteEvent, addEvent } from "../Utils/Calendar";
 import { padWithLeadingZero } from "../Utils/Calendar";
 
+//This screen allows the user to set up a new event or modify an existing one.
+//Reachable from the FAB on the Main screen.
 export const Appointment = ({ route, navigation }) => {
+  //Check whether this is a new event or we're modifying an existing event.
   const {
     newEvent: isNewEvent
   } = route.params
 
-  //console.log("New Event?: " + isNewEvent)
   // Get the Username Value
   const {
     username: currentUser
   } = useCurrentUserContext();
-  // Use State Declarations 
+
+  //Use State Declarations.
+  //Fill with old values in case we're modifying an existing event.
   const [startDate, changestartDate] = useState((isNewEvent ? undefined : route.params.oldEvent.start));
   const [endDate, changeendDate] = useState((isNewEvent ? undefined : route.params.oldEvent.end));
   const [titel, onChangeTitel] = useState((isNewEvent ? undefined : route.params.oldEvent.title));
@@ -66,11 +70,13 @@ export const Appointment = ({ route, navigation }) => {
 
     console.log(dateStart + ' (' + timeStart + ')')
   };
+
   // Show mode to set the DateTimePicker mode to Date or Time
   const showMode = (currentMode) => {
     setDatePickerShow(true);
     setDatePickerDateMode(currentMode);
   };
+
   // Function to set changes when using the Datepicker for the End Date and Time
   const onChange2 = (event, selectedDate) => {
     const currentDate = selectedDate || datePickerEnddate;
@@ -89,6 +95,7 @@ export const Appointment = ({ route, navigation }) => {
     console.log(fDate + ' (' + fTime + ')')
     console.log(selectedDate.toString())
   };
+
   // Show mode to set the DateTimePicker mode to Date or Time
   const showMode2 = (currentMode) => {
     setDatePickerShow2(true);
@@ -110,7 +117,7 @@ export const Appointment = ({ route, navigation }) => {
     return event;
   }
   
-  //initialize the date/time pickers, if this is an old event
+  //initialize the date/time pickers with the existing datetimes, if this is an old event
   if (!isNewEvent) {
     useEffect(() => {
       onChange(undefined, new Date(startDate));
@@ -179,6 +186,7 @@ export const Appointment = ({ route, navigation }) => {
           />)}
         </View>
       </View>
+
       <View className="flex-row m-2">
         <TouchableOpacity
           className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
@@ -219,6 +227,7 @@ export const Appointment = ({ route, navigation }) => {
           }}>
           <Text className="text-white">Speichern</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           className="flex-auto items-center bg-dodgerblue p-2 mx-1 rounded"
           onPress={() => {
@@ -228,6 +237,7 @@ export const Appointment = ({ route, navigation }) => {
           <Text className="text-white">Abbrechen</Text>
         </TouchableOpacity>
       </View>
+      
     </SafeAreaView>
   );
 };

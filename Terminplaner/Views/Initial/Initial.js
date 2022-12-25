@@ -3,6 +3,9 @@ import React from "react";
 import {ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import {CalendarDaysIcon} from "react-native-heroicons/outline";
 
+//This is the apps landing page.
+//The user is redirected here from the app's splash screen.
+//Links to login, user registration, and user management (authentication) screens.
 export default function Intitial({navigation}) {
 
     const {

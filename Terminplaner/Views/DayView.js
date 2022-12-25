@@ -9,6 +9,10 @@ import Event from '../Components/Event'
 import { getEventsWithinRange, monthNames } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
+//This screen/component shows all events on a given day.
+//Reachable from CalendarView
+//NOTE: On going back from here, we return to CalendarView, but to the month of the day currently selected here.
+//This requires some modification of the default back-navigation behaviour (explained further below).
 export default function DayView({ route, navigation }){
     //Extract user context
     const {
@@ -28,7 +32,8 @@ export default function DayView({ route, navigation }){
         month: monthSelected,
         day: daySelected
     });
-    //This state stores all the calendar events in the month currently selected
+
+    //This state stores all the calendar events in the day currently selected
     const [eventsInDay, setEventsInDay] = useState([]);
 
     //Prevent default "back" behaviour
@@ -67,9 +72,11 @@ export default function DayView({ route, navigation }){
             }
         });
 
+        //Return unsubscribe so the listeners we set up are deleted again when they're not needed anymore
         return unsubscribe;
     }, [timeSelected]);
 
+    //Handle going one day back in time
     function oneDayBack(){
         //Offload the hard parts to the standard library
         const dayBefore = new Date(timeSelected.year, timeSelected.month, timeSelected.day - 1);
@@ -80,6 +87,7 @@ export default function DayView({ route, navigation }){
         });
     }
 
+    //Handle going one day forward in time
     function oneDayForward(){
         //Offload the hard parts to the standard library
         const dayBefore = new Date(timeSelected.year, timeSelected.month, timeSelected.day + 1);
@@ -124,7 +132,7 @@ export default function DayView({ route, navigation }){
                             renderItem={renderCalendarItem} 
                             keyExtractor={(item) => (`${item.start}${item.end}${item.title}`)}
                             style={{flexGrow: 1}}
-                            ListEmptyComponent = {() => (<Text>Keine Termine an diesem Tag vorhanden.</Text>)}/>
+                            ListEmptyComponent = {() => (<Text className="m-2">Keine Termine an diesem Tag vorhanden.</Text>)}/>
         </View>
     )
 }

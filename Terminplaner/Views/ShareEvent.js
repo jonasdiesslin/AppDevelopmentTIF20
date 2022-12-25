@@ -1,4 +1,4 @@
-import {Alert, FlatList, ImageBackground, Text, TouchableOpacity, View} from "react-native";
+import {Alert, FlatList, Text, TouchableOpacity, View} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {UserCircleIcon} from "react-native-heroicons/outline";
 import React, {useState, useEffect} from "react";
@@ -6,6 +6,7 @@ import {getAuthenticationInfo} from "../Utils/Storage";
 
 import { padWithLeadingZero, addEvent } from "../Utils/Calendar";
 
+//This screen allows a user to share an event with other users (i.e. add it to their calendars)
 export default function ShareEvent({route, navigation}) {
 
     const {
@@ -28,7 +29,8 @@ export default function ShareEvent({route, navigation}) {
     }, []);
 
     const [authInfo, setAuthInfo] = useState([]);
-    //console.log(authInfo);
+
+    //Stores which users are currently selected (i.e. have an active checkbox)
     let selectedUsers = [];
 
     async function getUsers() {
@@ -36,6 +38,7 @@ export default function ShareEvent({route, navigation}) {
         setAuthInfo(res);
     }
 
+    //Copy event to all selected users' calendars
     async function doShare(){
         for (let i = 0; i < selectedUsers.length; i++) {
             //Copy event to this users calendar
@@ -57,6 +60,7 @@ export default function ShareEvent({route, navigation}) {
         );
     }
 
+    //Validate inputs and ask the user for confirmation before sharing
     async function attemptShare(){
         if (selectedUsers.length === 0) {
             Alert.alert("Bitte wählen Sie mindestens einen Benutzer aus, mit dem Sie den Termin teilen wollen.");
@@ -96,14 +100,10 @@ export default function ShareEvent({route, navigation}) {
                 size={30}
                 onPress={(isChecked) => {
                     if(isChecked) {
-                        //console.log(`User ${title} checked.`);
                         selectedUsers.push(title);
-                        //console.log(selectedUsers);
                     } else {
-                        //console.log(`User ${title} unchecked.`);
                         //Remove this user from the selectedUsers list -> keep only users with different name
                         selectedUsers = selectedUsers.filter((username) => (username !== title));
-                        //console.log(selectedUsers);
                     }
                 }}
             />

@@ -4,7 +4,7 @@ import { ShareIcon, PencilSquareIcon, TrashIcon} from "react-native-heroicons/ou
 import { padWithLeadingZero, deleteEvent } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
-//This component shows all details for an event. It is reachable by clicking on an event in the main view or the calendar view.
+//This component shows all details for an event. It is reachable by clicking on an event in the main view or the day view.
 export default function EventDetails({ route, navigation }) {
     console.log("EventDetails rendered");
     //Extract user context

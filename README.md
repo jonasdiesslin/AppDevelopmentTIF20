@@ -15,7 +15,7 @@ Sie wurde mithilfe von React Native, Expo und Nativewind (der Native-Version von
 
 Der Code der App befindet sich im Ordner "Terminplaner".
 
-Nach der Installation von Expo und dem Ausführen der Befehle
+Nach der Installation und dem Setup von Expo und dem Ausführen der Befehle
 
 > npm install
 
@@ -24,9 +24,12 @@ und
 
 > npx expo start
 
-kann die App mit Expo Go ausgeführt werden.
+kann die App mit der "Expo Go"-App ausgeführt werden.
+Ebenso kann die App mit expo run:android/ios gebaut werden.
 
-Eine APK für die Standalone-App findet sich unter:
+Eine APK für die Standalone-App findet sich unter: APK/
+
+## Umgesetzte Features
 
 ## Must-Haves
 
@@ -34,19 +37,19 @@ Folgende Must-Haves wurden umgesetzt:
 - Benutzer haben
     - einen Benutzernamen
     - ein Passwort
-- Es können Benutzer
+- Benutzer können
     - angelegt
     - eingeloggt
     - ausgeloggt
     - gelöscht
-    werden
+    werden.
 - Termine können
     - angelegt
     - in einer Liste eingesehen
     - in einem Kalender eingesehen
     - bearbeitet
     - gelöscht
-    werden
+    werden.
 - Termine haben
     - einen Titel
     - eine (optionale) Beschreibung
@@ -58,13 +61,13 @@ Dabei werden immer nur die Erinnerungen für den Benutzer angezeigt, der sich al
 ## Nice-To-Haves
 
 Folgende Nice-To-Haves wurden umgesetzt:
-- Termine werden in der Cloud (mittels Firebase/Firestore) gespeichert
-- Es existiert eine Suchfunktion für Termine
-- Termine können mit anderen Benutzern geteilt werden
+- Termine werden in der Cloud (mittels Firebase/Firestore) gespeichert.
+- Es existiert eine Suchfunktion für Termine.
+- Termine können mit anderen Benutzern geteilt werden.
 
 ## Login-Daten
 
-Standardmäßig vorhanden ist ein Benutzer mit dem Namen "test" und dem Passwort "test".
+Standardmäßig vorhanden ist ein Benutzer mit dem Namen "test" und dem Passwort "test". Dieser hat auch einige voreingestellte Termine.
 Weitere Benutzer können auf Wunsch über den "Registrieren"-Button auf der Startseite erstellt werden.
 
 Um sich in die Benutzerverwaltung einloggen zu können, müssen sowohl ein Benutzername und das passende normale Passwort als auch ein spezielles Benutzerverwaltungspasswort eingegeben werden. Dieses lautet "password".

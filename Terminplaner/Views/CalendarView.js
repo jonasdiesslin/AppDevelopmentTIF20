@@ -9,6 +9,7 @@ import { getCalendar } from "../Utils/Storage";
 import { getCurrentDay, getDaysInMonth, getEventsWithinRange, padWithLeadingZero } from "../Utils/Calendar";
 import { useCurrentUserContext } from '../Utils/userContext';
 
+//This screen displays a calendar with marks on all dates which have events on them
 export default function CalendarView({ route, navigation }){
     //Extract user context
     const {
@@ -69,6 +70,7 @@ export default function CalendarView({ route, navigation }){
         setEventsInMonth(monthCalendar);
     }
     
+    //Reload calendar every time the user switches to a new month
     useEffect(() => {
         getEventsInMonth();
     }, [timeSelected]);
@@ -91,6 +93,8 @@ export default function CalendarView({ route, navigation }){
         }
         setDatesToMark(newDatesToMark);
     }
+
+    //Mark days with events every time we've got new events (i.e. after the user has switched to a new month)
     useEffect(() => {
         updateDatesToMark();
     }, [eventsInMonth]);
@@ -98,8 +102,11 @@ export default function CalendarView({ route, navigation }){
     return (
         <View style={{flex: 1}}>
             <Calendar
+                //Set up the initial date
                 initialDate={`${route.params.yearSelected}-${padWithLeadingZero(route.params.monthSelected + 1)}-${padWithLeadingZero(getCurrentDay())}`} 
+                //Set monday as the first day of the week
                 firstDay={1}
+                //Handle clicks on days by navigating to DayView (with the correct parameters)
                 onDayPress={dayPressed => {
                     if(dayPressed.month !== (timeSelected.month + 1)){
                         setTimeSelected({
@@ -113,15 +120,19 @@ export default function CalendarView({ route, navigation }){
                         daySelected: dayPressed.day
                     });
                 }}
+                //Handle going back one month
                 onPressArrowLeft={subtractMonth => {
                     oneMonthBack();
                     subtractMonth();
                 }}
+                //Handle going forward one month
                 onPressArrowRight={addMonth => {
                     oneMonthForward();
                     addMonth();
                 }}
+                //All days with events get marked with a dot
                 markedDates={datesToMark}
+                //Use custom backwards/forwards icons for consistency with DayView.js
                 renderArrow={direction => (direction === "left") ? <ChevronLeftIcon color="dodgerblue"/> : <ChevronRightIcon color="dodgerblue"/>}
             />
         </View>

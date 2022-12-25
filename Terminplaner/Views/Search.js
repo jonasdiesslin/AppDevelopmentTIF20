@@ -6,6 +6,7 @@ import Event from '../Components/Event'
 
 import { useCurrentUserContext } from '../Utils/userContext';
 
+//The event search screen. Allows the user to search for events based on their titles.
 export default function Search({ navigation }){
     const {
         username: currentUser
@@ -44,10 +45,10 @@ export default function Search({ navigation }){
     }
 
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1}} className="p-1">
             <TextInput
                 placeholder="Suchbegriff"
-                className="top-4 border-2 border-stone-400 rounded-md p-2 w-80 h-11 mb-5"
+                className="top-4 border-2 border-stone-400 rounded-md p-2 w-80 h-11 mb-8"
                 value={searchString}
                 onChangeText={setSearchString}
             />

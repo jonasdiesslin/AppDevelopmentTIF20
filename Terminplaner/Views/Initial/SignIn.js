@@ -22,16 +22,19 @@ export default function SignIn({route, navigation}) {
 
 
     async function attemptLogin(){
+        //Await authentication results
         const loginSuccessful = await authenticateUser(usernameInput, passwordInput)
 
         if(loginSuccessful){
             //Password was correct, log in this user
             setCurrentUser(usernameInput);
-            setLoggedIn(true); 
+            setLoggedIn(true);
+            //Set up notifications for this user
             rescheduleNotificationsForUser(usernameInput);
             //Now we'll switch over to the Main component
             navigation.navigate("Main");
         } else {
+            //Authentication failed, tell the user
             setUsernameInput("");
             setPasswordInput("");
             Alert.alert("Benutzername oder Passwort fehlerhaft.");
@@ -40,18 +43,16 @@ export default function SignIn({route, navigation}) {
 
 
     return (
+        <ImageBackground source={image} className="flex-1">
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                className="flex-1"
+                enabled={Platform.OS === "ios"}
+            >
+            <TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
 
 
-            <ImageBackground source={image} className="flex-1">
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    className="flex-1"
-                    enabled={Platform.OS === "ios"}
-                >
-                <TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
-
-
-              <View className="flex-1 justify-center items-center relative pb-72">
+                <View className="flex-1 justify-center items-center relative pb-72">
 
                         <Text className="text-3xl bottom-7 font-bold text-white ">Login</Text>
                         <UserCircleIcon color="white" size={170} />
@@ -83,11 +84,8 @@ export default function SignIn({route, navigation}) {
                             </TouchableOpacity>
                         </View>
                 </View>
-        </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-            </ImageBackground>
-
-
-
+        </ImageBackground>
     )
 }

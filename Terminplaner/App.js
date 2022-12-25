@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { HeaderBackButton } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { TouchableOpacity, Text, Alert } from 'react-native';
+import { TouchableOpacity, Alert } from 'react-native';
 import { ArrowLeftOnRectangleIcon } from 'react-native-heroicons/outline';
 import { registerForPushNotificationsAsync } from "./Utils/Notifications";
 
@@ -19,7 +19,6 @@ import DayView from './Views/DayView';
 import Search from './Views/Search';
 
 import { currentUserContext } from './Utils/userContext';
-//import { initLocalStorage } from './Utils/Storage'
 import { initializeFirebaseStorage } from './Utils/Storage';
 import ShareEvent from './Views/ShareEvent';
 
@@ -37,35 +36,11 @@ export default function App() {
     initializeFirebaseStorage();
   }, []) //Empty dependencies -> Effect used only once
 
-  //Initialize notification handling
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
-
+  //Set up notification handling
   useEffect(() => {
     registerForPushNotificationsAsync()
 
-    /*
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-    */
-
-    /*
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-      //What do we have to do here?
-    });
-    */
-
-    //Schedule test notification
-    //scheduleTestPushNotification().then(id => console.log(`notificationID: ${id}`));
-
-    return () => {
-      //Notifications.removeNotificationSubscription(notificationListener.current);
-      //Notifications.removeNotificationSubscription(responseListener.current);
-    };
+    return () => {};
   }, []);
 
   //Now return the actual app body
@@ -73,6 +48,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <currentUserContext.Provider value={{
+          //Provide global context for login/logout, current user, and a nice background image
           loginFunction: setLoggedIn,
           username: currentUser,
           userFunction: setCurrentUser,

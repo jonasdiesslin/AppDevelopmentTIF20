@@ -2,7 +2,8 @@ import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 
 import { padWithLeadingZero } from "../Utils/Calendar";
 
-//This component can display basic information for a single calendar entry
+//This component can display basic information for a single calendar entry (aka an event)
+//Information displayed includes: title, start date and end date.
 export default function Event({ calendarItem, navigation }) {
     const startDate = new Date(calendarItem.start)
     const endDate = new Date(calendarItem.end)

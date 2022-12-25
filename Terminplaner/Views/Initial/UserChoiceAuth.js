@@ -7,7 +7,7 @@ import { useCurrentUserContext } from '../../Utils/userContext';
 import {CommonActions} from "@react-navigation/native";
 
 
-//The component for the login screen
+//The component for the user management authentication screen
 export default function UserChoiceAuth({route, navigation}) {
 
     const [usernameInput, setUsernameInput] = useState("");
@@ -16,15 +16,9 @@ export default function UserChoiceAuth({route, navigation}) {
 
     const {image} = route.params;
 
-    const {
-        loginFunction: setLoggedIn,
-        userFunction: setCurrentUser
-    } = useCurrentUserContext();
-
-
-
+    //Authenticate and navigate to management screen
     async function attemptLogin(){
-        //use commented await statement as soon gateway for authentication is available
+        //await authentication results
         const loginSuccessful = await authenticateManager(usernameInput, passwordInput, pin)
 
         if(loginSuccessful){
@@ -46,6 +40,7 @@ export default function UserChoiceAuth({route, navigation}) {
             }, 1200);
 
         } else {
+            //Authentication failed, tell the user
             setUsernameInput("");
             setPasswordInput("");
             Alert.alert("Benutzername, Passwort oder Pin fehlerhaft.");

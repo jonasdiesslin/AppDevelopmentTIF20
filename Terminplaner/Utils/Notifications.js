@@ -1,15 +1,14 @@
-import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Device from 'expo-device';
-import React, { useState, useEffect, useRef } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {  Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 
 import { getCalendar } from "./Storage";
 
-//Perform some basic initialization
-AsyncStorage.getItem("scheduledNotifications").then(item => console.log(item))
+//This file contains basic notification handling code.
+//Notifications are handled on a local basis, with all currently scheduled notifications stored in AsyncStorage.
 
+//Perform some basic initialization (configure how this app should handle notifications)
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -18,7 +17,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-//Reschedule notifications for a given user, i.e. cancel all current notifications and schedule all of this users notifications
+//Reschedule notifications for a given user, i.e. cancel all existing notifications and schedule all of this users notifications
 export async function rescheduleNotificationsForUser(username){
   await cancelCurrentNotifications();
   await scheduleNotificationsForUser(username);
@@ -29,15 +28,18 @@ export async function rescheduleNotificationsForUser(username){
 //Schedule all Notifications for the user currently logged in
 async function scheduleNotificationsForUser(username){
   const userCalendar = await getCalendar(username);
+  //Store new Ids in this array so we can do a batch update at the end
   let newNotificationIdArray = [];
 
   for (const calendarItem of userCalendar){
     if(calendarItem.notification){
+      //We'll take care of updating AsyncStorage ourselves so scheduleNotificationInternal doesn't have to
       let newId = await scheduleEventNotificationInternal(calendarItem, username, false);
       newNotificationIdArray.push(newId);
     }
   }
 
+  //Batch update AsyncStorage with the notification Ids (for performance reasons)
   await AsyncStorage.setItem("scheduledNotifications", JSON.stringify(newNotificationIdArray));
 
   console.log(newNotificationIdArray);
@@ -63,7 +65,8 @@ async function cancelCurrentNotifications(){
   await AsyncStorage.setItem("scheduledNotifications", JSON.stringify([]));
 }
 
-export async function scheduleTestPushNotification() {
+//A simple test function to check if notifications are working
+async function scheduleTestPushNotification() {
     const id = await Notifications.scheduleNotificationAsync({
       content: {
         title: "You've got mail! 📬",
@@ -75,11 +78,14 @@ export async function scheduleTestPushNotification() {
     return id;
 }
 
+//Schedule a notification for a given event and a given user.
 export async function scheduleEventNotification(event, username){
   const id = await scheduleEventNotificationInternal(event, username, true);
   return id;
 }
 
+//Schedule a notification for a given event and a given user.
+//Optionally stores the new notifications Id as well.
 async function scheduleEventNotificationInternal(event, username, storeId){
   //Takes in a number and pads with a leading zero if less than ten. Use for displaying minutes.
   function padWithLeadingZero(input){
@@ -131,7 +137,6 @@ export async function registerForPushNotificationsAsync() {
       });
     }
   
-    /*
     if (Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
@@ -140,23 +145,31 @@ export async function registerForPushNotificationsAsync() {
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+        Alert.alert('Fehlende Berechtigung', "Diese App benötigt für ihr Funktionieren die Berechtigung zum Versenden von Benachrichtigungen.");
         return;
       }
+
+      //NOTE: We do local notifications only, i.e. we don't need any push tokens
+      /*
       token = (await Notifications.getExpoPushTokenAsync()).data;
       console.log(token);
+      */
+
     } else {
-      alert('Must use physical device for Push Notifications');
+      Alert.alert('Emulator erkannt', "Verwenden Sie diese App bitte auf einem physischen Gerät, " +
+        "um Benachrichtigungen korrekt zu empfangen.");
     }
   
-    return token;
-    */
+    //return token;
+    return;
 }
 
+//Cancel a notification given it's Id.
 export async function cancelNotification(notifId){
   await cancelNotificationInternal(notifId, true);
 }
 
+//Cancel a notification given it's Id. Optionally deletes it's Id from AsyncStorage as well.
 async function cancelNotificationInternal(notifId, deleteId){
     await Notifications.cancelScheduledNotificationAsync(notifId);
 

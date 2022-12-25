@@ -6,7 +6,7 @@ import {deleteUser} from "../../Utils/Authentication";
 import {getAuthenticationInfo} from "../../Utils/Storage";
 
 
-
+//The user management screen
 export default function UserChoice({route, navigation}) {
 
     const {image} = route.params;
@@ -17,7 +17,8 @@ export default function UserChoice({route, navigation}) {
     }, []);
 
     const [authInfo, setAuthInfo] = useState([]);
-    //console.log(authInfo);
+    
+    //This variable holds the usernames currently selected (i.e. with checkboxes selected)
     let selectedUsers = [];
 
     async function getUsers() {
@@ -25,6 +26,7 @@ export default function UserChoice({route, navigation}) {
         setAuthInfo(res);
     }
 
+    //Delete all selected users
     async function doDelete(){
         for (let i = 0; i < selectedUsers.length; i++) {
             await deleteUser(selectedUsers[i])
@@ -44,6 +46,7 @@ export default function UserChoice({route, navigation}) {
         );
     }
 
+    //Validate input and ask user for confirmation before deleting
     async function attemptDelete(){
         if (selectedUsers.length === 0) {
             Alert.alert("Bitte wählen Sie einen Benutzer aus, den Sie entfernen möchten.");
@@ -81,14 +84,10 @@ export default function UserChoice({route, navigation}) {
                 className="self-center"
                 onPress={(isChecked) => {
                     if(isChecked) {
-                        //console.log(`User ${title} checked.`);
                         selectedUsers.push(title);
-                        //console.log(selectedUsers);
                     } else {
-                        //console.log(`User ${title} unchecked.`);
                         //Remove this user from the selectedUsers list -> keep only users with different name
                         selectedUsers = selectedUsers.filter((username) => (username !== title));
-                        //console.log(selectedUsers);
                     }
                 }}
             />
@@ -112,7 +111,6 @@ export default function UserChoice({route, navigation}) {
                                       keyExtractor={item => item.username}
                                       className=""/>
 
-                            {/*Check if User is chosen*/}
                             <TouchableOpacity className="top-16 bg-blue-300 rounded-md h-10 w-80"  onPress={attemptDelete}>
                                 <Text className="self-center bottom-1 text-lg text-white p-2">Löschen</Text>
                             </TouchableOpacity>

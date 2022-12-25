@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
 import { PlusIcon, CalendarDaysIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { useFocusEffect } from "@react-navigation/native"
 import { ArrowLeftOnRectangleIcon } from "react-native-heroicons/outline";
@@ -11,6 +11,7 @@ import Event from '../Components/Event'
 import { useCurrentUserContext } from '../Utils/userContext';
 import { getEventsWithinRange, getEventsAfterDate, getTodayTimestamp, getStartTomorrowTimestamp, getEndTomorrowTimestamp, getSevenDaysHenceTimestamp } from "../Utils/Calendar";
 
+//Construct a calendar separator (for displaying purposes only)
 function getCalendarSeparator(text){
     return {
         isSeparator: true,
@@ -18,6 +19,9 @@ function getCalendarSeparator(text){
     }
 }
 
+//The apps main page, where a user is redirected to after succesfull login
+//NOTE: The only way back from here is to log out using our logout button.
+//We therefore have to modify the default back-navigation behaviour a bit (explained further below).
 export default function Main({ navigation }) {
 
     const {
@@ -85,7 +89,7 @@ export default function Main({ navigation }) {
         }, [])
     );
 
-    //Get various dates
+    //Get various dates we'll need to display a separated calendar
     const startOfToday = getTodayTimestamp();
     const startOfTomorrow = getStartTomorrowTimestamp();
     const endOfTomorrow = getEndTomorrowTimestamp();
@@ -102,6 +106,7 @@ export default function Main({ navigation }) {
     finishedCalendar = finishedCalendar.concat(getEventsAfterDate(mainCalendar, endOfWeek));
 
     function renderCalendarItem({item: calendarItem}){
+        //Render separators and events appropriately
         if(calendarItem.isSeparator === true) {
             return (<Text className="bg-gray-300 p-1 mb-1">
                         {calendarItem.text}
@@ -184,21 +189,3 @@ const styles = StyleSheet.create({
         includeFontPadding: false,
     }
 })
-
-/*
-<View className="mb-2">
-                    <Button title="Kalendaransicht" onPress={() => {
-                        //navigate to calendar view
-                        navigation.navigate("CalendarView", {
-                            yearSelected: getTodayTimestamp().getFullYear(),
-                            monthSelected: getTodayTimestamp().getMonth()
-                        });
-                    }}/>
-                </View>
-                    
-                <View className=""></View>
-                    <Button title="Suche" onPress={() => {
-                        navigation.navigate("Search");
-                    }}/>
-                <View/>
-*/

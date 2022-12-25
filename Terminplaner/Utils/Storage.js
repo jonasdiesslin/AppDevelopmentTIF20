@@ -2,10 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { initializeFirestore, getFirestore, doc, getDoc, setDoc, onSnapshot, deleteDoc } from "firebase/firestore";
 import { Alert } from 'react-native';
 
-//Global variables to hold authenticationInfo and calendars
+//This file contains basic storage handling code.
+//See Docs/Datatypes.md for more info.
+
+//Global variables to hold authenticationInfo and managementInfo
 let authenticationInfo = [];
 let managementInfo = {};
-//let calendars = {};
 
 //For efficiency reasons, we keep only a single active calendar in memory at a time (there's only one user logged in at any time as well).
 let currentCalendar = [];
@@ -35,6 +37,7 @@ export async function initializeFirebaseStorage(){
         const docRef = doc(db, "Terminplaner", "authenticationInfo");
         const docSnap = await getDoc(docRef);
     } catch (error) {
+        //Inform the user something went wrong
         console.log(error);
         Alert.alert("Netzwerk-Fehler",
             "Laden der Authentifizierungsinformationen aus Firestore fehlgeschlagen. " +
@@ -56,7 +59,7 @@ export async function getAuthenticationInfo(){
 
 //Stores a new authenticationInfo-Array
 export async function storeAuthenticationInfo(newAuthenticationInfo){
-    //Note: We really *have to* await the set operation here. Otherwise, multiple closely spaced deletes
+    //NOTE: We really *have to* await the set operation here. Otherwise, multiple closely spaced deletes
     //(e.g. when deleting multiple users at once) will lead to concurrency issues
     //This could be mitigated by handling bulk deletes in Authentication.js (which would also save traffic)
     await setDoc(doc(db, "Terminplaner", "authenticationInfo"), {
@@ -74,10 +77,12 @@ export async function getPasswordHash(username){
             return authentificationInfo[i].passwordHash;
         }
     }
-    //If we are here, the username has not been found
+    //If we are here, the username has not been found.
+    //Return an empty string, as this will never equal any SHA-256 digest (so authentication will always fail)
     return ""
 }
 
+//Get the (complete) calendar for a given user
 export async function getCalendar(username){
     if (currentCalendarUsername === username) {
         //We already have the correct calendar stored locally
@@ -105,12 +110,15 @@ export async function getCalendar(username){
     }
 }
 
+//Store a new calendar for a given user
 export async function storeCalendar(username, newCalendar){
     await setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
         calendarArray: newCalendar
     });
 }
 
+//Set up a new calendar for given username
+//Used after creating a new user
 export async function initializeCalendar(username){
     //First, create a new calendar document for this user
     await setDoc(doc(db, "Terminplaner", `calendar-${username}`), {
@@ -126,6 +134,8 @@ export async function initializeCalendar(username){
     currentCalendarUsername = username;
 }
 
+//Delete calendar for a given username
+//Used when deleting a user
 export async function deleteCalendar(username){
     //Unsub first so we don't get any spurious snapshot
     unsubCurrentCalendar();
@@ -134,6 +144,8 @@ export async function deleteCalendar(username){
     return;
 }
 
+//Return the managementInfo
+//Used for authenticating users for the user management functionality
 export async function getManagementInfo(){
     return managementInfo;
 }

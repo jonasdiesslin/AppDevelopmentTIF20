@@ -5,24 +5,30 @@ import {createUser} from "../../Utils/Authentication";
 import {checkIfUsernameExists} from "../../Utils/Authentication";
 import { CommonActions } from '@react-navigation/native';
 
-
+//This screen allows the user to create a new user profile
 export default function Register({route, navigation}) {
 
+    //Declare states for the text input boxes
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [passwordInputRepeat, setpasswordInputRepeat] = useState("");
 
     const {image} = route.params;
 
+    //Validate input form
     const isFormValid = useMemo(() => {
         return usernameInput.length > 0 && (passwordInput.length > 0 && passwordInputRepeat.length > 0)
     }, [usernameInput, passwordInput, passwordInputRepeat]);
 
+    //Register new user if inputs are ok
     async function attemptRegister(){
+        //Prevent duplicate usernames
         if (await checkIfUsernameExists(usernameInput)) {
             Alert.alert("Benutzername bereits vergeben.");
         }
+        //Check if password inputs are equal
         else if(passwordInput === passwordInputRepeat){
+            //Attempt the actual registration
             const registerSuccessful = await createUser(usernameInput, passwordInput)
             if(registerSuccessful){
                 //register was correct, switch to login
@@ -45,6 +51,7 @@ export default function Register({route, navigation}) {
             } else {
                 setUsernameInput("");
                 setPasswordInput("");
+                setpasswordInputRepeat("");
                 Alert.alert("Benutzername oder Passwort fehlerhaft.");
             }
         }
